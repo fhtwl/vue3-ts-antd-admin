@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import { Button } from 'ant-design-vue';
 defineProps<{ msg: string }>();
 
 const count = ref(0);
@@ -31,6 +31,7 @@ const count = ref(0);
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
+  <Button>测试</Button>
 </template>
 
 <style scoped>

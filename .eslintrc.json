@@ -18,5 +18,8 @@
     "sourceType": "module"
   },
   "plugins": ["vue", "@typescript-eslint"],
-  "rules": {}
+  "rules": {
+    "vue/comment-directive": "off",
+    "prettier/prettier": "off"
+  }
 }
