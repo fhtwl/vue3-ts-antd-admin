@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ACCESS_TOKEN } from '../const';
+import { login } from '@/api/system/auth';
 
 interface UserInfo {
   userName: string;
@@ -9,6 +10,7 @@ interface UserInfo {
 
 export const useStore = defineStore('user', {
   state: () => ({
+    token: localStorage.getItem(ACCESS_TOKEN),
     name: '',
     avatar: '',
     roles: [],
@@ -18,11 +20,27 @@ export const useStore = defineStore('user', {
   },
   actions: {
     // 登录
-    async Login(userInfo: UserInfo) {
+    async login(userInfo: UserInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo)
-          .then((token: string) => {
+          .then((res) => {
+            const token = res.data as string;
+            this.token = token;
             localStorage.setItem(ACCESS_TOKEN, token);
+            resolve(undefined);
+          })
+          .catch((error: Error) => {
+            reject(error);
+          });
+      });
+    },
+    // 退出登录
+    async logout() {
+      return new Promise((resolve, reject) => {
+        logout()
+          .then(() => {
+            this.token = '';
+            localStorage.removeItem(ACCESS_TOKEN);
             resolve(undefined);
           })
           .catch((error: Error) => {
@@ -32,8 +50,8 @@ export const useStore = defineStore('user', {
     },
   },
 });
-async function login(userInfo: UserInfo) {
-  console.log(userInfo);
+
+async function logout() {
   const res = await fetch('/');
   return await res.json();
 }
