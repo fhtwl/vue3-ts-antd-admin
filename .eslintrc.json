@@ -20,6 +20,8 @@
   "plugins": ["vue", "@typescript-eslint"],
   "rules": {
     "vue/comment-directive": "off",
-    "prettier/prettier": "off"
+    "prettier/prettier": "off",
+    // 允许单字单词作为组件名
+    "vue/multi-word-component-names": "off"
   }
 }
