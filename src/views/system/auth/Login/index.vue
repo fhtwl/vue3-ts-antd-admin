@@ -1,10 +1,5 @@
 <script lang="ts">
 import type { FormInstance } from 'ant-design-vue';
-import {
-  SearchOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons-vue';
 import { defineComponent, reactive, ref } from 'vue';
 import { useStore } from '@/store/system/user';
 import md5 from 'md5';
@@ -24,13 +19,7 @@ interface FormState {
 
 export default defineComponent({
   name: 'Login',
-  components: {
-    // Button,
-    // Form,
-    // Alert,
-    // Input,
-    // Checkbox,
-  },
+  components: {},
   setup() {
     const form = reactive<FormState>({
       userName: '',
@@ -163,6 +152,8 @@ export default defineComponent({
       :form="form"
     >
       <a-button type="primary" @click="handleSubmit">Submit</a-button>
+      <a-input placeholder="Basic usage" />
+      <SearchOutlined />
     </a-form>
 
     <div class="primary-color">path.resolve(__dirname, './src')</div>

@@ -12,13 +12,17 @@ function resolve(url: string): string {
 export default defineConfig({
   plugins: [
     vue(),
-    // Components({
-    //   resolvers: [
-    //     AntDesignVueResolver({
-    //       importStyle: 'less',
-    //     }),
-    //   ],
-    // }),
+    // 按需加载
+    Components({
+      resolvers: [
+        AntDesignVueResolver({
+          // 不加载css, 而是手动加载css. 通过手动加载less文件并将less变量绑定到css变量上, 即可实现动态主题色
+          importStyle: false,
+          // 加载所有icon
+          resolveIcons: true,
+        }),
+      ],
+    }),
   ],
   resolve: {
     alias: {
@@ -26,6 +30,7 @@ export default defineConfig({
       '~@': resolve('./src'),
     },
   },
+  // 声明node变量
   define: {
     'process.env': {},
   },
