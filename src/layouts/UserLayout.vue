@@ -36,6 +36,11 @@
 export default {
   name: 'UserLayout',
   // mixins: [deviceMixin],
+  data() {
+    return {
+      isMobile: false,
+    };
+  },
   mounted() {
     document.body.classList.add('userLayout');
   },

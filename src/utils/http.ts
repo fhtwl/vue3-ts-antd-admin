@@ -5,13 +5,6 @@ import { notification } from 'ant-design-vue';
 
 import { useStore } from '@/store/system/user';
 import { ACCESS_TOKEN } from '@/store/system/const';
-const userStore = useStore();
-
-interface ResponseData<T> {
-  code: string;
-  data: T;
-  msg: string;
-}
 
 // 设置请求头和请求路径
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
@@ -19,6 +12,7 @@ axios.defaults.timeout = 10000;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.interceptors.request.use(
   (config): AxiosRequestConfig<unknown> => {
+    const userStore = useStore();
     const token = userStore.token;
     if (token) {
       config.headers![ACCESS_TOKEN] = token;
@@ -33,7 +27,8 @@ axios.interceptors.request.use(
 // 异常拦截处理器
 const errorHandler = (error: AxiosError) => {
   if (error.response) {
-    const data = error.response.data as ResponseData<unknown>;
+    const userStore = useStore();
+    const data = error.response.data as Common.ResponseData<unknown>;
     const token = userStore.token;
     if (error.response.status === 403) {
       notification.error({
@@ -71,16 +66,10 @@ axios.interceptors.response.use((response) => {
   return response.data.data;
 }, errorHandler);
 
-interface ResType<T> {
-  code: number;
-  data?: T;
-  msg: string;
-  err?: string;
-}
 interface Http {
-  get<T>(url: string, params?: unknown): Promise<ResType<T>>;
-  post<T>(url: string, params?: unknown): Promise<ResType<T>>;
-  upload<T>(url: string, params: unknown): Promise<ResType<T>>;
+  get<T>(url: string, params?: unknown): Promise<T>;
+  post<T>(url: string, params?: unknown): Promise<T>;
+  upload<T>(url: string, params: unknown): Promise<T>;
   download(url: string): void;
 }
 

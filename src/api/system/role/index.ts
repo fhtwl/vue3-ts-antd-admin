@@ -1,5 +1,3 @@
-import { common } from '@/typings/common';
-import { system } from '@/typings/system';
 import http from '@/utils/http';
 
 const Role = `/system/role`;
@@ -36,7 +34,7 @@ export function getRoleMap() {
  * @param {*} parameter
  * @returns
  */
-export function getRoleList(parameter: common.PaginationParams) {
+export function getRoleList(parameter: Common.PaginationParams) {
   return http.post(api.getRoleList, parameter);
 }
 
@@ -45,7 +43,7 @@ export function getRoleList(parameter: common.PaginationParams) {
  * @param {*} parameter
  * @returns
  */
-export function addRole(parameter: system.Role) {
+export function addRole(parameter: System.Role) {
   return http.post(api.addRole, parameter);
 }
 
@@ -54,7 +52,7 @@ export function addRole(parameter: system.Role) {
  * @param {*} parameter
  * @returns
  */
-export function editRoleById(parameter: system.Role) {
+export function editRoleById(parameter: System.Role) {
   return http.post(api.editRoleById, parameter);
 }
 
@@ -65,7 +63,7 @@ export function editRoleById(parameter: system.Role) {
  */
 export function editRolePermissionById(parameter: {
   ids: string;
-  roleId: common.Id;
+  roleId: number;
 }) {
   return http.post(api.editRolePermissionById, parameter);
 }

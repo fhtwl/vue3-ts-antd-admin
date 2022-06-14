@@ -19,7 +19,7 @@ interface Login {
  * @param parameter
  * @returns
  */
-export function login(parameter: Login) {
+export function login(parameter: Login): Promise<string> {
   return http.post(api.login, parameter);
 }
 

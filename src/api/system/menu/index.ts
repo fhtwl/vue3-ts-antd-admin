@@ -1,6 +1,3 @@
-// import { common } from '@/types/common';
-import { common } from '@/typings/common';
-import { system } from '@/typings/system';
 import http from '@/utils/http';
 const Menu = `/system/menu`;
 
@@ -26,7 +23,7 @@ export function getMenuMap() {
   return http.get(api.getMenuMap);
 }
 
-export function getMenuList(parameter: common.PaginationParams) {
+export function getMenuList(parameter: Common.PaginationParams) {
   return http.post(api.getMenuList, parameter);
 }
 
@@ -35,7 +32,7 @@ export function getMenuList(parameter: common.PaginationParams) {
  * @param {*} parameter
  * @returns
  */
-export function addMenu(parameter: system.Menu) {
+export function addMenu(parameter: System.Menu) {
   return http.post(api.addMenu, parameter);
 }
 
@@ -44,7 +41,7 @@ export function addMenu(parameter: system.Menu) {
  * @param {*} parameter
  * @returns
  */
-export function editMenuById(parameter: system.Menu) {
+export function editMenuById(parameter: System.Menu) {
   return http.post(api.editMenuById, parameter);
 }
 
@@ -53,6 +50,6 @@ export function editMenuById(parameter: system.Menu) {
  * @param {*} parameter
  * @returns
  */
-export function getMenuByRoleId(parameter: { id: common.Id }) {
+export function getMenuByRoleId(parameter: { id: number }) {
   return http.get(api.getMenuByRoleId, parameter);
 }

@@ -1,5 +1,4 @@
-import { common } from '@/typings/common';
-import { system } from '@/typings/system';
+import { UserRes } from '@/typings/api/system/user';
 import http from '@/utils/http';
 
 const User = `/system/user`;
@@ -14,8 +13,8 @@ const api = {
   editUserById: `${User}/editUserById`,
 };
 
-export function getUserList(parameter: common.PaginationParams) {
-  http.post(api.getUserList, parameter);
+export function getUserList(parameter: Common.PaginationParams) {
+  return http.post(api.getUserList, parameter);
 }
 
 /**
@@ -23,8 +22,8 @@ export function getUserList(parameter: common.PaginationParams) {
  * @param {*} parameter
  * @returns
  */
-export function editUserInfo(parameter: system.UserInfo) {
-  http.post(api.editUserInfo, parameter);
+export function editUserInfo(parameter: System.UserInfo) {
+  return http.post(api.editUserInfo, parameter);
 }
 
 /**
@@ -40,7 +39,7 @@ export function editUserById(parameter: {
   nickName: string;
   email: string;
 }) {
-  http.post(api.editUserById, parameter);
+  return http.post(api.editUserById, parameter);
 }
 
 /**
@@ -49,7 +48,7 @@ export function editUserById(parameter: {
  * @returns
  */
 export function email() {
-  http.post(api.email);
+  return http.post(api.email);
 }
 
 /**
@@ -62,13 +61,13 @@ export function editPassword(parameter: {
   code: string;
   emailCode: string;
 }) {
-  http.post(api.editPassword, parameter);
+  return http.post(api.editPassword, parameter);
 }
 
 export function getUserInfo() {
-  http.get(api.getUserInfo);
+  return http.get<UserRes.GetUserInfo>(api.getUserInfo);
 }
 
 export function getUserMenu() {
-  http.post(api.getUserMenu);
+  return http.post(api.getUserMenu);
 }

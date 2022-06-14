@@ -1,13 +1,41 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import Components from 'unplugin-vue-components/vite';
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+
+function resolve(url: string): string {
+  return path.resolve(__dirname, url);
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    // Components({
+    //   resolvers: [
+    //     AntDesignVueResolver({
+    //       importStyle: 'less',
+    //     }),
+    //   ],
+    // }),
+  ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': resolve('./src'),
+      '~@': resolve('./src'),
+    },
+  },
+  define: {
+    'process.env': {},
+  },
+  css: {
+    preprocessorOptions: {
+      less: {
+        // 全局添加less
+        additionalData: `@import '@/styles/common/common.less';`,
+        javascriptEnabled: true,
+      },
     },
   },
   server: {

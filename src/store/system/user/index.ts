@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ACCESS_TOKEN } from '../const';
 import { login } from '@/api/system/auth';
+import { getUserInfo } from '@/api/system/user';
 
 interface UserInfo {
   userName: string;
@@ -14,6 +15,8 @@ export const useStore = defineStore('user', {
     name: '',
     avatar: '',
     roles: [],
+    info: null,
+    email: '',
   }),
   getters: {
     nameLength: (state) => state.name.length,
@@ -24,7 +27,7 @@ export const useStore = defineStore('user', {
       return new Promise((resolve, reject) => {
         login(userInfo)
           .then((res) => {
-            const token = res.data as string;
+            const token = res as string;
             this.token = token;
             localStorage.setItem(ACCESS_TOKEN, token);
             resolve(undefined);
@@ -44,6 +47,33 @@ export const useStore = defineStore('user', {
             resolve(undefined);
           })
           .catch((error: Error) => {
+            reject(error);
+          });
+      });
+    },
+    getInfo() {
+      return new Promise((resolve, reject) => {
+        getUserInfo()
+          .then((response) => {
+            const result = response;
+            // if (result.role && result.role.permissions.length > 0) {
+            //   const role = result.role;
+            //   role.permissions = result.role.permissions;
+            //   role.permissionList = role.permissions.map((permission) => {
+            //     return permission.id;
+            //   });
+            //   this.roles = result.role;
+            //   this.info = result.info;
+            // } else {
+            //   reject(new Error('getInfo: roles must be a non-null array !'));
+            // }
+            // this.name = result.info.nickName;
+            // this.avatar = result.info.avatar;
+            // this.email = result.email;
+
+            resolve(response);
+          })
+          .catch((error) => {
             reject(error);
           });
       });
