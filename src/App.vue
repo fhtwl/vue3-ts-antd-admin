@@ -22,5 +22,6 @@ ConfigProvider.config({
 
 <style lang="less">
 @import url('ant-design-vue/dist/antd.variable.less');
+@import url('@/styles/common/var.less');
 @import url('@/styles/common/common.less');
 </style>

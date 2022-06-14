@@ -38,7 +38,7 @@ export default defineConfig({
     preprocessorOptions: {
       less: {
         // 全局添加less
-        additionalData: `@import '@/styles/common/common.less';`,
+        additionalData: `@import '@/styles/common/var.less';`,
         javascriptEnabled: true,
       },
     },
