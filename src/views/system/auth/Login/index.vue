@@ -1,14 +1,9 @@
 <script lang="ts">
-import type { FormInstance } from 'ant-design-vue';
+import { FormInstance } from 'ant-design-vue';
 import { defineComponent, reactive, ref } from 'vue';
 import { useStore } from '@/store/system/user';
 import md5 from 'md5';
 import './index.less';
-import { useStore as useThemeStore } from '@/store/system/theme';
-const themeStore = useThemeStore();
-
-// import {} from 'ant-design/icon-vue';
-
 const userStore = useStore();
 
 interface FormState {
@@ -27,23 +22,43 @@ export default defineComponent({
       code: '',
     });
     const formRef = ref<FormInstance>();
+
+    const isLoginError = ref(false);
+    function setLoginError(bool: boolean) {
+      isLoginError.value = bool;
+    }
+
+    const loading = ref(false);
+    function setLoading(bool: boolean) {
+      loading.value = bool;
+    }
+
+    const code = ref(`/api/system/common/code?v=${Math.random()}`);
+    function handleUpdateCode() {
+      code.value = `/api/system/common/code?v=${Math.random()}`;
+    }
     return {
-      pageName: 'Login',
-      loginBtn: false,
-      // login type: 101 email, 102 userName, 2 telephone
-      loginType: 101,
-      isLoginError: false,
-      // form: this.$form.createForm(this),
+      isLoginError,
+      setLoginError,
       form,
       formRef,
-      state: {
-        time: 60,
-        loginBtn: false,
-        // login type: 101 email, 102 userName, 2 telephone
-        loginType: 101,
-        smsSendBtn: false,
+      loading,
+      setLoading,
+      code,
+      handleUpdateCode,
+    };
+  },
+  data() {
+    return {
+      rules: {
+        userName: [
+          { required: true, message: '请输入用户名！', trigger: 'blur' },
+        ],
+        password: [
+          { required: true, message: '请输入密码！', trigger: 'blur' },
+        ],
+        code: [{ required: true, message: '请输入验证码！', trigger: 'blur' }],
       },
-      code: '/api/system/common/code',
     };
   },
   computed: {
@@ -55,90 +70,40 @@ export default defineComponent({
     },
   },
   methods: {
-    //   handleLogin() {
-    //     userStore.$patch({
-    //       name: '张三',
-    //     });
-    //     userStore.Login();
-    //   },
-    //   handleUsernameOrEmail(rule, value, callback) {
-    //     const { state } = this;
-    //     const regex =
-    //       /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-    //     if (regex.test(value)) {
-    //       state.loginType = 101;
-    //     } else {
-    //       state.loginType = 102;
-    //     }
-    //     callback();
-    //   },
-    handleSubmit(e: unknown) {
-      themeStore.setTheme('red');
-      // e.preventDefault();
-      const { state, formRef } = this;
-
-      state.loginBtn = true;
+    handleSubmit() {
+      const { formRef } = this;
+      this.setLoading(true);
 
       const validateFieldsKey = ['userName', 'password', 'code'];
-      console.log(formRef);
-      // this.formRef.validateFields(
-      //   validateFieldsKey,
-      //   { force: true },
-      //   (err, values) => {
-      //     if (!err) {
-      //       console.log('login form', values);
-      //       const loginParams = { ...values };
-      //       delete loginParams.userName;
-      //       loginParams[!state.loginType ? 'email' : 'userName'] =
-      //         values.userName;
-      //       loginParams.password = md5(values.password);
-      //       loginParams.type = state.loginType;
-      //       Login(loginParams)
-      //         .then((res) => this.loginSuccess(res))
-      //         .catch((err) => this.requestFailed(err))
-      //         .finally(() => {
-      //           state.loginBtn = false;
-      //         });
-      //     } else {
-      //       setTimeout(() => {
-      //         state.loginBtn = false;
-      //       }, 600);
-      //     }
-      //   }
-      // );
+      formRef
+        ?.validateFields(validateFieldsKey)
+        .then((values) => {
+          const loginParams = { ...values };
+          loginParams.password = md5(values.password);
+          userStore
+            .login(loginParams as FormState)
+            .then(() => this.loginSuccess())
+            .catch((res) => this.requestFailed(res))
+            .finally(() => {
+              this.setLoading(false);
+            });
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.setLoading(false);
+          }, 600);
+        });
     },
-    //   stepCaptchaSuccess() {
-    //     this.loginSuccess();
-    //   },
-    //   stepCaptchaCancel() {
-    //     this.Logout().then(() => {
-    //       this.loginBtn = false;
-    //       this.stepCaptchaVisible = false;
-    //     });
-    //   },
-    //   loginSuccess(res) {
-    //     this.$router.push({ path: '/' });
-    //     // 延迟 1 秒显示欢迎信息
-    //     // setTimeout(() => {
-    //     //   this.$notification.success({
-    //     //     message: '欢迎',
-    //     //     description: `${timeFix()}，欢迎回来`,
-    //     //   });
-    //     // }, 1000);
-    //     this.isLoginError = false;
-    //   },
-    //   requestFailed() {
-    //     this.isLoginError = true;
-    //     this.handleUpdateCode();
-    //     // this.$notification['error']({
-    //     //   message: '错误',
-    //     //   description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-    //     //   duration: 4
-    //     // })
-    //   },
-    //   handleUpdateCode() {
-    //     this.code = `/api/system/common/code?v=${Math.random()}`;
-    //   },
+
+    loginSuccess() {
+      this.$router.push({ path: '/' });
+      this.setLoginError(false);
+    },
+    requestFailed(res: unknown) {
+      console.log('requestFailed', res);
+      this.setLoginError(true);
+      this.handleUpdateCode();
+    },
   },
 });
 </script>
@@ -147,15 +112,90 @@ export default defineComponent({
   <div class="main">
     <a-form
       id="formLogin"
-      ref="formLogin"
+      ref="formRef"
       class="user-layout-login"
-      :form="form"
+      :model="form"
+      :rules="rules"
+      @finish="handleSubmit"
     >
-      <a-button type="primary" @click="handleSubmit">Submit</a-button>
-      <a-input placeholder="Basic usage" />
-      <SearchOutlined />
-    </a-form>
+      <a-alert
+        v-if="isLoginError"
+        type="error"
+        show-icon
+        style="margin-bottom: 24px"
+        message="账户或密码或验证码错误"
+      />
 
-    <div class="primary-color">path.resolve(__dirname, './src')</div>
+      <a-form-item name="userName">
+        <a-input
+          v-model:value="form.userName"
+          size="large"
+          placeholder="用户名"
+        >
+          <template #prefix>
+            <user-outlined class="icon" />
+          </template>
+        </a-input>
+      </a-form-item>
+
+      <a-form-item name="password">
+        <a-input-password
+          v-model:value="form.password"
+          size="large"
+          placeholder="密码: user"
+        >
+          <template #prefix>
+            <lock-outlined class="icon" />
+          </template>
+        </a-input-password>
+      </a-form-item>
+
+      <a-form-item>
+        <div name="code" style="display: flex; width: 100%">
+          <a-input
+            v-model:value="form.code"
+            size="large"
+            type="text"
+            placeholder="验证码"
+          />
+          <img
+            :src="code"
+            alt=""
+            srcset=""
+            class="getCaptcha"
+            @click="handleUpdateCode"
+          />
+        </div>
+      </a-form-item>
+      <!-- <a-form-item>
+        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]"> 自动登录 </a-checkbox>
+        <router-link
+          :path="{ name: 'recover' }"
+          class="forge-password"
+          style="float: right"
+        >
+          忘记密码
+        </router-link>
+      </a-form-item> -->
+
+      <a-form-item style="margin-top: 24px">
+        <a-button
+          size="large"
+          type="primary"
+          class="login-button"
+          html-type="submit"
+          :loading="loading"
+          :disabled="loading"
+        >
+          登录
+        </a-button>
+      </a-form-item>
+
+      <div class="user-login-other">
+        <router-link class="register" :to="{ name: 'register' }">
+          注册
+        </router-link>
+      </div>
+    </a-form>
   </div>
 </template>

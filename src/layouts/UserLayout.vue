@@ -1,5 +1,5 @@
 <template>
-  <div id="userLayout" :class="['user-layout-wrapper', isMobile && 'mobile']">
+  <div id="userLayout" :class="['user-layout-wrapper']">
     <div class="container">
       <div class="user-layout-content">
         <div class="top">
@@ -30,16 +30,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import { deviceMixin } from '@/store/device-mixin'
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'UserLayout',
   // mixins: [deviceMixin],
   data() {
-    return {
-      isMobile: false,
-    };
+    return {};
   },
   mounted() {
     document.body.classList.add('userLayout');
@@ -47,7 +47,7 @@ export default {
   beforeUnmount() {
     document.body.classList.remove('userLayout');
   },
-};
+});
 </script>
 
 <style lang="less" scoped>
@@ -56,6 +56,7 @@ export default {
 
   &.mobile {
     .container {
+      display: block;
       .main {
         max-width: 368px;
         width: 98%;
@@ -70,7 +71,9 @@ export default {
     background-size: 100%;
     //padding: 50px 0 84px;
     position: relative;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .user-layout-lang {
       width: 100%;
       height: 40px;

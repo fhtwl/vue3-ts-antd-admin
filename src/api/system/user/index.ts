@@ -64,10 +64,9 @@ export function editPassword(parameter: {
   return http.post(api.editPassword, parameter);
 }
 
-export function getUserInfo() {
-  return http.get<UserRes.GetUserInfo>(api.getUserInfo);
+export function getUserInfo(): Promise<UserRes.GetUserInfo> {
+  return http.get(api.getUserInfo);
 }
-
-export function getUserMenu() {
+export function getUserMenu(): Promise<UserRes.GetUserMenu[]> {
   return http.post(api.getUserMenu);
 }

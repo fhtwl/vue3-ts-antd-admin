@@ -1,16 +1,35 @@
+import { DefineComponent } from 'vue';
+
 // import System from '@fhtwl-admin/system';
-export namespace UserRes {
-  interface GetUserInfo {
-    role: {
-      name: string;
-      roleId: number;
-      id: number;
-      menuType: System.Decode;
-      show: number;
-      parentId: number;
-      serialNum: number;
-      permission: string;
-      actions: System.Action[];
+declare namespace UserRes {
+  export interface StoreRole {
+    permissions: System.Permission[];
+    roleId: number;
+    roleName: string;
+    permissionList: number[];
+  }
+
+  export interface GetUserInfo {
+    role: StoreRole;
+    userName: string;
+    info: System.UserInfo;
+    email: string;
+  }
+
+  export interface GetUserMenu extends Common.TreeNode {
+    key: number | string;
+    name: string;
+    path: string;
+    component: string;
+    redirect: string;
+    meta: {
+      title: string;
+      show?: boolean;
+      hideChildren?: boolean;
+      hiddenHeaderContent?: boolean;
+      //  target:
+      icon?: string;
     };
+    children: GetUserMenu[];
   }
 }

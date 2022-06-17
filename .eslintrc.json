@@ -23,6 +23,8 @@
     "prettier/prettier": "off",
     // 允许单字单词作为组件名
     "vue/multi-word-component-names": "off",
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "no-debugger": "off",
+    "@typescript-eslint/no-empty-function": "off"
   }
 }

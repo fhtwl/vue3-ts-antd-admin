@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import { bxAnaalyse } from '@/core/icons';
 
 import common from './modules/common';
-
 const routes = [...common];
 
 const router = createRouter({

@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
-import { ACCESS_TOKEN } from '../const';
+import { ACCESS_TOKEN } from './const';
 import { login } from '@/api/system/auth';
 import { getUserInfo } from '@/api/system/user';
+import { UserRes } from '@/typings/api/system/user';
+import { Permission } from '@fhtwl-admin/system';
 
 interface UserInfo {
   userName: string;
@@ -14,8 +16,8 @@ export const useStore = defineStore('user', {
     token: localStorage.getItem(ACCESS_TOKEN),
     name: '',
     avatar: '',
-    roles: [],
-    info: null,
+    role: undefined as UserRes.StoreRole | undefined,
+    info: undefined as System.UserInfo | undefined,
     email: '',
   }),
   getters: {
@@ -27,9 +29,10 @@ export const useStore = defineStore('user', {
       return new Promise((resolve, reject) => {
         login(userInfo)
           .then((res) => {
-            const token = res as string;
+            const token = res;
             this.token = token;
             localStorage.setItem(ACCESS_TOKEN, token);
+            this.getInfo();
             resolve(undefined);
           })
           .catch((error: Error) => {
@@ -51,25 +54,26 @@ export const useStore = defineStore('user', {
           });
       });
     },
-    getInfo() {
+    getInfo(): Promise<UserRes.GetUserInfo> {
       return new Promise((resolve, reject) => {
         getUserInfo()
           .then((response) => {
             const result = response;
-            // if (result.role && result.role.permissions.length > 0) {
-            //   const role = result.role;
-            //   role.permissions = result.role.permissions;
-            //   role.permissionList = role.permissions.map((permission) => {
-            //     return permission.id;
-            //   });
-            //   this.roles = result.role;
-            //   this.info = result.info;
-            // } else {
-            //   reject(new Error('getInfo: roles must be a non-null array !'));
-            // }
-            // this.name = result.info.nickName;
-            // this.avatar = result.info.avatar;
-            // this.email = result.email;
+            if (result.role && result.role.permissions.length > 0) {
+              const role = result.role;
+              role.permissionList = role.permissions.map(
+                (permission: Permission) => {
+                  return permission.id;
+                }
+              );
+              this.role = result.role;
+              this.info = result.info;
+            } else {
+              reject(new Error('getInfo: roles must be a non-null array !'));
+            }
+            this.name = result.info.nickName;
+            this.avatar = result.info.avatar;
+            this.email = result.email;
 
             resolve(response);
           })

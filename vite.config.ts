@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 
 function resolve(url: string): string {
   return path.resolve(__dirname, url);
@@ -12,6 +13,7 @@ function resolve(url: string): string {
 export default defineConfig({
   plugins: [
     vue(),
+    vueJsx(),
     // 按需加载
     Components({
       resolvers: [
@@ -29,6 +31,8 @@ export default defineConfig({
       '@': resolve('./src'),
       '~@': resolve('./src'),
     },
+    // 省略文件后缀
+    extensions: ['.js', '.ts', '.json', '.jsx', '.tsx'],
   },
   // 声明node变量
   define: {
@@ -38,13 +42,13 @@ export default defineConfig({
     preprocessorOptions: {
       less: {
         // 全局添加less
-        additionalData: `@import '@/styles/common/var.less';`,
+        additionalData: `@import '@/assets/styles/common/var.less';`,
         javascriptEnabled: true,
       },
     },
   },
   server: {
-    port: 3000,
+    port: 8001,
     proxy: {
       '/api': {
         target: 'http://localhost:9000',
