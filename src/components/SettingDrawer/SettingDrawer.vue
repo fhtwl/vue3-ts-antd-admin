@@ -38,10 +38,6 @@ export default defineComponent({
       updateColorWeak(checked);
     };
 
-    const handleMultiTabChange = function (checked: boolean) {
-      themeStore[TOGGLE_MULTI_TAB](checked);
-    };
-
     const handleMenuTheme = function (theme: string) {
       themeStore[TOGGLE_NAV_THEME](theme);
     };
@@ -98,7 +94,9 @@ export default defineComponent({
 
     const hideSetting = computed(() => settings.value.hideSetting);
 
-    const multiTab = computed(() => settings.value.multiTab);
+    const handleMultiTabChange = function (checked: boolean) {
+      themeStore[TOGGLE_MULTI_TAB](checked);
+    };
 
     return {
       settings,
@@ -122,7 +120,6 @@ export default defineComponent({
       fixedSidebar,
       colorWeak,
       hideSetting,
-      multiTab,
     };
   },
   data() {
@@ -146,7 +143,6 @@ export default defineComponent({
       <div class="setting-drawer-index-content">
         <div :style="{ marginBottom: '24px' }">
           <h3 class="setting-drawer-index-title">整体风格设置</h3>
-
           <div class="setting-drawer-index-blockChecbox">
             <a-tooltip>
               <template #title> 暗色菜单风格 </template>
@@ -270,7 +266,7 @@ export default defineComponent({
                 <template #actions>
                   <a-switch
                     size="small"
-                    :default-checked="fixedHeader"
+                    :checked="fixedHeader"
                     @change="handleFixedHeaderChange"
                   />
                 </template>
@@ -286,7 +282,7 @@ export default defineComponent({
                   <a-switch
                     size="small"
                     :disabled="layout === 'topmenu'"
-                    :default-checked="fixedSidebar"
+                    :checked="fixedSidebar"
                     @change="handleFixedSidebar"
                   />
                 </template>
@@ -317,7 +313,7 @@ export default defineComponent({
                 <template #actions>
                   <a-switch
                     size="small"
-                    :default-checked="colorWeak"
+                    :checked="colorWeak"
                     @change="handleColorWeakChange"
                   />
                 </template>
@@ -329,7 +325,7 @@ export default defineComponent({
               <a-list-item>
                 <template #actions>
                   <a-switch
-                    v-model="hideSetting"
+                    :checked="hideSetting"
                     size="small"
                     @change="handleHideSettingChange"
                   />
@@ -357,8 +353,8 @@ export default defineComponent({
               <a-list-item>
                 <template #actions>
                   <a-switch
+                    :checked="settings.multiTab"
                     size="small"
-                    :default-checked="multiTab"
                     @change="handleMultiTabChange"
                   />
                 </template>

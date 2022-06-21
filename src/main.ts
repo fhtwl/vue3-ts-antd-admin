@@ -1,6 +1,6 @@
-import { message, Button } from 'ant-design-vue';
 import { createApp } from 'vue';
 import App from './App.vue';
+import setupAtnd from '@/lib/ant-design-vue';
 // import '@/styles/common/common.less';
 // import 'ant-design-vue/dist/antd.less';
 // import 'ant-design-vue/dist/antd.variable.less';
@@ -13,10 +13,9 @@ import './permission';
 // import '@/styles/common/common.less';
 
 const app = createApp(App);
-app.use(Button);
 app.use(router);
 app.component('CIcon', CIcon);
 app.use(createPinia());
-app.config.globalProperties.$message = message;
+setupAtnd(app);
 app.config.globalProperties.$axios = axios;
 app.mount('#app');

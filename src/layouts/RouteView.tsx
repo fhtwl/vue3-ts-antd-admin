@@ -1,11 +1,11 @@
-import { computed, defineComponent, KeepAlive } from 'vue';
+import { computed, defineComponent, KeepAlive, Transition } from 'vue';
 import { useStore } from '@/store/system/theme';
-
+import './RouteView.less';
 export default defineComponent({
   name: 'RouteView',
   components: {
     'keep-alive': KeepAlive,
-    // Transition,
+    Transition,
   },
   props: {
     keepAlive: {
@@ -34,18 +34,30 @@ export default defineComponent({
     //     }}
     //   </router-view>
     // );
+    const RootBox = (
+      _props: unknown,
+      { slots }: { slots: { default: () => unknown } }
+    ) => <div class="transition">{slots.default ? slots.default() : ''}</div>;
     const inKeep = (
       <router-view>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         {({ Component }: { Component: any }) => {
           return (
-            // <transition name={meta.transition || 'fade'} mode="out-in">
-            <keep-alive>
-              <Component key={this.$route.path} />
-              {/* <component is={Component} /> */}
-              {/* {Component} */}
-            </keep-alive>
-            // </transition>
+            <transition
+              name={meta.transition || 'fade-translate'}
+              mode="out-in"
+              appear
+            >
+              <RootBox key={this.$route.path}>
+                {/* <div class="transition"> */}
+                <keep-alive>
+                  <Component key={this.$route.path} />
+                  {/* <component is={Component} /> */}
+                  {/* {Component} */}
+                </keep-alive>
+                {/* </div> */}
+              </RootBox>
+            </transition>
           );
         }}
       </router-view>

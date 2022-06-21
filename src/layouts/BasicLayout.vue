@@ -1,13 +1,13 @@
 <script lang="ts">
 import defaultSettings from '@/config/defaultSettings';
 import RightContent from '@/components/GlobalHeader/RightContent.vue';
-import GlobalFooter from '@/components/GlobalFooter/index.vue';
+import GlobalFooter from '@/components/GlobalFooter';
 import LogoSvgImg from '@/assets/logo.svg?inline';
 import SettingDrawer from '@/components/SettingDrawer/SettingDrawer.vue';
 import CustomLayout from './CustomLayout/index.vue';
 import { defineRouterStore } from '@/store/system/async-router';
 import { useStore } from '@/store/system/theme';
-// import MultiTab
+import MultiTab from '@/components/MultiTab';
 import {
   CONTENT_WIDTH_TYPE,
   TOGGLE_NAV_THEME,
@@ -23,6 +23,7 @@ export default defineComponent({
     GlobalFooter: markRaw(GlobalFooter),
     LogoSvg: markRaw(LogoSvg),
     CustomLayout: markRaw(CustomLayout),
+    MultiTab: markRaw(MultiTab),
   },
   setup() {
     const routerStore = defineRouterStore();
