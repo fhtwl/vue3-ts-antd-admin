@@ -162,7 +162,7 @@ export default defineComponent({
                   v-if="navTheme === 'dark'"
                   class="setting-drawer-index-selectIcon"
                 >
-                  <a-icon type="check" />
+                  <check-outlined />
                 </div>
               </div>
             </a-tooltip>
@@ -181,7 +181,7 @@ export default defineComponent({
                   v-if="navTheme !== 'dark'"
                   class="setting-drawer-index-selectIcon"
                 >
-                  <a-icon type="check" />
+                  <check-outlined />
                 </div>
               </div>
             </a-tooltip>
@@ -201,10 +201,7 @@ export default defineComponent({
                 {{ item.key }}
               </template>
               <a-tag :color="item.color" @click="handleColorChange(item.color)">
-                <a-icon
-                  v-if="item.color === primaryColor"
-                  type="check"
-                ></a-icon>
+                <check-outlined v-if="item.color === primaryColor" />
               </a-tag>
             </a-tooltip>
           </div>
@@ -229,7 +226,7 @@ export default defineComponent({
                   v-if="layout === 'sidemenu'"
                   class="setting-drawer-index-selectIcon"
                 >
-                  <a-icon type="check" />
+                  <check-outlined />
                 </div>
               </div>
             </a-tooltip>
@@ -248,7 +245,7 @@ export default defineComponent({
                   v-if="layout !== 'sidemenu'"
                   class="setting-drawer-index-selectIcon"
                 >
-                  <a-icon type="check" />
+                  <check-outlined />
                 </div>
               </div>
             </a-tooltip>
@@ -348,9 +345,8 @@ export default defineComponent({
                           >-<b>个人设置</b>-<b>个性化</b>-<b>打开设置面板</b>中再次打开</span
                         >
                       </template>
-                      <span
-                        ><a-icon
-                          type="question-circle"
+                      <span>
+                        <question-circle-outlined
                           class="hide-icon-help"
                         />隐藏设置</span
                       >
@@ -381,8 +377,8 @@ export default defineComponent({
           class="setting-drawer-index-handle"
           @click="toggle"
         >
-          <a-icon v-if="!visible" type="setting" />
-          <a-icon v-else type="close" />
+          <setting-outlined v-if="!visible" />
+          <close-outlined v-else />
         </div>
       </template>
     </a-drawer>

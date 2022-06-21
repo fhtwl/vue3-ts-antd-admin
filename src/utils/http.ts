@@ -4,6 +4,8 @@ import { notification } from 'ant-design-vue';
 
 import { useStore } from '@/store/system/user';
 import { ACCESS_TOKEN } from '@/store/system/user/const';
+import router from '@/router';
+import { loginRoutePath } from '@/permission';
 
 // 设置请求头和请求路径
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_BASE_URL;
@@ -40,13 +42,16 @@ const errorHandler = (error: AxiosError) => {
         message: data.msg,
         // description: 'Authorization verification failed'
       });
+      const reload = () => {
+        setTimeout(() => {
+          router.push(loginRoutePath);
+          // window.location.reload();
+        }, 1500);
+      };
       if (token) {
-        userStore.logout().then(() => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        });
+        userStore.deleteToken();
       }
+      reload();
     }
   }
   return Promise.reject(error);

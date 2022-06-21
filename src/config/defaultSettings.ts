@@ -18,7 +18,7 @@ export default {
   layout: 'sidemenu', // nav menu position: `sidemenu` or `topmenu`
   contentWidth: 'Fluid', // layout of content: `Fluid` or `Fixed`, only works when layout is topmenu
   fixedHeader: false, // sticky header
-  fixSiderbar: false, // sticky siderbar
+  fixedSidebar: false, // sticky siderbar
   colorWeak: false,
   menu: {
     locale: true,
@@ -30,4 +30,6 @@ export default {
     process.env.NODE_ENV === 'production' &&
     process.env.VUE_APP_PREVIEW !== 'true',
   multiTab: true,
+  hideSetting: false,
+  autoHideHeader: false,
 };

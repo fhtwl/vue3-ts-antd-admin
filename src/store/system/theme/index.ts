@@ -12,20 +12,34 @@ import {
   TOGGLE_NAV_THEME,
   TOGGLE_WEAK,
 } from './const';
+import defaultSettings from '@/config/defaultSettings';
+
+const {
+  navTheme,
+  multiTab,
+  layout,
+  hideSetting,
+  fixedHeader,
+  fixedSidebar,
+  contentWidth,
+  autoHideHeader,
+  colorWeak,
+  primaryColor,
+} = defaultSettings;
 
 export const useStore = defineStore('theme', {
   state: () => ({
-    theme: '#f00',
+    theme: navTheme,
     sideCollapsed: false,
-    layout: '',
-    contentWidth: '',
-    fixedHeader: false,
-    fixedSidebar: false,
-    autoHideHeader: false,
-    color: '',
-    colorWeak: false,
-    multiTab: true, // 多页签模式
-    hideSetting: false, // 隐藏设置
+    layout,
+    contentWidth,
+    fixedHeader,
+    fixedSidebar,
+    autoHideHeader,
+    color: primaryColor,
+    colorWeak,
+    multiTab, // 多页签模式
+    hideSetting, // 隐藏设置
     _antLocale: {},
   }),
   getters: {},
@@ -78,7 +92,7 @@ export const useStore = defineStore('theme', {
 
     /**
      * 布局
-     * @param bool
+     * @param mode
      */
     [TOGGLE_LAYOUT]: function (mode: string) {
       this.layout = mode;

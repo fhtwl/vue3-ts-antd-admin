@@ -1,3 +1,4 @@
+import { MessageApi } from 'ant-design-vue/lib/message';
 import { DefineComponent } from 'vue';
 import { UserRes } from '../api/system/user';
 
@@ -21,4 +22,10 @@ declare namespace System {
   }
 
   export type VueComponent = DefineComponent<{}, {}, any>;
+}
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $message: MessageApi;
+  }
 }

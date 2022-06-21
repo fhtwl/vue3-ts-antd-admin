@@ -9,7 +9,11 @@ export default defineComponent({
     Menus,
   },
   props: {
-    collapsed: {
+    // collapsed: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    defaultCollapsed: {
       type: Boolean,
       default: true,
     },
@@ -27,12 +31,15 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const collapsed = ref(true);
+    const collapsed = ref(props.defaultCollapsed);
     const handleCollapsedChange = function () {
-      props.handleCollapse(!collapsed.value);
+      const newValue = !collapsed.value;
+      collapsed.value = newValue;
+      props.handleCollapse(newValue);
+      console.log(collapsed.value);
     };
     return {
-      // collapsed,
+      collapsed,
       handleCollapsedChange,
     };
   },
@@ -47,7 +54,7 @@ export default defineComponent({
   >
     <a-layout-sider
       v-if="settings.layout === 'sidemenu'"
-      :value="collapsed"
+      v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
       :theme="settings.theme"
@@ -55,7 +62,7 @@ export default defineComponent({
       class="layout-sider"
     >
       <slot name="menuHeaderRender"></slot>
-      <Menus :menus="menus" :settings="settings" />
+      <Menus :menus="menus" :settings="settings" :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>
       <a-layout-header
@@ -66,13 +73,13 @@ export default defineComponent({
         <div class="left">
           <template v-if="settings.layout === 'sidemenu'">
             <div class="trigger" @click="handleCollapsedChange">
-              <c-icon :type="collapsed ? 'menu-unfold' : 'menu-fold'" />
+              <c-icon :type="!collapsed ? 'menu-unfold' : 'menu-fold'" />
             </div>
           </template>
           <slot name="headerContentRender"></slot>
           <template v-if="settings.layout === 'topmenu'">
             <slot name="menuHeaderRender"></slot>
-            <Menus :menus="menus" :settings="settings" />
+            <Menus :menus="menus" :settings="settings" :collapsed="collapsed" />
           </template>
         </div>
         <div class="right">

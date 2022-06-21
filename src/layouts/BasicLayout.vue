@@ -7,22 +7,22 @@ import SettingDrawer from '@/components/SettingDrawer/SettingDrawer.vue';
 import CustomLayout from './CustomLayout/index.vue';
 import { defineRouterStore } from '@/store/system/async-router';
 import { useStore } from '@/store/system/theme';
+// import MultiTab
 import {
   CONTENT_WIDTH_TYPE,
-  SIDEBAR_TYPE,
   TOGGLE_NAV_THEME,
   TOGGLE_COLOR,
 } from '@/store/system/theme/const';
 const LogoSvg = () => LogoSvgImg;
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, markRaw, shallowRef } from 'vue';
 export default defineComponent({
   name: 'BasicLayout',
   components: {
-    SettingDrawer,
-    RightContent,
-    GlobalFooter,
-    LogoSvg,
-    CustomLayout,
+    SettingDrawer: markRaw(SettingDrawer),
+    RightContent: markRaw(RightContent),
+    GlobalFooter: markRaw(GlobalFooter),
+    LogoSvg: markRaw(LogoSvg),
+    CustomLayout: markRaw(CustomLayout),
   },
   setup() {
     const routerStore = defineRouterStore();
@@ -107,18 +107,20 @@ export default defineComponent({
       }
     };
 
-    // 侧栏收起状态
-    const collapsed = ref(false);
-    const handleCollapse = function (bool: boolean) {
-      collapsed.value = bool;
-    };
-    watch(collapsed, (bool) => {
-      themeStore[SIDEBAR_TYPE](bool);
+    const shallowNum = shallowRef({
+      key: 999,
+      collapsed: false,
     });
 
-    const key = ref(999);
+    const handleCollapse = function (bool: boolean) {
+      shallowNum.value.collapsed = bool;
+    };
+
+    // watch(shallowNum, ({ collapsed }) => {
+    //   themeStore[SIDEBAR_TYPE](collapsed);
+    // });
     const reload = function () {
-      key.value = Math.random();
+      shallowNum.value.key = Math.random();
     };
 
     return {
@@ -126,9 +128,8 @@ export default defineComponent({
       menus,
       settings,
       handleSettingChange,
-      collapsed,
       handleCollapse,
-      key,
+      shallowNum,
       reload,
     };
   },
@@ -151,7 +152,7 @@ export default defineComponent({
 <template>
   <CustomLayout
     :menus="menus"
-    :collapsed="collapsed"
+    :default-collapsed="shallowNum.collapsed"
     :handle-collapse="handleCollapse"
     :settings="settings"
   >
@@ -165,7 +166,7 @@ export default defineComponent({
     <template #headerContentRender>
       <div class="basic-head">
         <!-- <a-tooltip title="刷新页面">
-          <a-icon type="reload" style="font-size: 18px;cursor: pointer;" @click="reload" />
+           <reload-outlined style="font-size: 18px;cursor: pointer;" @click="reload"  />
         </a-tooltip> -->
         <div class="multi-tab-container">
           <multi-tab v-if="settings.multiTab" />
@@ -185,7 +186,7 @@ export default defineComponent({
     <template #footerRender>
       <global-footer />
     </template>
-    <router-view :key="key" />
+    <router-view :key="shallowNum.key" />
   </CustomLayout>
 </template>
 

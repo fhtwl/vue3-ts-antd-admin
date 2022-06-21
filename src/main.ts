@@ -9,7 +9,7 @@ import { createPinia } from 'pinia';
 import axios from '@/utils/http';
 import CIcon from '@/components/CIcon/index.vue';
 import './permission';
-
+// devtools.enabled = true;
 // import '@/styles/common/common.less';
 
 const app = createApp(App);

@@ -3,7 +3,13 @@ import './index.less';
 import { useStore } from '@/store/system/theme';
 import { System } from '@/typings/common';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { Menu } from 'ant-design-vue';
 export default defineComponent({
+  components: {
+    'a-menu': Menu,
+    'a-menu-item': Menu.Item,
+    'a-sub-menu': Menu.SubMenu,
+  },
   props: {
     menus: {
       type: Array,
@@ -11,6 +17,10 @@ export default defineComponent({
     },
     settings: {
       type: Object,
+      default: () => {},
+    },
+    collapsed: {
+      type: Boolean,
       default: () => {},
     },
   },
@@ -23,13 +33,15 @@ export default defineComponent({
     };
   },
   data() {
+    const defaultOpenKeys = this.$route.matched
+      .filter((item) => item.name && item.name !== this.$route.name)
+      .map((item) => item.name);
+    console.log(defaultOpenKeys);
     return {
       selectedKeys: this.$route.matched
         .filter((item) => item.name)
         .map((item) => item.name),
-      defaultOpenKeys: this.$route.matched
-        .filter((item) => item.name && item.name !== this.$route.name)
-        .map((item) => item.name),
+      defaultOpenKeys,
     };
   },
   watch: {
@@ -44,21 +56,21 @@ export default defineComponent({
   },
   methods: {
     renderSubMenuItem(node: System.Router) {
-      const solt = {
-        title: this.renderTitle(node),
-      };
       const children = node.children?.filter((item) => !item.hidden) || [];
+      const solts = {
+        title: () => this.renderTitle(node),
+      };
       return (
-        <a-sub-menu v-slot={solt} key={node.name}>
-          {/* <template #title>{this.renderTitle(node)}</template> */}
-          {/* <span slot="title">{this.renderTitle(node)}</span> */}
+        <a-sub-menu v-slots={solts} key={node.name}>
           {children.map((item) => this.renderMenuItem(item))}
         </a-sub-menu>
       );
     },
     renderMenuItem(node: System.Router) {
       return (
-        <a-menu-item key={node.name}>{this.renderLinkTitle(node)}</a-menu-item>
+        <a-menu-item title="112" key={node.name}>
+          {this.renderLinkTitle(node)}
+        </a-menu-item>
       );
     },
     renderTitle(node: System.Router) {
@@ -78,7 +90,7 @@ export default defineComponent({
       theme,
       menus,
       renderSubMenuItem,
-      settings,
+      // settings,
       selectedKeys,
       defaultOpenKeys,
     } = this;
@@ -90,11 +102,12 @@ export default defineComponent({
       children.length && (
         <a-menu
           class="custom-menus"
+          mode="inline"
           theme={theme}
-          mode={settings.layout === 'sidemenu' ? 'inline' : 'horizontal'}
-          default-open-keys={defaultOpenKeys}
+          openKeys={defaultOpenKeys}
           selectedKeys={selectedKeys}
         >
+          {/* mode={settings.layout === 'sidemenu' ? 'inline' : 'horizontal'} */}
           {children.map((item) => renderSubMenuItem(item))}
         </a-menu>
       )

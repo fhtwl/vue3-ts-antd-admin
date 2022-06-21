@@ -82,6 +82,10 @@ export const useStore = defineStore('user', {
           });
       });
     },
+    deleteToken() {
+      this.token = null;
+      localStorage.removeItem(ACCESS_TOKEN);
+    },
   },
 });
 

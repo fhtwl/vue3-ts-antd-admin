@@ -13,7 +13,7 @@ import { RouteRecordRaw } from 'vue-router';
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const allowList = ['login', 'register', 'registerResult']; // no redirect allowList
-const loginRoutePath = '/auth/login';
+export const loginRoutePath = '/auth/login';
 const defaultRoutePath = '/dashboard/my-dashboard';
 
 router.beforeEach((to, from, next) => {

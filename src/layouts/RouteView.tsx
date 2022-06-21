@@ -1,8 +1,12 @@
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, KeepAlive } from 'vue';
 import { useStore } from '@/store/system/theme';
 
 export default defineComponent({
   name: 'RouteView',
+  components: {
+    'keep-alive': KeepAlive,
+    // Transition,
+  },
   props: {
     keepAlive: {
       type: Boolean,
@@ -20,11 +24,30 @@ export default defineComponent({
       $route: { meta },
       multiTab,
     } = this;
+    console.log(this.$slots);
+    // const inKeep = (
+    //   <router-view>
+    //     {{
+    //       default: ({ Component }: { Component: unknown }) => {
+    //         return <keep-alive>{Component}</keep-alive>;
+    //       },
+    //     }}
+    //   </router-view>
+    // );
     const inKeep = (
       <router-view>
-        <keep-alive>
-          <component is={this.$slots.Component} />
-        </keep-alive>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {({ Component }: { Component: any }) => {
+          return (
+            // <transition name={meta.transition || 'fade'} mode="out-in">
+            <keep-alive>
+              <Component key={this.$route.path} />
+              {/* <component is={Component} /> */}
+              {/* {Component} */}
+            </keep-alive>
+            // </transition>
+          );
+        }}
       </router-view>
     );
     const notKeep = <router-view />;
