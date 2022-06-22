@@ -7,7 +7,7 @@ export default defineComponent({
   name: 'MultiTab',
   data() {
     return {
-      fullPathList: [] as string[],
+      pathList: [] as string[],
       pages: [] as RouteLocationNormalized[],
       activeKey: '' as string,
       newTabIndex: 0,
@@ -15,106 +15,60 @@ export default defineComponent({
   },
   watch: {
     $route: function (newVal: RouteLocationNormalized) {
-      this.activeKey = newVal.fullPath;
-      console.log(this.fullPathList, this.fullPathList.indexOf(newVal.path));
-      if (this.fullPathList.indexOf(newVal.path) < 0) {
-        this.fullPathList.push(newVal.path);
+      this.activeKey = newVal.path;
+
+      if (this.pathList.indexOf(newVal.path) < 0) {
+        this.pathList.push(newVal.path);
         this.pages.push(newVal);
       } else {
         const index = this.pages.findIndex((page) => page.path === newVal.path);
         this.pages[index] = newVal;
-        this.activeKey = newVal.fullPath;
       }
-      console.log(newVal, this.activeKey, this.pages);
     },
-    activeKey: function (newPathKey) {
-      this.$router.push({ path: newPathKey });
-    },
+    // activeKey: function (newPathKey) {
+    //   console.log(newPathKey);
+    //   this.$router.push({ path: newPathKey });
+    // },
   },
   created() {
-    // // bind event
-    // open: function (config) {
-    //   events.$emit('open', config)
-    // }
-    // rename: function (key, name) {
-    //   events.$emit('rename', { key: key, name: name })
-    // }
-    // /**
-    //  * close current page
-    //  */
-    // closeCurrentPage: function () {
-    //   this.close()
-    // }
-    // /**
-    //  * close route fullPath tab
-    //  * @param config
-    //  */
-    // close: function (config) {
-    //   events.$emit('close', config)
-    // }
-    // events
-    //   .$on('open', (val: string) => {
-    //     if (!val) {
-    //       throw new Error(`multi-tab: open tab ${val} err`);
-    //     }
-    //     this.activeKey = val;
-    //   })
-    //   .$on('close', (val: string) => {
-    //     if (!val) {
-    //       this.closeThat(this.activeKey);
-    //       return;
-    //     }
-    //     this.closeThat(val);
-    //   })
-    //   .$on('rename', ({ key, name }: { key: string; name: string }) => {
-    //     console.log('rename', key, name);
-    //     try {
-    //       const item = this.pages.find((item) => item.path === key);
-    //       item!.meta.customTitle = name;
-    //       this.$forceUpdate();
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
-    //   });
-
     this.pages.push(this.$route);
-    this.fullPathList.push(this.$route.path);
+    this.pathList.push(this.$route.path);
     this.selectedLastPath();
   },
   methods: {
-    onEdit(targetKey: string, action: MultiTabAction) {
+    handleEdit(targetKey: string, action: MultiTabAction) {
+      console.log(action, targetKey);
       this[action](targetKey);
     },
     remove(targetKey: string) {
-      this.pages = this.pages.filter((page) => page.fullPath !== targetKey);
-      this.fullPathList = this.fullPathList.filter(
-        (path) => path !== targetKey
-      );
+      this.pages = this.pages.filter((page) => page.path !== targetKey);
+      this.pathList = this.pathList.filter((path) => path !== targetKey);
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
-      // if (!this.fullPathList.includes(this.activeKey)) {
-      if (!this.fullPathList.includes(this.activeKey.split('?')[0])) {
+      // if (!this.pathList.includes(this.activeKey)) {
+      if (!this.pathList.includes(this.activeKey.split('?')[0])) {
         this.selectedLastPath();
       }
     },
     selectedLastPath() {
-      const last = this.fullPathList[this.fullPathList.length - 1];
-      this.activeKey =
-        this.pages.find((page) => page.path === last)?.fullPath || '';
+      const last = this.pathList[this.pathList.length - 1];
+      const lastPage = this.pages.find((page) => page.path === last);
+      this.activeKey = lastPage?.path || '';
+      this.$router.push({ path: lastPage?.fullPath || '' });
     },
 
     // content menu
     closeThat(e: string) {
       // 判断是否为最后一个标签页，如果是最后一个，则无法被关闭
-      if (this.fullPathList.length > 1) {
+      if (this.pathList.length > 1) {
         this.remove(e);
       } else {
         this.$message.info('这是最后一个标签了, 无法被关闭');
       }
     },
     closeLeft(e: string) {
-      const currentIndex = this.fullPathList.indexOf(e);
+      const currentIndex = this.pathList.indexOf(e);
       if (currentIndex > 0) {
-        this.fullPathList.forEach((item, index) => {
+        this.pathList.forEach((item, index) => {
           if (index < currentIndex) {
             this.remove(item);
           }
@@ -124,9 +78,9 @@ export default defineComponent({
       }
     },
     closeRight(e: string) {
-      const currentIndex = this.fullPathList.indexOf(e);
-      if (currentIndex < this.fullPathList.length - 1) {
-        this.fullPathList.forEach((item, index) => {
+      const currentIndex = this.pathList.indexOf(e);
+      if (currentIndex < this.pathList.length - 1) {
+        this.pathList.forEach((item, index) => {
           if (index > currentIndex) {
             this.remove(item);
           }
@@ -136,25 +90,22 @@ export default defineComponent({
       }
     },
     closeAll(key: string) {
-      const currentIndex = this.fullPathList.indexOf(key);
-      this.fullPathList.forEach((item, index) => {
+      const currentIndex = this.pathList.indexOf(key);
+      this.pathList.forEach((item, index) => {
         if (index !== currentIndex) {
           this.remove(item);
         }
       });
     },
     closeMenuClick(action: MultiTabAction, route: string) {
+      console.log(action, route);
       this[action](route);
     },
     renderTabPaneMenu(e: string) {
       return (
         <a-menu
-          {...{
-            on: {
-              click: ({ key }: { key: MultiTabAction }) => {
-                this.closeMenuClick(key, e);
-              },
-            },
+          onClick={({ key }: { key: MultiTabAction }) => {
+            this.closeMenuClick(key, e);
           }}
         >
           <a-menu-item key="closeThat">关闭当前标签</a-menu-item>
@@ -174,21 +125,27 @@ export default defineComponent({
         </a-dropdown>
       );
     },
+    handleChange(key: string) {
+      console.log(key);
+      this.activeKey = key;
+      this.$router.push({ path: key });
+    },
   },
   render() {
     const {
-      onEdit,
+      handleEdit,
       $data: { pages },
     } = this;
+    console.log(pages);
     const panes = pages.map((page) => {
       return (
         <a-tab-pane
           style={{ height: 0 }}
           tab={this.renderTabPane(
             (page.meta.customTitle || page.meta.title) as string,
-            page.fullPath
+            page.path
           )}
-          key={page.fullPath}
+          key={page.path}
           closable={pages.length > 1}
         ></a-tab-pane>
       );
@@ -200,14 +157,15 @@ export default defineComponent({
           <a-tabs
             hideAdd
             type={'editable-card'}
-            v-model={this.activeKey}
+            v-model:activeKey={this.activeKey}
+            onChange={this.handleChange}
             tabBarStyle={{
               background: '#FFF',
               margin: 0,
               paddingLeft: '16px',
               paddingTop: '1px',
             }}
-            {...{ on: { edit: onEdit } }}
+            onEdit={handleEdit}
           >
             {panes}
           </a-tabs>
