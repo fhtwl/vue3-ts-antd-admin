@@ -2,7 +2,6 @@
 import defaultSettings from '@/config/defaultSettings';
 import RightContent from '@/components/GlobalHeader/RightContent.vue';
 import GlobalFooter from '@/components/GlobalFooter';
-import LogoSvgImg from '@/assets/logo.svg?inline';
 import SettingDrawer from '@/components/SettingDrawer/SettingDrawer.vue';
 import CustomLayout from './CustomLayout/index.vue';
 import { defineRouterStore } from '@/store/system/async-router';
@@ -13,15 +12,14 @@ import {
   TOGGLE_NAV_THEME,
   TOGGLE_COLOR,
 } from '@/store/system/theme/const';
-const LogoSvg = () => LogoSvgImg;
 import { computed, defineComponent, markRaw, shallowRef } from 'vue';
+import { getAssrtsImages } from '@/utils/utils';
 export default defineComponent({
   name: 'BasicLayout',
   components: {
     SettingDrawer: markRaw(SettingDrawer),
     RightContent: markRaw(RightContent),
     GlobalFooter: markRaw(GlobalFooter),
-    LogoSvg: markRaw(LogoSvg),
     CustomLayout: markRaw(CustomLayout),
     MultiTab: markRaw(MultiTab),
   },
@@ -36,6 +34,7 @@ export default defineComponent({
       const routes = mainMenu.value.find((item) => item.path === '/');
       return (routes && routes.children) || [];
     });
+    const logoSvgImg = getAssrtsImages('/logo.svg?inline');
 
     const settings = computed(() => {
       const {
@@ -132,6 +131,7 @@ export default defineComponent({
       handleCollapse,
       shallowNum,
       reload,
+      logoSvgImg,
     };
   },
   data() {
@@ -159,7 +159,7 @@ export default defineComponent({
   >
     <template #menuHeaderRender>
       <div class="logo">
-        <logo-svg />
+        <img :src="logoSvgImg" />
         <h1>{{ title }}</h1>
       </div>
     </template>
