@@ -136,14 +136,6 @@ export default defineComponent({
   },
   data() {
     return {
-      // preview.pro.antdv.com only use.
-      isProPreviewSite:
-        process.env.VUE_APP_PREVIEW === 'true' &&
-        process.env.NODE_ENV !== 'development',
-      // end
-      isDev:
-        process.env.NODE_ENV === 'development' ||
-        process.env.VUE_APP_PREVIEW === 'true',
       title: defaultSettings.title,
     };
   },

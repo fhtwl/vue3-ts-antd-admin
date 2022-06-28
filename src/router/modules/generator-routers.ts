@@ -4,15 +4,16 @@ import { getUserMenu } from '@/api/system/user';
 import { BasicLayout, BlankLayout, RouteView } from '@/layouts';
 import { UserRes } from '@/typings/api/system/user';
 import { System } from '@/typings/common';
+import { markRaw } from 'vue';
 
 // 前端路由表
 const constantRouterComponents: {
   [propsName: string]: unknown;
 } = {
   // 基础页面 layout 必须引入
-  BasicLayout: BasicLayout,
-  BlankLayout: BlankLayout,
-  RouteView: RouteView,
+  BasicLayout: markRaw(BasicLayout),
+  BlankLayout: markRaw(BlankLayout),
+  RouteView: markRaw(RouteView),
   404: () => import('@/views/system/exception/404/index.vue'),
 
   // 你需要动态引入的页面组件

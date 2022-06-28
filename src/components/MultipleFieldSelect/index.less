@@ -1,0 +1,133 @@
+.multiple-field-select {
+  width: 100%;
+  height: 34px;
+  position: relative;
+  &.disabled {
+    opacity: 0.9;
+    .input {
+      color: rgba(0, 0, 0, 0.25);
+      .icon {
+        display: block !important;
+        &.clear {
+          display: none !important;
+        }
+      }
+    }
+  }
+  .input {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 4px 11px;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    border: 1px solid #d9d9d9;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    border-radius: 4px;
+    // overflow: hidden;
+    input {
+      // visibility: hidden;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .value {
+      width: 100%;
+      height: 100%;
+      padding-right: 30px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      line-height: 24px;
+    }
+    .icon {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.25);
+      &.clear {
+        display: none;
+        cursor: pointer;
+      }
+    }
+    .board {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      width: 100%;
+      z-index: 1;
+      background: #fff;
+      box-shadow: 2px 4px 8px 3px #ddd;
+      display: none;
+      overflow-y: scroll;
+      transition: all 0.3s;
+      max-height: 140px;
+      min-height: 140px;
+      .component {
+        .component-title {
+          padding: 0 4px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 12px;
+          color: #aaa;
+          height: 32px;
+          line-height: 32px;
+        }
+        .field-list {
+          .field {
+            padding: 0 30px 0 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+            height: 32px;
+            line-height: 32px;
+            cursor: pointer;
+            .check {
+              position: absolute;
+              top: 10px;
+              right: 10px;
+            }
+            &.active {
+              background: #f1f1f1;
+              .check {
+                color: @primary-color;
+              }
+            }
+            &.disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+    }
+    &:hover {
+      .icon {
+        display: none;
+        &.clear {
+          display: block;
+          &:hover {
+            color: rgba(0, 0, 0, 0.45);
+          }
+        }
+      }
+    }
+    &.focus {
+      // overflow: inherit;
+      border-color: @primary-color;
+      .board {
+        display: block;
+      }
+      input {
+        height: 140px;
+      }
+    }
+  }
+}

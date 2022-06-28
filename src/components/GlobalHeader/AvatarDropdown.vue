@@ -50,10 +50,10 @@ export default defineComponent({
   },
   methods: {
     handleToCenter() {
-      this.$router.push({ path: '/user/center' });
+      this.$router.push({ path: '/account/center' });
     },
     handleToSettings() {
-      this.$router.push({ path: '/user/settings' });
+      this.$router.push({ path: '/account/userSetting' });
     },
     handleLogout() {
       const userStore = useStore();

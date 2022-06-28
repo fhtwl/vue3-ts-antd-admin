@@ -25,15 +25,6 @@ export default defineComponent({
       multiTab,
     } = this;
     console.log(this.$slots);
-    // const inKeep = (
-    //   <router-view>
-    //     {{
-    //       default: ({ Component }: { Component: unknown }) => {
-    //         return <keep-alive>{Component}</keep-alive>;
-    //       },
-    //     }}
-    //   </router-view>
-    // );
     const RootBox = (
       _props: unknown,
       { slots }: { slots: { default: () => unknown } }
@@ -49,13 +40,9 @@ export default defineComponent({
               appear
             >
               <RootBox key={this.$route.path}>
-                {/* <div class="transition"> */}
                 <keep-alive>
                   <Component key={this.$route.path} />
-                  {/* <component is={Component} /> */}
-                  {/* {Component} */}
                 </keep-alive>
-                {/* </div> */}
               </RootBox>
             </transition>
           );

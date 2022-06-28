@@ -26,7 +26,11 @@ const colorList = [
     color: '#52C41A',
   },
   {
-    key: '拂晓蓝（默认）',
+    key: '生命',
+    color: '#18a058',
+  },
+  {
+    key: '拂晓蓝',
     color: '#1890FF',
   },
   {

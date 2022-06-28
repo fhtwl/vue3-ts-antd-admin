@@ -1,0 +1,52 @@
+.common-form-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  .value {
+    width: 150px;
+    .ant-form-item-control-wrapper {
+      width: 80px;
+    }
+  }
+  .unit {
+    width: 150px;
+    margin-right: 0;
+    .ant-form-item-control-wrapper {
+      width: 80px;
+    }
+  }
+  .row {
+    width: 100%;
+  }
+  .ant-upload {
+    & > img {
+      width: 100%;
+    }
+  }
+
+  .ant-form-item-label {
+    width: 70px;
+    min-width: 70px;
+  }
+  .ant-form-item-control-wrapper {
+    width: calc(~'100% - 70px');
+    .ant-input-number,
+    .ant-input,
+    .ant-calendar-picker {
+      width: 100%;
+    }
+  }
+  .value,
+  .unit {
+    display: inline-block;
+    .ant-form-item-control-wrapper {
+      display: inline-block;
+    }
+  }
+  .ant-row.ant-form-item {
+    .ant-col {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}

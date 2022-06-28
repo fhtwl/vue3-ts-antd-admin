@@ -3,6 +3,7 @@
     <avatar-dropdown
       :menu="showMenu"
       :current-user="currentUser"
+      class=""
       :class="prefixCls"
     />
   </div>
