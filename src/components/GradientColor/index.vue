@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { FormItemEvent } from '../CommonForm';
 import { getGradientBg } from './gradientBg';
 
@@ -13,7 +13,7 @@ export default defineComponent({
   components: {},
   props: {
     value: {
-      type: Object,
+      type: Object as PropType<Value>,
       required: true,
     },
   },
@@ -38,7 +38,7 @@ export default defineComponent({
     },
     handleColorChange(e: unknown, index: number) {
       const { color } = this.value;
-      color[index] = (e as FormItemEvent).target?.value || '';
+      color[index] = ((e as FormItemEvent).target?.value as string) || '';
       // this.$set(this.value, 'color', [...color]);
       // eslint-disable-next-line vue/no-mutating-props
       this.value.color = [...color];

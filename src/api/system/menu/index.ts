@@ -10,39 +10,53 @@ const api = {
   getMenuByRoleId: `${Menu}/getMenuByRoleId`,
 };
 
-export function deleteMenuByIds(parameter: { ids: number[] }) {
-  return http.get(api.deleteMenuByIds, parameter);
+export function deleteMenuByIds(params: { ids: string }) {
+  return http.get(api.deleteMenuByIds, { params });
 }
 
 /**
  * 获取所有角色
- * @param {*} parameter
  * @returns
  */
-export function getMenuMap() {
+export function getMenuMap(): Promise<System.Menu[]> {
   return http.get(api.getMenuMap);
 }
 
-export function getMenuList(parameter: Common.PaginationParams) {
-  return http.post(api.getMenuList, parameter);
+export function getMenuList(params: Common.PaginationParams) {
+  return http.post(api.getMenuList, params);
 }
 
 /**
  * 新增菜单
- * @param {*} parameter
+ * @param {*} params
  * @returns
  */
-export function addMenu(parameter: System.Menu) {
-  return http.post(api.addMenu, parameter);
+export function addMenu(params: {
+  name: string;
+  parentId: number | undefined;
+  icon: string;
+  show: Common.BooleanNumber;
+  path: string;
+  type: System.MenuType;
+}) {
+  return http.post(api.addMenu, params);
 }
 
 /**
  * 修改菜单
- * @param {*} parameter
+ * @param {*} params
  * @returns
  */
-export function editMenuById(parameter: System.Menu) {
-  return http.post(api.editMenuById, parameter);
+export function editMenuById(params: {
+  name: string;
+  parentId: number | undefined;
+  icon: string;
+  show: Common.BooleanNumber;
+  path: string;
+  type: System.MenuType;
+  id: number;
+}) {
+  return http.post(api.editMenuById, params);
 }
 
 /**
@@ -50,6 +64,6 @@ export function editMenuById(parameter: System.Menu) {
  * @param {*} parameter
  * @returns
  */
-export function getMenuByRoleId(parameter: { id: number }) {
-  return http.get(api.getMenuByRoleId, parameter);
+export function getMenuByRoleId(params: { id: number }) {
+  return http.get(api.getMenuByRoleId, { params });
 }

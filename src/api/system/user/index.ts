@@ -28,10 +28,10 @@ export function editUserInfo(parameter: System.UserInfo) {
 
 /**
  * 修改用户信息
- * @param {*} parameter
+ * @param {*} params
  * @returns
  */
-export function editUserById(parameter: {
+export function editUserById(params: {
   userName: string;
   avatar: string;
   password: string;
@@ -39,12 +39,12 @@ export function editUserById(parameter: {
   nickName: string;
   email: string;
 }) {
-  return http.post(api.editUserById, parameter);
+  return http.post(api.editUserById, params);
 }
 
 /**
  * 发送邮件获取验证码
- * @param {*} parameter
+ * @param {*} params
  * @returns
  */
 export function email() {
@@ -53,15 +53,15 @@ export function email() {
 
 /**
  * 修改密码
- * @param {*} parameter
+ * @param {*} params
  * @returns
  */
-export function editPassword(parameter: {
+export function editPassword(params: {
   password: string;
   code: string;
   emailCode: string;
 }) {
-  return http.post(api.editPassword, parameter);
+  return http.post(api.editPassword, params);
 }
 
 export function getUserInfo(): Promise<UserRes.GetUserInfo> {

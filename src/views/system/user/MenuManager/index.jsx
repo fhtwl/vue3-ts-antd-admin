@@ -1,14 +1,9 @@
-import { defineComponent, getCurrentInstance } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getMenuList, deleteMenuByIds } from '@/api/system/menu';
 import './index.less';
 import AddMenu from './AddMenu';
-import { Fun } from '@fhtwl-admin/common';
-import { VueComponentNode } from '@/components/TableLayout/Tool';
-import { CommonFormItem } from '@/components/CommonForm';
 
-export default defineComponent({
-  setup() {},
+export default {
   data() {
     return {
       formData: {
@@ -24,12 +19,11 @@ export default defineComponent({
           },
           dataType: String,
         },
-      ] as CommonFormItem[],
+      ],
       list: [],
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      parentId: 0,
       tableLoading: true,
       columns: [
         {
@@ -63,7 +57,7 @@ export default defineComponent({
           title: '是否显示',
           dataIndex: 'show',
           width: 60,
-          customRender: (text: boolean) => {
+          customRender: (text) => {
             return text ? '是' : '否';
           },
         },
@@ -117,19 +111,17 @@ export default defineComponent({
   created() {},
   mounted() {},
   methods: {
-    handleSearch(data: Common.PaginationParams, resolve: Fun) {
+    handleSearch(data, resolve) {
       getMenuList({ ...data }).then(resolve);
     },
     handleAddClick() {
-      (this.$refs.addMenuRef as { show: Fun }).show('add');
+      this.$refs.addMenuRef.show('add');
     },
-    handleEditClick(selectKey: unknown, selectNodes: number[]) {
-      (this.$refs.addMenuRef as { show: Fun }).show('edit', selectNodes[0]);
+    handleEditClick(selectKey, selectNodes) {
+      this.$refs.addMenuRef.show('edit', selectNodes[0]);
     },
-    handleDeleteClick(selectKey: unknown, selectNodes: Common.TreeNode[]) {
-      const { proxy } = getCurrentInstance()!;
-
-      proxy!.$confirm({
+    handleDeleteClick(selectKey, selectNodes) {
+      this.$confirm({
         title: '是否确认删除',
         content: '删除该菜单会删除该菜单的所有子菜单',
         okText: '是',
@@ -137,8 +129,8 @@ export default defineComponent({
         cancelText: '否',
         maskClosable: false,
         onOk: () => {
-          const ids: number[] = [];
-          const each = (tree: Common.TreeNode[]) => {
+          const ids = [];
+          const each = (tree) => {
             tree.forEach((item) => {
               ids.push(item.id);
               if (item.children) {
@@ -156,18 +148,15 @@ export default defineComponent({
         },
       });
     },
-    handleDetailsClick(_selectKey: unknown, selectNodes: number[]) {
-      (this.$refs.addMenuRef as { show: Common.Fun }).show(
-        'details',
-        selectNodes[0]
-      );
+    handleDetailsClick(selectKey, selectNodes) {
+      this.$refs.addMenuRef.show('details', selectNodes[0]);
     },
-    handleSeleceCategory(node: { value: number }) {
+    handleSeleceCategory(node) {
       this.parentId = node.value;
-      (this.$refs.tableLayoutRef as { resetSearch: Common.Fun }).resetSearch();
+      this.$refs.tableLayoutRef.resetSearch();
     },
     reSearch() {
-      (this.$refs.tableLayoutRef as { resetSearch: Common.Fun }).resetSearch();
+      this.$refs.tableLayoutRef.resetSearch();
     },
   },
   render() {
@@ -177,7 +166,7 @@ export default defineComponent({
       <div class="container">
         <TableLayout
           ref="tableLayoutRef"
-          tableHeader={tableHeader as unknown as VueComponentNode[]}
+          tableHeader={tableHeader}
           formJson={formJson}
           columns={columns}
           search={handleSearch}
@@ -186,4 +175,4 @@ export default defineComponent({
       </div>
     );
   },
-});
+};

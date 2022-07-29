@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ACCESS_TOKEN } from './const';
-import { login } from '@/api/system/auth';
+import { login, logout } from '@/api/system/auth';
 import { getUserInfo } from '@/api/system/user';
 import { UserRes } from '@/typings/api/system/user';
 import { Permission } from '@fhtwl-admin/system';
@@ -88,8 +88,3 @@ export const useStore = defineStore('user', {
     },
   },
 });
-
-async function logout() {
-  const res = await fetch('/');
-  return await res.json();
-}

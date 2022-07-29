@@ -14,7 +14,7 @@
       <a-icon v-if="status === 'blur'" class="icon open" type="down" />
       <a-icon v-if="status === 'focus'" class="icon open" type="up" />
 
-      <!-- <div
+      <div
         id="board"
         class="board"
         :class="status === 'focus' ? 'open' : 'close'"
@@ -25,7 +25,7 @@
           class="component"
         >
           <div class="component-title">{{ component.label }}</div>
-          <div class="field-list">
+          <!-- <div class="field-list">
             <div
               v-for="field in component.children"
               :key="field.value"
@@ -61,25 +61,25 @@
                 type="check"
               />
             </div>
-          </div>
+          </div> -->
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Common from '@fhtwl-admin/common';
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   props: {
     value: {
-      type: Array,
+      type: Array as PropType<Common.OptionValue[]>,
       default: () => [],
     },
     options: {
-      type: Array,
+      type: Array as PropType<Common.Option[]>,
       default: () => [],
     },
     // 是否要求需要保证多选的组件的字段名相同
@@ -109,12 +109,12 @@ export default defineComponent({
         const [componentValue, fieldValue] = (item as string).split('/');
         // 经过转换,value可能是数字或者字符串,所以用==
         // eslint-disable-next-line no-undef
-        const component = (options as Common.TreeNode[]).find(
+        const component = options.find(
           (option) => option.value == componentValue
         );
         // console.log(options, item, componentValue, component)
         const componentName = component!.label;
-        const field = component!.children.find(
+        const field = component!.children!.find(
           (option) => option.value === fieldValue
         );
         const fieldName = field!.label;
@@ -125,7 +125,7 @@ export default defineComponent({
     },
 
     itemDisabled() {
-      return (component: string, field: string | number) => {
+      return (component: Common.OptionValue, field: string | number) => {
         const { isSameField, selectValue } = this;
 
         // 是否字段名唯一
@@ -166,7 +166,7 @@ export default defineComponent({
     },
     // eslint-disable-next-line no-undef
     handleSelect(
-      component: string,
+      component: Common.OptionValue,
       field: Common.OptionValue,
       id: Common.OptionValue,
       filterType: string,

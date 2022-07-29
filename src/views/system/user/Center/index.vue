@@ -5,16 +5,11 @@ import { useStore } from '@/store/system/user';
 export default defineComponent({
   setup() {
     const store = useStore();
-    const userLevel = {
-      user: '用户',
-      admin: '管理员',
-    };
     return {
       nickname: computed(() => store.info?.nickName),
       userInfo: computed(() => store.info),
       avatar: computed(() => store.info?.avatar),
       role: computed(() => store.role),
-      userLevel,
     };
   },
 });
@@ -34,14 +29,6 @@ export default defineComponent({
           </div>
           <div class="account-center-detail">
             <p><i class="title"></i>{{ role?.roleName }}</p>
-            <!-- <p>
-              <i class="group"></i>xxxx－某某某事业群－某某平台部－某某技术部－UED
-            </p>
-            <p>
-              <i class="address"></i>
-              <span>浙江省</span>
-              <span>杭州市</span>
-            </p> -->
           </div>
           <a-divider />
         </a-card>

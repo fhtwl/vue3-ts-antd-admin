@@ -6,9 +6,9 @@ const api = {
 
 /**
  * 上传图片
- * @param {*} parameter
+ * @param {*} params
  * @returns
  */
-export function uploadImg(parameter: FormData) {
-  http.post(api.img, parameter);
+export function uploadImg(params: FormData) {
+  http.post(api.img, params);
 }
