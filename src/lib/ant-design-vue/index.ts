@@ -8,6 +8,17 @@ import {
   Switch,
   message,
   Modal,
+  Table,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  DatePicker,
+  TreeSelect,
+  Tree,
+  Upload,
+  Radio,
+  Checkbox,
 } from 'ant-design-vue';
 
 import { App } from 'vue';
@@ -21,6 +32,17 @@ const components = [
   Switch,
   Dropdown,
   Modal,
+  Table,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  DatePicker,
+  TreeSelect,
+  Tree,
+  Upload,
+  Radio,
+  Checkbox,
 ];
 
 export default function setupAtnd(app: App<Element>) {

@@ -123,10 +123,10 @@ export default defineComponent({
     handleAddClick() {
       (this.$refs.addMenuRef as { show: Fun }).show('add');
     },
-    handleEditClick(selectKey: unknown, selectNodes: number[]) {
+    handleEditClick(_selectKey: unknown, selectNodes: number[]) {
       (this.$refs.addMenuRef as { show: Fun }).show('edit', selectNodes[0]);
     },
-    handleDeleteClick(selectKey: unknown, selectNodes: Common.TreeNode[]) {
+    handleDeleteClick(_selectKey: unknown, selectNodes: Common.TreeNode[]) {
       const { proxy } = getCurrentInstance()!;
 
       proxy!.$confirm({

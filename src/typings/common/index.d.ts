@@ -3,7 +3,7 @@ import { ModalFunc } from 'ant-design-vue/lib/modal/Modal';
 import { DefineComponent } from 'vue';
 import { UserRes } from '../api/system/user';
 declare global {
-  namespace System {}
+  module System {}
   module Common {
     export interface Router {
       path: string;

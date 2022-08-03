@@ -35,7 +35,7 @@ export default defineComponent({
       default: 'id',
     },
   },
-  setup(_props) {
+  setup(props) {
     // 分页
     const current = ref(1);
     const pageSize = ref(10);
@@ -58,13 +58,13 @@ export default defineComponent({
     const handleSearch = function () {
       loading.value = true;
       const params = {
-        ...formData,
+        ...formData.value,
       };
-      _props.search(
+      props.search(
         {
           params,
-          pageNum: current,
-          pageSize,
+          pageNum: current.value,
+          pageSize: pageSize.value,
         },
         (res: PaginationResponse<Common.TreeNode>) => {
           tableData.value = res.records.map((item) => item);
@@ -80,7 +80,7 @@ export default defineComponent({
     };
 
     const getFormJson = computed(() => {
-      let formJson: CommonFormItem[] = _props.formJson;
+      let formJson: CommonFormItem[] = props.formJson;
       if (formJson.length > 0) {
         formJson = [
           ...formJson,
@@ -153,6 +153,7 @@ export default defineComponent({
       handleChange,
     } = this;
     const { formBottom = () => {} } = $slots;
+    console.log(tableData);
     return (
       <div class="table-layout">
         <CommonForm

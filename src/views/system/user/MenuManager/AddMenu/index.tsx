@@ -359,6 +359,7 @@ export default defineComponent({
       formJson,
       handleSelectIcon,
       menuIconList,
+      isIconShow,
     } = this;
     return (
       <a-modal
@@ -368,15 +369,15 @@ export default defineComponent({
         cancelText="取消"
         okText="确定"
         maskClosable={false}
-        v-on:ok={handleOk}
-        v-on:cancel={handleCancel}
+        onOk={handleOk}
+        onCancel={handleCancel}
       >
         <CommonForm
           ref="commonFormRef"
           formData={formData}
           formJson={formJson}
         />
-        <a-modal v-model="isIconShow" title="图标" footer={false}>
+        <a-modal value={isIconShow} title="图标" footer={false}>
           <div class="icon-container">
             {menuIconList.map((item) => (
               <div

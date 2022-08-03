@@ -3,14 +3,13 @@ import { defineComponent, PropType } from 'vue';
 
 export interface VueComponentNode {
   data: { attrs: { action: string } };
-  componentOptions: {
-    listeners: {
-      click: (
-        e: FormDataEvent,
-        selectedRowKeys?: Common.OptionValue[],
-        selectNodes?: Common.TreeNode[]
-      ) => unknown;
-    };
+  props: {
+    action: string;
+    onClick: (
+      e: FormDataEvent,
+      selectedRowKeys?: Common.OptionValue[],
+      selectNodes?: Common.TreeNode[]
+    ) => unknown;
   };
 }
 
@@ -45,9 +44,9 @@ export default defineComponent({
     return (
       <div class="table-layout-header">
         {list.map((item: VueComponentNode) => {
-          const { action } = item.data.attrs;
-          const handleClick = item.componentOptions.listeners.click;
-          item.componentOptions.listeners.click = (e: FormDataEvent) => {
+          const { action, onClick } = item.props;
+          const handleClick = onClick;
+          item.props.onClick = (e: FormDataEvent) => {
             const { selectedRowKeys, tableData } = this;
             const config = {
               single: ['query', 'edit', 're-name', 'move'], // 只能选1个

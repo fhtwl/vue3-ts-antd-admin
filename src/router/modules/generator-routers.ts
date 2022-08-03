@@ -3,7 +3,6 @@ import { getUserMenu } from '@/api/system/user';
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, RouteView } from '@/layouts';
 import { UserRes } from '@/typings/api/system/user';
-import { System } from '@/typings/common';
 import { markRaw } from 'vue';
 
 // 前端路由表
@@ -76,7 +75,7 @@ const rootRouter: UserRes.GetUserMenu = {
  * 动态生成菜单
  * @returns
  */
-export function generatorDynamicRouter(): Promise<System.Router[]> {
+export function generatorDynamicRouter(): Promise<Common.Router[]> {
   return new Promise((resolve, reject) => {
     getUserMenu()
       .then((result) => {
@@ -108,12 +107,12 @@ export function generatorDynamicRouter(): Promise<System.Router[]> {
  */
 export const generator = (
   routerMap: UserRes.GetUserMenu[],
-  parent?: System.Router
+  parent?: Common.Router
 ) => {
   return routerMap.map((item) => {
     const { title, show, hideChildren, hiddenHeaderContent, icon } =
       item.meta || {};
-    const currentRouter: System.Router = {
+    const currentRouter: Common.Router = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/my-dashboard
       path: item.path || `${(parent && parent.path) || ''}/${item.key}`,
       // 路由名称，建议唯一
@@ -122,7 +121,7 @@ export const generator = (
       // component: constantRouterComponents[item.component || item.key],
       // 该路由对应页面的 组件 :方案2 (动态加载)
       component: (constantRouterComponents[item.component || item.key] ||
-        (() => import(`@/views/${item.component}`))) as System.VueComponent,
+        (() => import(`@/views/${item.component}`))) as Common.VueComponent,
 
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {

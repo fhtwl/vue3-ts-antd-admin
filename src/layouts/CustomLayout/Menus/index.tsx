@@ -1,7 +1,6 @@
 import { computed, defineComponent } from 'vue';
 import './index.less';
 import { useStore } from '@/store/system/theme';
-import { System } from '@/typings/common';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { Menu } from 'ant-design-vue';
 export default defineComponent({
@@ -55,7 +54,7 @@ export default defineComponent({
     },
   },
   methods: {
-    renderSubMenuItem(node: System.Router) {
+    renderSubMenuItem(node: Common.Router) {
       const children = node.children?.filter((item) => !item.hidden) || [];
       const solts = {
         title: () => this.renderTitle(node),
@@ -66,14 +65,14 @@ export default defineComponent({
         </a-sub-menu>
       );
     },
-    renderMenuItem(node: System.Router) {
+    renderMenuItem(node: Common.Router) {
       return (
         <a-menu-item title="112" key={node.name}>
           {this.renderLinkTitle(node)}
         </a-menu-item>
       );
     },
-    renderTitle(node: System.Router) {
+    renderTitle(node: Common.Router) {
       return (
         <span class="title">
           <c-icon class="icon" type={node.meta.icon} />
@@ -81,7 +80,7 @@ export default defineComponent({
         </span>
       );
     },
-    renderLinkTitle(node: System.Router) {
+    renderLinkTitle(node: Common.Router) {
       return <router-link to={node.path}>{this.renderTitle(node)}</router-link>;
     },
   },
@@ -95,7 +94,7 @@ export default defineComponent({
       defaultOpenKeys,
     } = this;
     const children =
-      (menus as unknown as System.Router[]).filter((item) => !item.hidden) ||
+      (menus as unknown as Common.Router[]).filter((item) => !item.hidden) ||
       [];
 
     return (
