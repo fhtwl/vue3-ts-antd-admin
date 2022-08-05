@@ -2,6 +2,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
+  .ant-form-item-control-input-content,
+  .ant-input-number {
+    width: 100%;
+  }
   .value {
     width: 150px;
     .ant-form-item-control-wrapper {
@@ -17,6 +21,8 @@
   }
   .row {
     width: 100%;
+    margin-bottom: 10px;
+    margin-top: 6px;
   }
   .ant-upload {
     & > img {
@@ -25,11 +31,11 @@
   }
 
   .ant-form-item-label {
-    width: 70px;
-    min-width: 70px;
+    width: 90px;
+    min-width: 90px;
   }
   .ant-form-item-control-wrapper {
-    width: calc(~'100% - 70px');
+    width: calc(~'100% - 90px');
     .ant-input-number,
     .ant-input,
     .ant-calendar-picker {

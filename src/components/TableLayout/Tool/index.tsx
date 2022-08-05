@@ -45,8 +45,9 @@ export default defineComponent({
       <div class="table-layout-header">
         {list.map((item: VueComponentNode) => {
           const { action, onClick } = item.props;
-          const handleClick = onClick;
-          item.props.onClick = (e: FormDataEvent) => {
+          console.log(item);
+          const handleClick = Object.assign(onClick);
+          item.props.onClick = () => {
             const { selectedRowKeys, tableData } = this;
             const config = {
               single: ['query', 'edit', 're-name', 'move'], // 只能选1个
@@ -66,6 +67,7 @@ export default defineComponent({
                 return;
               }
             }
+            console.log(selectedRowKeys, tableData);
             const selectNodes: Common.TreeNode[] = [];
             const filter = (tree: Common.TreeNode[]) => {
               selectNodes.push(
@@ -80,7 +82,7 @@ export default defineComponent({
               });
             };
             filter(tableData);
-            return handleClick(e, selectedRowKeys, selectNodes);
+            return handleClick(selectedRowKeys, selectNodes);
           };
           return item;
         })}

@@ -109,11 +109,11 @@ export default defineComponent({
 
   methods: {
     // 每种类型的表单item
-    renderFormItem(item: CommonFormItem, index: number) {
+    renderFormItem(item: CommonFormItem) {
       const { colon, formData } = this;
       const {
         type,
-        label,
+        label = '',
         fieldName = '',
         rules,
         options = [],
@@ -123,38 +123,36 @@ export default defineComponent({
       } = item;
       console.log(extraConfig);
       let { placeholder } = item;
-      if (extraConfig && extraConfig.disabled) {
-        placeholder = ' ';
+      if (extraConfig) {
+        extraConfig.placeholder = extraConfig.placeholder || `请输入${label}`;
+        if (extraConfig.disabled) {
+          placeholder = ' ';
+        }
       }
+
       const formItemAttr = {
         name: fieldName,
         colon,
         label,
-        key: `form-item-${index}`,
+        key: `form-item-${fieldName}`,
         rules,
         class: extraConfig.className,
       };
+      console.log(formItemAttr);
       const itemHandleChange = item.onChange;
       switch (type) {
         // 自定义内容，当现有组件不满足需求时，可在外层组件中自定义表单项（或分组小标题等其他内容），写在配置项的content里即可
         case 'custom':
-          return (
-            <div key={`form-item-${index}`} {...extraConfig}>
-              {item.render && item.render(formData)}
-            </div>
-          );
+          return item.render && item.render!(formData);
         // 普通文本
         case 'input':
           return (
             <a-form-item {...formItemAttr}>
               <a-input
-                v-model={formData[fieldName]}
                 autoComplete="off"
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                onChange={(e: FormItemEvent) =>
-                  this.onFormChange(fieldName, e.target.value)
-                }
+                v-model:value={formData[fieldName]}
               />
             </a-form-item>
           );
@@ -164,13 +162,10 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-input-number
-                v-model={formData[fieldName]}
                 autoComplete="off"
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                onChange={(e: Common.OptionValue) =>
-                  this.onFormChange(fieldName, e)
-                }
+                v-model:value={formData[fieldName]}
               />
             </a-form-item>
           );
@@ -181,12 +176,9 @@ export default defineComponent({
             <a-form-item {...formItemAttr}>
               {
                 <a-select
-                  v-model={formData[fieldName]}
-                  onChange={(e: Common.OptionValue) =>
-                    this.onFormChange(fieldName, e, itemHandleChange)
-                  }
                   autoComplete="off"
                   {...extraConfig}
+                  v-model:value={formData[fieldName]}
                 >
                   {options.map((item2) => (
                     <a-select-option key={item2.value}>
@@ -203,21 +195,8 @@ export default defineComponent({
               {
                 <a-select
                   v-model={formData[fieldName]}
-                  onChange={(
-                    value: Common.OptionValue,
-                    option: Common.Option
-                  ) =>
-                    this.onFormChange(
-                      fieldName,
-                      value,
-                      itemHandleChange,
-                      option
-                    )
-                  }
-                  autoComplete="off"
-                  disabled={extraConfig.disabled}
-                  mode={extraConfig.mode}
                   {...extraConfig}
+                  v-model:value={formData[fieldName]}
                 >
                   {options.map((item2, index2) => (
                     <a-select-opt-group key={index2} label={item2.label}>
@@ -241,14 +220,8 @@ export default defineComponent({
             <a-form-item {...formItemAttr}>
               {
                 <a-tree-select
-                  replaceFields={extraConfig.replaceFields}
-                  v-model={formData[fieldName]}
-                  treeData={extraConfig.treeData}
-                  onChange={(e: Common.OptionValue) =>
-                    this.onFormChange(fieldName, e, itemHandleChange)
-                  }
-                  autoComplete="off"
-                  disabled={extraConfig.disabled}
+                  v-model:value={formData[fieldName]}
+                  {...extraConfig}
                 />
               }
             </a-form-item>
@@ -257,14 +230,8 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <MultipleFieldSelect
-                v-model={formData[fieldName]}
-                options={options}
-                replaceFields={extraConfig.replaceFields}
-                onChange={(e: Common.OptionValue) =>
-                  this.onFormChange(fieldName, e, itemHandleChange)
-                }
-                autoComplete="off"
-                disabled={extraConfig.disabled}
+                v-model:value={formData[fieldName]}
+                {...extraConfig}
               />
             </a-form-item>
           );
@@ -274,14 +241,8 @@ export default defineComponent({
             <a-form-item {...formItemAttr}>
               <a-input
                 type="color"
-                v-model={formData[fieldName]}
-                autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                disabled={extraConfig.disabled}
-                onChange={(e: FormItemEvent) =>
-                  this.onFormChange(fieldName, e.target.value)
-                }
+                v-model:value={formData[fieldName]}
               />
             </a-form-item>
           );
@@ -290,13 +251,9 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-date-picker
-                v-model={formData[fieldName]}
                 autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                disabled={extraConfig.disabled}
-                format={extraConfig.format}
-                valueFormat={extraConfig.valueFormat}
+                v-model:value={formData[fieldName]}
                 onChange={(value: Common.OptionValue) =>
                   this.onFormChange(fieldName, value, itemHandleChange)
                 }
@@ -308,13 +265,10 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-range-picker
-                v-model={formData[fieldName]}
                 autoComplete="off"
                 placeholder={placeholder || [`开始时间`, '结束时间']}
                 {...extraConfig}
-                disabled={extraConfig.disabled}
-                format={extraConfig.format}
-                valueFormat={extraConfig.valueFormat}
+                v-model:value={formData[fieldName]}
                 onChange={(value: Common.OptionValue) =>
                   this.onFormChange(fieldName, value, itemHandleChange)
                 }
@@ -327,10 +281,9 @@ export default defineComponent({
               <a-switch
                 checked-children="开"
                 un-checked-children="关"
-                v-model={formData[fieldName]}
                 autoComplete="off"
                 {...extraConfig}
-                disabled={extraConfig.disabled}
+                v-model:checked={formData[fieldName]}
                 onChange={(value: Common.OptionValue) =>
                   this.onFormChange(fieldName, value, itemHandleChange)
                 }
@@ -341,10 +294,8 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-slider
-                v-model={formData[fieldName]}
-                autoComplete="off"
                 {...extraConfig}
-                disabled={extraConfig.disabled}
+                v-model:value={formData[fieldName]}
                 onChange={(value: Common.OptionValue) =>
                   this.onFormChange(fieldName, value, itemHandleChange)
                 }
@@ -357,8 +308,6 @@ export default defineComponent({
               <a-button
                 autoComplete="off"
                 {...extraConfig}
-                disabled={extraConfig.disabled}
-                type={extraConfig.type}
                 onClick={() => onClick(item)}
               >
                 {label}
@@ -369,7 +318,6 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-upload
-                disabled={extraConfig.disabled}
                 list-type="picture-card"
                 name="file"
                 {...extraConfig}
@@ -395,11 +343,10 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-textarea
-                v-model={formData[fieldName]}
                 autoComplete="off"
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                disabled={extraConfig.disabled}
+                v-model:value={formData[fieldName]}
                 onChange={(e: FormItemEvent) =>
                   this.onFormChange(fieldName, e.target.value)
                 }
@@ -410,12 +357,9 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-radio-group
-                v-model={formData[fieldName]}
                 options={options}
-                autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                disabled={extraConfig.disabled}
+                v-model:value={formData[fieldName]}
                 onChange={(value: Common.OptionValue, option: Common.Option) =>
                   this.onFormChange(fieldName, value, itemHandleChange, option)
                 }
@@ -426,11 +370,10 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <GradientColor
-                v-model={formData[fieldName]}
                 autoComplete="off"
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                disabled={extraConfig.disabled}
+                v-model:value={formData[fieldName]}
                 onChange={(e: FormItemEvent) =>
                   this.onFormChange(fieldName, e.target.value)
                 }
@@ -467,14 +410,15 @@ export default defineComponent({
     return (
       <a-form
         {...{ props: { model: formData } }}
+        model={formData}
         {...formItemLayout}
         ref="formRef"
         labelAlign="right"
         layout={layout}
         class="common-form-container"
       >
-        {formJson.map((item, index) =>
-          item.notRender ? null : this.renderFormItem(item, index)
+        {formJson.map((item) =>
+          item.notRender ? null : this.renderFormItem(item)
         )}
       </a-form>
     );

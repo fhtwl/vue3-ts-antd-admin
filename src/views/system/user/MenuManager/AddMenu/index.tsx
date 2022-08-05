@@ -39,7 +39,7 @@ export default defineComponent({
     CommonForm,
   },
   emits: ['update'],
-  setup(props: Common.Params, { emit }) {
+  setup(_props: Common.Params, { emit }) {
     // 弹窗显示
     const visible = ref(false);
     const formData = ref<FormData>(defaultFormData);
@@ -156,10 +156,11 @@ export default defineComponent({
           ],
           render: (formData: unknown) => {
             return (
-              <a-form-model-item
+              <a-form-item
                 class="row"
-                prop="icon"
+                name="icon"
                 colon={false}
+                key="icon"
                 label="菜单图标"
               >
                 <a-input
@@ -168,7 +169,7 @@ export default defineComponent({
                   value={(formData as FormData)['icon']}
                   readOnly
                 />
-              </a-form-model-item>
+              </a-form-item>
             );
           },
           dataType: String,
@@ -299,7 +300,8 @@ export default defineComponent({
 
     const show = function (newType: ActionType = 'add', val: FormData) {
       type.value = newType;
-      val.parentId = val.parentId === 0 ? undefined : val.parentId;
+
+      val.parentId = val?.parentId === 0 ? undefined : val?.parentId;
       switch (newType) {
         case 'add': {
           formData.value = {
@@ -365,7 +367,7 @@ export default defineComponent({
       <a-modal
         title={title}
         visible={visible}
-        width="360px"
+        width="420px"
         cancelText="取消"
         okText="确定"
         maskClosable={false}

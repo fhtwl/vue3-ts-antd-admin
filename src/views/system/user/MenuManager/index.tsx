@@ -121,7 +121,7 @@ export default defineComponent({
       getMenuList({ ...data }).then(resolve);
     },
     handleAddClick() {
-      (this.$refs.addMenuRef as { show: Fun }).show('add');
+      (this.$refs.addMenuRef as { show: Fun }).show('add', {});
     },
     handleEditClick(_selectKey: unknown, selectNodes: number[]) {
       (this.$refs.addMenuRef as { show: Fun }).show('edit', selectNodes[0]);
@@ -157,8 +157,9 @@ export default defineComponent({
       });
     },
     handleDetailsClick(_selectKey: unknown, selectNodes: number[]) {
+      console.log(_selectKey, selectNodes);
       (this.$refs.addMenuRef as { show: Common.Fun }).show(
-        'details',
+        'query',
         selectNodes[0]
       );
     },

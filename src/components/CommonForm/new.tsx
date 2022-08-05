@@ -141,31 +141,31 @@ export default defineComponent({
         // 普通文本
         case 'input':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-input
                 v-model={formData[fieldName]}
                 placeholder={placeholder || `请输入${label}`}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
 
         // 数字输入框
         case 'number':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-input-number
                 v-model={formData[fieldName]}
                 placeholder={placeholder || `请输入${label}`}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
 
         // 下拉选择框，extraConfig中配置{mode: 'tags'}可进行多选
         case 'select':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               {
                 <a-select
                   v-model={formData[fieldName]}
@@ -178,11 +178,11 @@ export default defineComponent({
                   ))}
                 </a-select>
               }
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'select-group':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               {
                 <a-select
                   v-model={formData[fieldName]}
@@ -202,90 +202,90 @@ export default defineComponent({
                   ))}
                 </a-select>
               }
-            </a-form-model-item>
+            </a-form-item>
           );
         // 树选择框
         case 'tree-select':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               {
                 <a-tree-select
                   v-model={formData[fieldName]}
                   v-bind={{ ...extraConfig }}
                 />
               }
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'multiple-field-select':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <MultipleFieldSelect
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         // 颜色选择器
         case 'color':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-input
                 type="color"
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         // 日期选择器
         case 'date':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-date-picker
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         // 日期选择器
         case 'date-range':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-range-picker
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
                 placeholder={placeholder || [`开始时间`, '结束时间']}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'switch':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-switch
                 checked-children="开"
                 un-checked-children="关"
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'slider':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-slider
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'button':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-button v-bind={{ ...extraConfig }}>{label}</a-button>
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'upload':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-upload
                 list-type="picture-card"
                 name="file"
@@ -304,34 +304,34 @@ export default defineComponent({
                   </div>
                 )}
               </a-upload>
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'textarea':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-textarea
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'radio-group':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <a-radio-group
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         case 'gradient-color':
           return (
-            <a-form-model-item v-bind={formItemAttr}>
+            <a-form-item v-bind={formItemAttr}>
               <GradientColor
                 v-model={formData[fieldName]}
                 v-bind={{ ...extraConfig }}
               />
-            </a-form-model-item>
+            </a-form-item>
           );
         default:
           return null;
@@ -343,7 +343,7 @@ export default defineComponent({
     const { formJson = [], formData, layout } = this;
     console.log(formData);
     return (
-      <a-form-model
+      <a-form
         {...{ props: { model: formData } }}
         {...formItemLayout}
         ref="formRef"
@@ -354,7 +354,7 @@ export default defineComponent({
         {formJson.map((item, index) =>
           item.notRender ? null : this.renderFormItem(item, index)
         )}
-      </a-form-model>
+      </a-form>
     );
   },
 });

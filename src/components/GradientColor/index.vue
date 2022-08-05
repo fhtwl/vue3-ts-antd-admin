@@ -61,32 +61,32 @@ export default defineComponent({
       <template #overlay>
         <div class="popup" style="width: 320px">
           <div class="content">
-            <a-form-model
+            <a-form
               ref="formRef"
               class="color-arr-form"
               :model="value"
               layout="inline"
             >
               <span>渐变方向</span>
-              <a-form-model-item label="偏转角度" prop="angle" class="item">
+              <a-form-item label="偏转角度" prop="angle" class="item">
                 <a-slider :value="value.angle" :min="0" :max="360" />
-              </a-form-model-item>
+              </a-form-item>
               <span>颜色透明</span>
-              <a-form-model-item label="透明度" prop="opacity" class="item">
+              <a-form-item label="透明度" prop="opacity" class="item">
                 <a-slider
                   :value="value.opacity"
                   :min="0"
                   :max="1"
                   :step="0.05"
                 />
-              </a-form-model-item>
+              </a-form-item>
               <span>颜色数组</span>
               <div
                 v-for="(item, index) in value.color"
                 :key="index"
                 class="item"
               >
-                <a-form-model-item
+                <a-form-item
                   :label="`颜色${index + 1}`"
                   :prop="`color.${index}`"
                   class="color-item"
@@ -96,8 +96,8 @@ export default defineComponent({
                     :value="item"
                     @change="(e: unknown) => handleColorChange(e, index)"
                   />
-                </a-form-model-item>
-                <a-form-model-item class="btn">
+                </a-form-item>
+                <a-form-item class="btn">
                   <a-button
                     type="dashed"
                     :disabled="value.color.length < 2"
@@ -108,15 +108,15 @@ export default defineComponent({
                       type="minus-circle-o"
                     />
                   </a-button>
-                </a-form-model-item>
+                </a-form-item>
 
-                <a-form-model-item class="btn">
+                <a-form-item class="btn">
                   <a-button type="dashed" @click="addColor">
                     <a-icon type="plus" />
                   </a-button>
-                </a-form-model-item>
+                </a-form-item>
               </div>
-            </a-form-model>
+            </a-form>
           </div>
         </div>
       </template>
