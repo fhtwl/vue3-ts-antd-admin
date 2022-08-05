@@ -8,10 +8,12 @@ export default defineComponent({
           <a href="https://fhtwl.gitee.io/" target="_blank">
             Blog
           </a>
-          <a href="https://gitee.com/fhtwl/low-code-admin" target="_blank">
-            Gitee
+
+          <a href="https://github.com/fhtwl/low-code-admin" target="_blank">
+            GitHub
           </a>
-          <a href="https://gitee.com/fhtwl" target="_blank">
+
+          <a href="https://github.com/fhtwl" target="_blank">
             @Fhtwl
           </a>
         </div>

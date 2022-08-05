@@ -379,13 +379,13 @@ export default defineComponent({
           formData={formData}
           formJson={formJson}
         />
-        <a-modal value={isIconShow} title="图标" footer={false}>
+        <a-modal visible={isIconShow} title="图标" footer={false}>
           <div class="icon-container">
             {menuIconList.map((item) => (
               <div
                 key={item.type}
                 class="icon"
-                v-on:click={handleSelectIcon(item)}
+                onClick={() => handleSelectIcon(item)}
               >
                 <c-icon type={item.type} />
               </div>

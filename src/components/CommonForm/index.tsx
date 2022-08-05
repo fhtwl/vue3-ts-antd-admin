@@ -119,7 +119,7 @@ export default defineComponent({
         options = [],
         extraConfig = {},
         onClick = () => {},
-        beforeUpload = () => {},
+        // beforeUpload = () => {},
       } = item;
       console.log(extraConfig);
       let { placeholder } = item;
@@ -139,7 +139,6 @@ export default defineComponent({
         class: extraConfig.className,
       };
       console.log(formItemAttr);
-      const itemHandleChange = item.onChange;
       switch (type) {
         // 自定义内容，当现有组件不满足需求时，可在外层组件中自定义表单项（或分组小标题等其他内容），写在配置项的content里即可
         case 'custom':
@@ -254,9 +253,6 @@ export default defineComponent({
                 autoComplete="off"
                 {...extraConfig}
                 v-model:value={formData[fieldName]}
-                onChange={(value: Common.OptionValue) =>
-                  this.onFormChange(fieldName, value, itemHandleChange)
-                }
               />
             </a-form-item>
           );
@@ -269,9 +265,6 @@ export default defineComponent({
                 placeholder={placeholder || [`开始时间`, '结束时间']}
                 {...extraConfig}
                 v-model:value={formData[fieldName]}
-                onChange={(value: Common.OptionValue) =>
-                  this.onFormChange(fieldName, value, itemHandleChange)
-                }
               />
             </a-form-item>
           );
@@ -284,22 +277,13 @@ export default defineComponent({
                 autoComplete="off"
                 {...extraConfig}
                 v-model:checked={formData[fieldName]}
-                onChange={(value: Common.OptionValue) =>
-                  this.onFormChange(fieldName, value, itemHandleChange)
-                }
               />
             </a-form-item>
           );
         case 'slider':
           return (
             <a-form-item {...formItemAttr}>
-              <a-slider
-                {...extraConfig}
-                v-model:value={formData[fieldName]}
-                onChange={(value: Common.OptionValue) =>
-                  this.onFormChange(fieldName, value, itemHandleChange)
-                }
-              />
+              <a-slider {...extraConfig} v-model:value={formData[fieldName]} />
             </a-form-item>
           );
         case 'button':
@@ -321,8 +305,8 @@ export default defineComponent({
                 list-type="picture-card"
                 name="file"
                 {...extraConfig}
-                beforeUpload={beforeUpload}
-                showUploadList={extraConfig.showUploadList}
+                // beforeUpload={beforeUpload}
+                // showUploadList={extraConfig.showUploadList}
               >
                 {formData[fieldName] ? (
                   <img src={formData[fieldName]} alt="avatar" />
@@ -347,9 +331,6 @@ export default defineComponent({
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
                 v-model:value={formData[fieldName]}
-                onChange={(e: FormItemEvent) =>
-                  this.onFormChange(fieldName, e.target.value)
-                }
               />
             </a-form-item>
           );
@@ -360,9 +341,6 @@ export default defineComponent({
                 options={options}
                 {...extraConfig}
                 v-model:value={formData[fieldName]}
-                onChange={(value: Common.OptionValue, option: Common.Option) =>
-                  this.onFormChange(fieldName, value, itemHandleChange, option)
-                }
               />
             </a-form-item>
           );
@@ -374,9 +352,6 @@ export default defineComponent({
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
                 v-model:value={formData[fieldName]}
-                onChange={(e: FormItemEvent) =>
-                  this.onFormChange(fieldName, e.target.value)
-                }
               />
             </a-form-item>
           );
@@ -384,24 +359,6 @@ export default defineComponent({
         default:
           return null;
       }
-    },
-    // 表单变化处理
-    onFormChange(
-      fieldName: string,
-      value: string | number,
-      itemHandleChange?: ItemHandleChange,
-      option?: Common.Option
-    ) {
-      const { onChange = () => {} } = this;
-      // const item = formJson.find(item => item.fieldName === fieldName)
-      // const itemHandleChange = item.itemHandleChange
-      if (itemHandleChange) {
-        itemHandleChange(fieldName, value, option!);
-      } else {
-        onChange(fieldName, value, option);
-      }
-
-      // console.log({fieldName, value, ...args});
     },
   },
   render() {

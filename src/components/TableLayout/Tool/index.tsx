@@ -45,7 +45,6 @@ export default defineComponent({
       <div class="table-layout-header">
         {list.map((item: VueComponentNode) => {
           const { action, onClick } = item.props;
-          console.log(item);
           const handleClick = Object.assign(onClick);
           item.props.onClick = () => {
             const { selectedRowKeys, tableData } = this;
@@ -67,7 +66,7 @@ export default defineComponent({
                 return;
               }
             }
-            console.log(selectedRowKeys, tableData);
+            // console.log(selectedRowKeys, tableData);
             const selectNodes: Common.TreeNode[] = [];
             const filter = (tree: Common.TreeNode[]) => {
               selectNodes.push(
