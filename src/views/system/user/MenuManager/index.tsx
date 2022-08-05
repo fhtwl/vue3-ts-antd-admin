@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance } from 'vue';
+import { defineComponent } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getMenuList, deleteMenuByIds } from '@/api/system/menu';
 import './index.less';
@@ -127,9 +127,7 @@ export default defineComponent({
       (this.$refs.addMenuRef as { show: Fun }).show('edit', selectNodes[0]);
     },
     handleDeleteClick(_selectKey: unknown, selectNodes: Common.TreeNode[]) {
-      const { proxy } = getCurrentInstance()!;
-
-      proxy!.$confirm({
+      this.$confirm({
         title: '是否确认删除',
         content: '删除该菜单会删除该菜单的所有子菜单',
         okText: '是',
