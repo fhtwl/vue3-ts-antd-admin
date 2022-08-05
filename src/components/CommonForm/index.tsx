@@ -65,7 +65,7 @@ const formItemLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 18 },
+    sm: { span: 16 },
   },
 };
 
@@ -304,7 +304,7 @@ export default defineComponent({
           );
         case 'button':
           return (
-            <a-form-item {...formItemAttr}>
+            <a-form-item {...formItemAttr} label="">
               <a-button
                 autoComplete="off"
                 {...extraConfig}
