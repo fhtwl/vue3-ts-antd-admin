@@ -1,9 +1,9 @@
 import { addMenu, editMenuById, getMenuMap } from '@/api/system/menu';
 import CommonForm, { CommonFormItem } from '@/components/CommonForm';
-import { menuIconList as defaultMenuIconList } from '../menuIcon';
 import { foreachTree } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
 import './index.less';
+import { message } from 'ant-design-vue';
 
 interface FormData {
   name: string;
@@ -47,7 +47,6 @@ export default defineComponent({
 
     const isIconShow = ref(false);
 
-    const menuIconList = ref(defaultMenuIconList);
     const menuOption = ref<System.Menu[]>([]);
 
     const formJson = computed<CommonFormItem[]>(function (): CommonFormItem[] {
@@ -259,12 +258,11 @@ export default defineComponent({
         handleCancel();
         return false;
       }
-      const { proxy } = getCurrentInstance()!;
       const callBack = () => {
         handleCancel();
-        proxy!.$message.success(`${title.value}成功`);
+        message.success(`${title.value}成功`);
       };
-
+      const { proxy } = getCurrentInstance()!;
       (
         proxy?.$refs['commonFormRef'] as {
           form: { validate: Common.Fun };
@@ -291,11 +289,6 @@ export default defineComponent({
       getMenuMap().then((data) => {
         menuOption.value = data;
       });
-    };
-
-    const handleSelectIcon = function (node: { type: string }) {
-      formData.value.icon = node.type;
-      isIconShow.value = false;
     };
 
     const show = function (newType: ActionType = 'add', val: FormData) {
@@ -332,14 +325,12 @@ export default defineComponent({
       type,
       title,
       isIconShow,
-      menuIconList,
       menuOption,
       formJson,
       handleIconClick,
       handleOk,
       handleCancel,
       getData,
-      handleSelectIcon,
       show,
     };
   },
@@ -359,8 +350,6 @@ export default defineComponent({
       handleCancel,
       formData,
       formJson,
-      handleSelectIcon,
-      menuIconList,
       isIconShow,
     } = this;
     return (
@@ -380,17 +369,7 @@ export default defineComponent({
           formJson={formJson}
         />
         <a-modal visible={isIconShow} title="图标" footer={false}>
-          <div class="icon-container">
-            {menuIconList.map((item) => (
-              <div
-                key={item.type}
-                class="icon"
-                onClick={() => handleSelectIcon(item)}
-              >
-                <c-icon type={item.type} />
-              </div>
-            ))}
-          </div>
+          <div class="icon-container"></div>
         </a-modal>
       </a-modal>
     );
