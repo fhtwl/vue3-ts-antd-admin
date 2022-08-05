@@ -1,7 +1,6 @@
 import { defineComponent, getCurrentInstance, ref } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getMenuList, deleteMenuByIds } from '@/api/system/menu';
-import './index.less';
 import { Fun } from '@fhtwl-admin/common';
 import { VueComponentNode } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
@@ -115,7 +114,7 @@ export default defineComponent({
     handleAddClick() {
       (this.$refs.addMenuRef as { show: Fun }).show('add', {});
     },
-    handleEditClick(_selectKey: unknown, selectNodes: number[]) {
+    handleEditClick(_selectKey: unknown, selectNodes: unknown[]) {
       (this.$refs.addMenuRef as { show: Fun }).show('edit', selectNodes[0]);
     },
     handleDeleteClick(_selectKey: unknown, selectNodes: Common.TreeNode[]) {
@@ -146,7 +145,7 @@ export default defineComponent({
         },
       });
     },
-    handleDetailsClick(_selectKey: unknown, selectNodes: number[]) {
+    handleDetailsClick(_selectKey: unknown, selectNodes: unknown[]) {
       console.log(_selectKey, selectNodes);
       (this.$refs.addMenuRef as { show: Common.Fun }).show(
         'query',
@@ -159,6 +158,11 @@ export default defineComponent({
     },
     reSearch() {
       (this.$refs.tableLayoutRef as { resetSearch: Common.Fun }).resetSearch();
+    },
+    handleEditMenuClick(_selectKey: number[], selectNodes: unknown[]) {
+      (this.$refs.menuPermissionRef as { show: Common.Fun }).show(
+        selectNodes[0]
+      );
     },
   },
   render() {

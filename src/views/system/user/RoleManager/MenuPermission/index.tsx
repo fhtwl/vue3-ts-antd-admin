@@ -2,7 +2,6 @@ import { editRolePermissionById } from '@/api/system/role';
 import { getMenuMap } from '@/api/system/menu';
 import { foreachTree } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
-import './index.less';
 
 interface FormData {
   name: string;
