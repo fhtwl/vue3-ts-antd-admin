@@ -1,4 +1,6 @@
+import { PaginationResponse } from '@/components/TableLayout';
 import http from '@/utils/http';
+import { AxiosResponse } from 'axios';
 const Menu = `/system/menu`;
 
 const api = {
@@ -22,9 +24,12 @@ export function getMenuMap(): Promise<System.Menu[]> {
   return http.get(api.getMenuMap);
 }
 
-export function getMenuList(params: Common.PaginationParams) {
+export function getMenuList(
+  params: Common.PaginationParams
+): Promise<PaginationResponse<Common.TreeNode>> {
   return http.post(api.getMenuList, params);
 }
+// Promise<TableSearchFun>
 
 /**
  * 新增菜单

@@ -1,7 +1,7 @@
 import { editRolePermissionById } from '@/api/system/role';
 import { getMenuMap } from '@/api/system/menu';
-import { foreachTree } from '@/utils/utils';
-import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
+import { defineComponent, getCurrentInstance, ref } from 'vue';
+import PermissionModal from '@/components/PermissionModal/index.vue';
 
 interface FormData {
   name: string;
@@ -21,21 +21,21 @@ const defaultFormData: FormData = {
   id: 0,
 };
 
-export type ActionType = 'edit' | 'add' | 'query';
-
-const replaceFields = { children: 'children', title: 'name', key: 'id' };
+const fieldNames = { children: 'children', title: 'name', key: 'id' };
 
 export default defineComponent({
+  components: { PermissionModal },
   emits: ['update'],
   setup(_props: Common.Params, { emit }) {
     // 弹窗显示
     const visible = ref(false);
     const formData = ref<FormData>(defaultFormData);
 
-    const autoExpandParent = ref(true);
-
     const checkedKeys = ref<number[]>([]);
-    const handleSelect = function () {};
+    const handleCheck = function (keys: number[]) {
+      checkedKeys.value = keys;
+    };
+
     const treeData = ref<System.Menu[]>([]);
 
     const handleCancel = function () {
@@ -68,17 +68,13 @@ export default defineComponent({
 
     return {
       visible,
-      autoExpandParent,
       handleOk,
       handleCancel,
       checkedKeys,
       treeData,
-      handleSelect,
       show,
+      handleCheck,
     };
-  },
-  data() {
-    return {};
   },
   mounted() {
     this.getMenuMap();
@@ -92,18 +88,10 @@ export default defineComponent({
     },
   },
   render() {
-    const {
-      visible,
-      handleOk,
-      handleCancel,
-      checkedKeys,
-      handleSelect,
-      treeData,
-      autoExpandParent,
-    } = this;
-
+    const { visible, handleOk, handleCancel, treeData } = this;
+    // checkedKeys 使用解构不会触发响应式
     return (
-      <action-modal
+      <PermissionModal
         title="菜单权限"
         visible={visible}
         onOk={handleOk}
@@ -111,15 +99,15 @@ export default defineComponent({
         permission="system:role:editPermission"
       >
         <a-tree
-          v-model={checkedKeys}
+          v-model:checkedKeys={this.checkedKeys}
           checkable
           checkStrictly
-          autoExpandParent={autoExpandParent}
+          autoExpandParent
           treeData={treeData}
-          replaceFields={replaceFields}
-          onCheck={handleSelect}
+          fieldNames={fieldNames}
+          onCheck={this.handleCheck}
         />
-      </action-modal>
+      </PermissionModal>
     );
   },
 });

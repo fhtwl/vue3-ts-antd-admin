@@ -11,27 +11,42 @@ export interface PaginationResponse<T> {
   records: T[];
 }
 
+export type TableSearchFun = (
+  data: Common.PaginationParams
+) => Promise<PaginationResponse<Common.TreeNode>>;
 export default defineComponent({
   components: {},
   props: {
+    /**
+     * 表格头部按钮组
+     */
     tableHeader: {
       type: Array as PropType<VueComponentNode[]>,
       default: () => [],
     },
+    /**
+     * 搜索栏
+     */
     formJson: {
       type: Array as PropType<CommonFormItem[]>,
       default: () => [],
     },
+    /**
+     * 表格列配置
+     */
     columns: {
-      type: Array,
+      type: Array as PropType<Common.TableColumns[]>,
       default: () => [],
     },
+    /**
+     * 搜索回调
+     */
     search: {
-      type: Function,
+      type: Function as PropType<TableSearchFun>,
       default: () => () => {},
     },
     rowKey: {
-      type: [String],
+      type: String,
       default: 'id',
     },
   },
@@ -60,20 +75,19 @@ export default defineComponent({
       const params = {
         ...formData.value,
       };
-      props.search(
-        {
+      props
+        .search({
           params,
           pageNum: current.value,
           pageSize: pageSize.value,
-        },
-        (res: PaginationResponse<Common.TreeNode>) => {
+        })
+        .then((res: PaginationResponse<Common.TreeNode>) => {
           tableData.value = res.records.map((item) => item);
           current.value = res.current;
           pageSize.value = res.pageSize;
           total.value = res.total;
           loading.value = false;
-        }
-      );
+        });
     };
     const handleReset = function () {
       formData.value = {};

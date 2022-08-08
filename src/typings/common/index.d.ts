@@ -2,6 +2,7 @@ import { MessageApi } from 'ant-design-vue/lib/message';
 import { ModalFunc } from 'ant-design-vue/lib/modal/Modal';
 import { DefineComponent } from 'vue';
 import { UserRes } from '../api/system/user';
+import { VueComponentNode } from '../../components/TableLayout/Tool/index';
 declare global {
   module System {}
   module Common {
@@ -34,6 +35,19 @@ declare global {
     }
 
     export type Fun<T = unknown, Ret = void> = (...args: T[]) => Ret;
+
+    /**
+     * 表格Columns
+     */
+    export interface TableColumns {
+      title: string;
+      dataIndex: string;
+      width?: number;
+      customRender?: Fun<
+        unknown,
+        string | Element | Element[] | VueComponentNode | VueComponentNode[]
+      >;
+    }
   }
 
   module LowCode {

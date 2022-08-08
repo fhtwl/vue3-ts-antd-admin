@@ -1,3 +1,4 @@
+import { PaginationResponse } from '@/components/TableLayout';
 import http from '@/utils/http';
 
 const Role = `/system/role`;
@@ -25,7 +26,7 @@ export function deleteRoleByIds(params: { ids: string }) {
  * @param {*} params
  * @returns
  */
-export function getRoleMap() {
+export function getRoleMap(): Promise<System.Role[]> {
   return http.get(api.getRoleMap);
 }
 
@@ -34,7 +35,9 @@ export function getRoleMap() {
  * @param {*} params
  * @returns
  */
-export function getRoleList(params: Common.PaginationParams) {
+export function getRoleList(
+  params: Common.PaginationParams
+): Promise<PaginationResponse<Common.TreeNode>> {
   return http.post(api.getRoleList, params);
 }
 
@@ -43,7 +46,7 @@ export function getRoleList(params: Common.PaginationParams) {
  * @param {*} params
  * @returns
  */
-export function addRole(params: System.Role) {
+export function addRole(params: RoleReq.AddRole) {
   return http.post(api.addRole, params);
 }
 
@@ -52,7 +55,7 @@ export function addRole(params: System.Role) {
  * @param {*} params
  * @returns
  */
-export function editRoleById(params: System.Role) {
+export function editRoleById(params: RoleReq.EditRoleById) {
   return http.post(api.editRoleById, params);
 }
 

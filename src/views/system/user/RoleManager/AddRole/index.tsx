@@ -1,27 +1,18 @@
-import { addMenu, editMenuById, getMenuMap } from '@/api/system/menu';
+import { addRole, editRoleById, getRoleMap } from '@/api/system/role';
 import CommonForm, { CommonFormItem } from '@/components/CommonForm';
-import { foreachTree } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
 import './index.less';
 import { message } from 'ant-design-vue';
 
-interface FormData {
-  name: string;
-  parentId: number | undefined;
-  icon: string;
-  show: Common.BooleanNumber;
-  path: string;
-  type: System.MenuType;
-  id: number | undefined;
+interface FormData extends RoleReq.AddRole {
+  id: undefined | number;
 }
 
 const defaultFormData: FormData = {
   name: '',
   parentId: undefined,
-  icon: '',
-  show: 1,
-  path: '',
-  type: 1,
+  serialNum: 0,
+  describe: '',
   id: undefined,
 };
 
@@ -47,36 +38,15 @@ export default defineComponent({
 
     const isIconShow = ref(false);
 
-    const menuOption = ref<System.Menu[]>([]);
+    const roleOptions = ref<System.Role[]>([]);
 
     const formJson = computed<CommonFormItem[]>(function (): CommonFormItem[] {
-      foreachTree(menuOption.value, (node) => {
-        node.disabled = formData.value.id === node.id;
-      });
-      let filterMenuOption;
-      switch (formData.value.type) {
-        case 1:
-          filterMenuOption = [];
-          break;
-        case 2:
-          foreachTree(menuOption.value, (node) => {
-            node.disabled = node.type !== 1;
-          });
-          filterMenuOption = menuOption;
-          break;
-        case 3:
-          foreachTree(menuOption.value, (node) => {
-            node.disabled = node.type !== 2;
-          });
-          filterMenuOption = menuOption;
-          break;
-      }
       const disabled = type.value === 'query';
 
-      const base: CommonFormItem[] = [
+      const list: CommonFormItem[] = [
         {
           type: 'input',
-          label: '名称',
+          label: '角色名称',
           fieldName: 'name',
           extraConfig: {
             className: 'row',
@@ -85,34 +55,16 @@ export default defineComponent({
           rules: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
           dataType: String,
         },
-
-        {
-          type: 'radio-group',
-          label: '菜单类型',
-          fieldName: 'type',
-          extraConfig: { className: 'row', disabled },
-          options: [
-            {
-              label: '目录',
-              value: 1,
-            },
-            { label: '菜单', value: 2 },
-            { label: '按钮', value: 3 },
-          ],
-          dataType: Number,
-        },
-      ];
-      const parent: CommonFormItem[] = [
         {
           type: 'tree-select',
-          label: '上级菜单',
+          label: '上级角色',
           fieldName: 'parentId',
           extraConfig: {
             className: 'row',
-            treeData: filterMenuOption,
+            treeData: roleOptions,
             replaceFields: {
               children: 'children',
-              title: 'name',
+              label: 'name',
               key: 'id',
               value: 'id',
             },
@@ -120,64 +72,23 @@ export default defineComponent({
           },
           dataType: Number,
         },
-      ];
-      const sort: CommonFormItem[] = [
         {
           type: 'number',
-          label: '菜单排序',
+          label: '角色排序',
           fieldName: 'serialNum',
           extraConfig: {
             className: 'row',
             disabled,
           },
           rules: [
-            { required: true, message: '菜单排序不能为空', trigger: 'blur' },
+            { required: true, message: '角色排序不能为空', trigger: 'blur' },
           ],
           dataType: String,
         },
-      ];
-      const address: CommonFormItem[] = [
         {
-          type: 'input',
-          label: '菜单地址',
-          fieldName: 'path',
-          extraConfig: { className: 'row', disabled },
-          dataType: String,
-        },
-      ];
-
-      const icon: CommonFormItem[] = [
-        {
-          type: 'custom',
-          rules: [
-            { required: true, message: '菜单图标不能为空', trigger: 'blur' },
-          ],
-          render: (formData: unknown) => {
-            return (
-              <a-form-item
-                class="row"
-                name="icon"
-                colon={false}
-                key="icon"
-                label="菜单图标"
-              >
-                <a-input
-                  disabled={disabled}
-                  onClick={!disabled ? handleIconClick : () => {}}
-                  value={(formData as FormData)['icon']}
-                  readOnly
-                />
-              </a-form-item>
-            );
-          },
-          dataType: String,
-        },
-      ];
-      const permissions: CommonFormItem[] = [
-        {
-          type: 'input',
-          label: '权限标识',
-          fieldName: 'permission',
+          type: 'textarea',
+          label: '角色备注',
+          fieldName: 'describe',
           extraConfig: {
             className: 'row',
             disabled,
@@ -185,66 +96,8 @@ export default defineComponent({
           dataType: String,
         },
       ];
-      const render: CommonFormItem[] = [
-        {
-          type: 'input',
-          label: '渲染组件',
-          fieldName: 'component',
-          extraConfig: {
-            className: 'row',
-            disabled,
-          },
-          rules: [
-            { required: true, message: '渲染组件不能为空', trigger: 'blur' },
-          ],
-          dataType: String,
-        },
-      ];
-      const show: CommonFormItem[] = [
-        {
-          type: 'radio-group',
-          label: '是否显示',
-          fieldName: 'show',
-          extraConfig: {
-            className: 'row',
-            disabled,
-          },
-          options: [
-            {
-              label: '显示',
-              value: 1,
-            },
-            {
-              label: '隐藏',
-              value: 0,
-            },
-          ],
-          dataType: Boolean,
-        },
-      ];
-      switch (formData.value.type) {
-        case 1:
-          return [...base, ...sort, ...icon, ...render, ...show];
-        case 2:
-          return [
-            ...base,
-            ...parent,
-            ...sort,
-            ...icon,
-            ...render,
-            ...permissions,
-            ...address,
-            ...show,
-          ];
-        case 3:
-          return [...base, ...parent, ...sort, ...permissions, ...show];
-        default:
-          return [];
-      }
+      return list;
     });
-    const handleIconClick = function () {
-      isIconShow.value = true;
-    };
 
     const handleCancel = function () {
       visible.value = false;
@@ -270,12 +123,12 @@ export default defineComponent({
       ).form.validate((valid: boolean) => {
         if (valid) {
           if (type.value === 'add') {
-            addMenu({
+            addRole({
               ...formData.value,
               parentId: formData.value.parentId ? formData.value.parentId : 0,
             }).then(callBack);
           } else {
-            editMenuById({
+            editRoleById({
               ...formData.value,
               parentId: formData.value.parentId ? formData.value.parentId : 0,
               id: formData.value.id as number,
@@ -286,8 +139,8 @@ export default defineComponent({
     };
 
     const getData = function () {
-      getMenuMap().then((data) => {
-        menuOption.value = data;
+      getRoleMap().then((data) => {
+        roleOptions.value = data;
       });
     };
 
@@ -325,9 +178,8 @@ export default defineComponent({
       type,
       title,
       isIconShow,
-      menuOption,
+      roleOptions,
       formJson,
-      handleIconClick,
       handleOk,
       handleCancel,
       getData,

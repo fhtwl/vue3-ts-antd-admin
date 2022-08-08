@@ -343,10 +343,6 @@ export default defineComponent({
       show,
     };
   },
-  data() {
-    return {};
-  },
-
   mounted() {
     this.getData();
   },
