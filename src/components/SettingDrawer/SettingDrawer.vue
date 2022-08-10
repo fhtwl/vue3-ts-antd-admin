@@ -16,6 +16,7 @@ import {
 import { useStore } from '@/store/system/theme';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
+  emits: ['change'],
   // mixins: [baseMixin],
   setup() {
     const themeStore = useStore();

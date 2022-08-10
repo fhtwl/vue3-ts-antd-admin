@@ -1,18 +1,38 @@
-import { addRole, editRoleById, getRoleMap } from '@/api/system/role';
+import { getRoleMap } from '@/api/system/role';
+import { addUser, editUserById } from '@/api/system/user';
+
 import CommonForm, { CommonFormItem } from '@/components/CommonForm';
+import { uploadImgWrap } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
+import { Info } from '..';
 import './index.less';
 
-export interface RoleFormData extends RoleReq.AddRole {
-  id: undefined | number;
+export interface UserFormData {
+  userName: string;
+  password: string;
+  avatar: string;
+  roleIds: string[];
+  email: string;
+  id: number | undefined;
+  info: Info;
+  parentId: number | undefined;
 }
 
-const defaultFormData: RoleFormData = {
-  name: '',
-  parentId: undefined,
-  serialNum: 0,
-  describe: '',
+const defaultFormData: UserFormData = {
+  userName: '',
+  avatar: '',
+  password: '',
+  roleIds: [],
+  info: {
+    nickName: '',
+    avatar: '',
+    roleName: '',
+    profile: '',
+    updatedAt: '',
+  },
+  email: '',
   id: undefined,
+  parentId: undefined,
 };
 
 export type ActionType = 'edit' | 'add' | 'query';
@@ -29,26 +49,31 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(_props: Common.Params, { emit }) {
-    const commonFormRef = ref<InstanceType<typeof CommonForm>>();
     const instance = getCurrentInstance();
+    const commonFormRef = ref<InstanceType<typeof CommonForm>>();
     // 弹窗显示
-    const visible = ref<boolean>(false);
-    const formData = ref<RoleFormData>(defaultFormData);
+    const visible = ref(false);
+    const formData = ref<UserFormData>(defaultFormData);
     const type = ref<ActionType>('add');
     const title = computed(() => actionConfig[type.value]);
 
-    const isIconShow = ref(false);
+    const roleOption = ref<System.Role[]>([]);
 
-    const roleOptions = ref<System.Role[]>([]);
-
+    const beforeUpload = function (file: File) {
+      uploadImgWrap(file, 'avatar', formData.value).then((img) => {
+        formData.value.info.avatar = img;
+        formData.value.avatar = img;
+      });
+      return false;
+    };
     const formJson = computed<CommonFormItem[]>(function (): CommonFormItem[] {
       const disabled = type.value === 'query';
 
       const list: CommonFormItem[] = [
         {
           type: 'input',
-          label: '角色名称',
-          fieldName: 'name',
+          label: '用户名',
+          fieldName: 'userName',
           extraConfig: {
             className: 'row',
             disabled,
@@ -58,11 +83,12 @@ export default defineComponent({
         },
         {
           type: 'tree-select',
-          label: '上级角色',
-          fieldName: 'parentId',
+          label: '角色',
+          fieldName: 'roleIds',
           extraConfig: {
             className: 'row',
-            treeData: roleOptions,
+            treeData: roleOption,
+            multiple: true,
             replaceFields: {
               children: 'children',
               label: 'name',
@@ -71,25 +97,28 @@ export default defineComponent({
             },
             disabled,
           },
+          rules: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
           dataType: Number,
         },
         {
-          type: 'number',
-          label: '角色排序',
-          fieldName: 'serialNum',
+          type: 'upload',
+          rules: [
+            { required: true, message: '用户头像不能为空', trigger: 'blur' },
+          ],
+          label: '背景图片',
+          fieldName: 'avatar',
+          initialValue: '',
+          beforeUpload,
           extraConfig: {
-            className: 'row',
+            showUploadList: false,
             disabled,
           },
-          rules: [
-            { required: true, message: '角色排序不能为空', trigger: 'blur' },
-          ],
           dataType: String,
         },
         {
-          type: 'textarea',
-          label: '角色备注',
-          fieldName: 'describe',
+          type: 'input',
+          label: '简介',
+          fieldName: 'profile',
           extraConfig: {
             className: 'row',
             disabled,
@@ -116,16 +145,20 @@ export default defineComponent({
         handleCancel();
         instance?.proxy?.$message.success(`${title.value}成功`);
       };
-      commonFormRef.value?.formRef?.validate().then(() => {
+
+      commonFormRef?.value?.formRef?.validate().then(() => {
+        const roleIds = formData.value.roleIds.join(',');
         if (type.value === 'add') {
-          addRole({
+          addUser({
             ...formData.value,
-            parentId: formData.value.parentId ? formData.value.parentId : 0,
+            ...formData.value.info,
+            roleIds,
           }).then(callBack);
         } else {
-          editRoleById({
+          editUserById({
             ...formData.value,
-            parentId: formData.value.parentId ? formData.value.parentId : 0,
+            ...formData.value.info,
+            roleIds,
             id: formData.value.id as number,
           }).then(callBack);
         }
@@ -134,13 +167,13 @@ export default defineComponent({
 
     const getData = function () {
       getRoleMap().then((data) => {
-        roleOptions.value = data;
+        roleOption.value = data;
       });
     };
 
     const show = function (
       newType: ActionType = 'add',
-      val: RoleFormData = { ...defaultFormData }
+      val: UserFormData = defaultFormData
     ) {
       type.value = newType;
 
@@ -168,39 +201,28 @@ export default defineComponent({
 
       visible.value = true;
     };
+
     return {
+      instance,
+      commonFormRef,
       visible,
       formData,
       type,
       title,
-      isIconShow,
-      roleOptions,
+      roleOption,
       formJson,
       handleOk,
       handleCancel,
       getData,
       show,
-      commonFormRef,
     };
   },
-  data() {
-    return {};
-  },
-
   mounted() {
     this.getData();
   },
   methods: {},
   render() {
-    const {
-      title,
-      visible,
-      handleOk,
-      handleCancel,
-      formData,
-      formJson,
-      isIconShow,
-    } = this;
+    const { title, visible, handleOk, handleCancel, formData, formJson } = this;
     return (
       <a-modal
         title={title}
@@ -217,9 +239,6 @@ export default defineComponent({
           formData={formData}
           formJson={formJson}
         />
-        <a-modal visible={isIconShow} title="图标" footer={false}>
-          <div class="icon-container"></div>
-        </a-modal>
       </a-modal>
     );
   },

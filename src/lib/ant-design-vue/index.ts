@@ -19,6 +19,7 @@ import {
   Upload,
   Radio,
   Checkbox,
+  Image,
 } from 'ant-design-vue';
 
 import { App } from 'vue';
@@ -43,6 +44,7 @@ const components = [
   Upload,
   Radio,
   Checkbox,
+  Image,
 ];
 
 export default function setupAtnd(app: App<Element>) {

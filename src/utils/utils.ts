@@ -1,3 +1,5 @@
+import { uploadImg } from '@/api/system/upload';
+import { message } from 'ant-design-vue';
 /**
  * 获取本地图片
  * @param path
@@ -22,5 +24,37 @@ export function foreachTree(
     if (element.children) {
       foreachTree(element.children, callBack);
     }
+  });
+}
+
+/**
+ * 上传图片
+ * @param { File } file 文件对象
+ * @param { string } fieldName 字段名
+ * @param { object} form
+ * @returns { Promise<string> }
+ */
+
+/***
+ *
+ */
+export function uploadImgWrap(
+  file: File,
+  fieldName: string,
+  form: Common.Params
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    form[fieldName + 'loading'] = true;
+    const formData = new FormData();
+    formData.append('img', file);
+    uploadImg(formData)
+      .then((data) => {
+        form[fieldName + 'loading'] = false;
+        resolve(data.path);
+      })
+      .catch((err) => {
+        message.error(err);
+        reject(err);
+      });
   });
 }

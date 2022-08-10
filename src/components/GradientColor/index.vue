@@ -14,7 +14,13 @@ export default defineComponent({
   props: {
     value: {
       type: Object as PropType<Value>,
-      required: true,
+      default: () => {
+        return {
+          angle: 0,
+          color: ['#fff'],
+          opacity: 1,
+        };
+      },
     },
   },
   data() {

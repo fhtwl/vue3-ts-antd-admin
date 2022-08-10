@@ -2,8 +2,7 @@ import { defineComponent, ref, reactive, getCurrentInstance } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getMenuList, deleteMenuByIds } from '@/api/system/menu';
 import './index.less';
-import AddMenu from './AddMenu';
-import { Fun } from '@fhtwl-admin/common';
+import AddMenu, { MenuFormData } from './AddMenu';
 import { VueComponentNode } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
@@ -55,23 +54,23 @@ export default defineComponent({
         width: 80,
       },
     ]);
+    const instance = getCurrentInstance();
+    const addMenuRef = ref<InstanceType<typeof AddMenu>>();
+    const tableLayoutRef = ref<InstanceType<typeof TableLayout>>();
     const handleAddClick = function () {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.addMenuRef as { show: Fun }).show('add', {});
+      addMenuRef.value?.show('add');
     };
     const handleEditClick = function (
-      _selectKey: unknown,
-      selectNodes: number[]
+      _selectKey: number[],
+      selectNodes: MenuFormData[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.addMenuRef as { show: Fun }).show('edit', selectNodes[0]);
+      addMenuRef.value?.show('edit', selectNodes[0]);
     };
     const handleDeleteClick = function (
       _selectKey: unknown,
       selectNodes: Common.TreeNode[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      proxy!.$confirm({
+      instance?.proxy!.$confirm({
         title: '是否确认删除',
         content: '删除该菜单会删除该菜单的所有子菜单',
         okText: '是',
@@ -92,27 +91,20 @@ export default defineComponent({
           deleteMenuByIds({
             ids: ids.join(','),
           }).then(() => {
-            proxy!.$message.success('删除成功');
+            instance?.proxy!.$message.success('删除成功');
             reSearch();
           });
         },
       });
     };
     const handleDetailsClick = function (
-      _selectKey: unknown,
-      selectNodes: number[]
+      _selectKeys: number[],
+      selectNodes: MenuFormData[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.addMenuRef as { show: Common.Fun }).show(
-        'query',
-        selectNodes[0]
-      );
+      addMenuRef.value?.show('query', selectNodes[0]);
     };
     const reSearch = function () {
-      const { proxy } = getCurrentInstance()!;
-      (
-        proxy!.$refs.tableLayoutRef as { resetSearch: Common.Fun }
-      ).resetSearch();
+      tableLayoutRef.value?.resetSearch();
     };
     const tableHeader = reactive<VueComponentNode[]>([
       <a-button
@@ -159,6 +151,8 @@ export default defineComponent({
       columns,
       tableHeader,
       reSearch,
+      addMenuRef,
+      tableLayoutRef,
     };
   },
 

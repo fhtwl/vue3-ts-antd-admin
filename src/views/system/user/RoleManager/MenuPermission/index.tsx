@@ -3,7 +3,7 @@ import { getMenuMap } from '@/api/system/menu';
 import { defineComponent, getCurrentInstance, ref } from 'vue';
 import PermissionModal from '@/components/PermissionModal/index.vue';
 
-interface FormData {
+export interface MenuPermissionFormData {
   name: string;
   parentId: number | undefined;
   show: Common.BooleanNumber;
@@ -12,7 +12,7 @@ interface FormData {
   id: number;
 }
 
-const defaultFormData: FormData = {
+const defaultFormData: MenuPermissionFormData = {
   name: '',
   parentId: undefined,
   show: 1,
@@ -29,7 +29,7 @@ export default defineComponent({
   setup(_props: Common.Params, { emit }) {
     // 弹窗显示
     const visible = ref(false);
-    const formData = ref<FormData>(defaultFormData);
+    const formData = ref<MenuPermissionFormData>(defaultFormData);
 
     const checkedKeys = ref<number[]>([]);
     const handleCheck = function (keys: number[]) {
@@ -57,7 +57,7 @@ export default defineComponent({
       });
     };
 
-    const show = function (val: FormData) {
+    const show = function (val: MenuPermissionFormData) {
       formData.value = {
         ...formData.value,
         ...val,

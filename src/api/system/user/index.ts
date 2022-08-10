@@ -1,3 +1,4 @@
+import { PaginationResponse } from '@/components/TableLayout';
 import { UserRes } from '@/typings/api/system/user';
 import http from '@/utils/http';
 
@@ -11,9 +12,13 @@ const api = {
   getUserInfo: `${User}/query`,
   getUserMenu: `${User}/getUserMenu`,
   editUserById: `${User}/editUserById`,
+  deleteUserByIds: `${User}/deleteUserByIds`,
+  addUser: `${User}/addUser`,
 };
 
-export function getUserList(parameter: Common.PaginationParams) {
+export function getUserList(
+  parameter: Common.PaginationParams
+): Promise<PaginationResponse<Common.TreeNode>> {
   return http.post(api.getUserList, parameter);
 }
 
@@ -38,6 +43,7 @@ export function editUserById(params: {
   roleIds: string;
   nickName: string;
   email: string;
+  id: number;
 }) {
   return http.post(api.editUserById, params);
 }
@@ -69,4 +75,29 @@ export function getUserInfo(): Promise<UserRes.GetUserInfo> {
 }
 export function getUserMenu(): Promise<UserRes.GetUserMenu[]> {
   return http.post(api.getUserMenu);
+}
+
+/**
+ * 根据ids批量删除用户
+ * @param params
+ * @returns
+ */
+export function deleteUserByIds(params: { ids: string }) {
+  return http.get(api.deleteUserByIds, { params });
+}
+
+/**
+ * 新增用户
+ * @param {*} params
+ * @returns
+ */
+export function addUser(params: {
+  userName: string;
+  avatar: string;
+  password: string;
+  roleIds: string;
+  nickName: string;
+  email: string;
+}) {
+  return http.post(api.addUser, params);
 }

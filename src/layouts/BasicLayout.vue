@@ -11,9 +11,27 @@ import {
   CONTENT_WIDTH_TYPE,
   TOGGLE_NAV_THEME,
   TOGGLE_COLOR,
+  TOGGLE_HIDE_SETTING,
 } from '@/store/system/theme/const';
 import { computed, defineComponent, markRaw, shallowRef } from 'vue';
 import { getAssrtsImages } from '@/utils/utils';
+
+type SettingType =
+  | 'layout'
+  | 'contentWidth'
+  | 'theme'
+  | 'primaryColor'
+  | 'fixedHeader'
+  | 'fixedSidebar'
+  | 'colorWeak'
+  | 'multiTab'
+  | 'defaultSelectKey'
+  | 'hideSetting';
+
+export interface SetSetting {
+  type: SettingType;
+  value: unknown;
+}
 export default defineComponent({
   name: 'BasicLayout',
   components: {
@@ -64,21 +82,7 @@ export default defineComponent({
         defaultSelectKey: undefined,
       };
     });
-    type SettingType =
-      | 'layout'
-      | 'contentWidth'
-      | 'theme'
-      | 'primaryColor'
-      | 'fixedHeader'
-      | 'fixedSidebar'
-      | 'colorWeak'
-      | 'multiTab'
-      | 'defaultSelectKey';
 
-    interface SetSetting {
-      type: SettingType;
-      value: unknown;
-    }
     const handleSettingChange = function ({ type, value }: SetSetting) {
       console.log(type, value);
       const settingValue = settings.value;
@@ -101,6 +105,9 @@ export default defineComponent({
           themeStore[TOGGLE_COLOR](value as string);
           // updateTheme(value)
           // this.$store.dispatch('ToggleColor', value)
+          break;
+        case 'hideSetting': // 是否隐藏设置
+          themeStore[TOGGLE_HIDE_SETTING](value as boolean);
           break;
         default:
           settingValue[type] = value as never;
@@ -166,10 +173,7 @@ export default defineComponent({
         </div>
       </div>
     </template>
-    <setting-drawer
-      :settings="settings"
-      @change="handleSettingChange"
-    ></setting-drawer>
+    <setting-drawer :settings="settings"></setting-drawer>
     <template #rightContentRender>
       <right-content
         :top-menu="settings.layout === 'topmenu'"

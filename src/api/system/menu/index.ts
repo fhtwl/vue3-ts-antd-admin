@@ -1,6 +1,5 @@
 import { PaginationResponse } from '@/components/TableLayout';
 import http from '@/utils/http';
-import { AxiosResponse } from 'axios';
 const Menu = `/system/menu`;
 
 const api = {

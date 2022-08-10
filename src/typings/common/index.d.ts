@@ -36,6 +36,14 @@ declare global {
 
     export type Fun<T = unknown, Ret = void> = (...args: T[]) => Ret;
 
+    export type RenderElement =
+      | string
+      | Element
+      | Element[]
+      | VueComponentNode
+      | VueComponentNode[]
+      | JSX.Element;
+
     /**
      * 表格Columns
      */
@@ -44,9 +52,24 @@ declare global {
       dataIndex: string;
       width?: number;
       customRender?: Fun<
-        unknown,
-        string | Element | Element[] | VueComponentNode | VueComponentNode[]
+        {
+          text: unknown;
+          record: Params;
+          index: number;
+          column: Common.TableColumns;
+        },
+        RenderElement
       >;
+    }
+
+    /**
+     * 后端返回的file
+     */
+    export interface FileJson {
+      path: string;
+      name: string;
+      mimetype: string;
+      size: number;
     }
   }
 

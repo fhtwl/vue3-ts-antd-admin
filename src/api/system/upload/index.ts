@@ -9,6 +9,6 @@ const api = {
  * @param {*} params
  * @returns
  */
-export function uploadImg(params: FormData) {
-  http.post(api.img, params);
+export function uploadImg(params: FormData): Promise<Common.FileJson> {
+  return http.post(api.img, params);
 }

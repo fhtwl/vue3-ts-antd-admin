@@ -4,11 +4,6 @@ import GradientColor from '../GradientColor/index.vue';
 import { defineComponent, PropType, ref } from 'vue';
 import { FormInstance } from 'ant-design-vue';
 import { Fun } from '@fhtwl-admin/common';
-type ItemHandleChange = (
-  fieldName: string,
-  value: Common.OptionValue,
-  option: Common.Option
-) => void;
 
 type handleBeforeUpload = (file: File) => void;
 
@@ -52,6 +47,7 @@ export interface CommonFormItem {
   onChange?: Fun<unknown, void>;
   render?: Fun<unknown, JSX.Element | string>;
   dataType?: Fun<unknown, void>;
+  initialValue?: string;
 }
 
 export interface FormItemEvent {
@@ -95,7 +91,6 @@ export default defineComponent({
   },
   setup() {
     const formRef = ref<FormInstance>();
-
     return {
       formRef,
     };
@@ -348,9 +343,7 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <GradientColor
-                autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
-                {...extraConfig}
+                // {...extraConfig}
                 v-model:value={formData[fieldName]}
               />
             </a-form-item>

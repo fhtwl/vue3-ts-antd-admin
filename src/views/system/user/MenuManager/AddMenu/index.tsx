@@ -5,7 +5,7 @@ import { foreachTree } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
 import './index.less';
 
-interface FormData {
+export interface MenuFormData {
   name: string;
   parentId: number | undefined;
   icon: string;
@@ -15,7 +15,7 @@ interface FormData {
   id: number | undefined;
 }
 
-const defaultFormData: FormData = {
+const defaultFormData: MenuFormData = {
   name: '',
   parentId: undefined,
   icon: '',
@@ -39,9 +39,11 @@ export default defineComponent({
   },
   emits: ['update'],
   setup(_props: Common.Params, { emit }) {
+    const instance = getCurrentInstance();
+    const commonFormRef = ref<InstanceType<typeof CommonForm>>();
     // 弹窗显示
     const visible = ref(false);
-    const formData = ref<FormData>(defaultFormData);
+    const formData = ref<MenuFormData>(defaultFormData);
     const type = ref<ActionType>('add');
     const title = computed(() => actionConfig[type.value]);
 
@@ -165,7 +167,7 @@ export default defineComponent({
                 <a-input
                   disabled={disabled}
                   onClick={!disabled ? handleIconClick : () => {}}
-                  value={(formData as FormData)['icon']}
+                  value={(formData as MenuFormData)['icon']}
                   readOnly
                 />
               </a-form-item>
@@ -243,6 +245,7 @@ export default defineComponent({
           return [];
       }
     });
+
     const handleIconClick = function () {
       isIconShow.value = true;
     };
@@ -259,30 +262,24 @@ export default defineComponent({
         handleCancel();
         return false;
       }
-      const { proxy } = getCurrentInstance()!;
+
       const callBack = () => {
         handleCancel();
-        proxy!.$message.success(`${title.value}成功`);
+        instance?.proxy!.$message.success(`${title.value}成功`);
       };
-
-      (
-        proxy?.$refs['commonFormRef'] as {
-          form: { validate: Common.Fun };
-        }
-      ).form.validate((valid: boolean) => {
-        if (valid) {
-          if (type.value === 'add') {
-            addMenu({
-              ...formData.value,
-              parentId: formData.value.parentId ? formData.value.parentId : 0,
-            }).then(callBack);
-          } else {
-            editMenuById({
-              ...formData.value,
-              parentId: formData.value.parentId ? formData.value.parentId : 0,
-              id: formData.value.id as number,
-            }).then(callBack);
-          }
+      commonFormRef?.value?.formRef?.validate().then((vaild) => {
+        console.log(vaild);
+        if (type.value === 'add') {
+          addMenu({
+            ...formData.value,
+            parentId: formData.value.parentId ? formData.value.parentId : 0,
+          }).then(callBack);
+        } else {
+          editMenuById({
+            ...formData.value,
+            parentId: formData.value.parentId ? formData.value.parentId : 0,
+            id: formData.value.id as number,
+          }).then(callBack);
         }
       });
     };
@@ -298,7 +295,10 @@ export default defineComponent({
       isIconShow.value = false;
     };
 
-    const show = function (newType: ActionType = 'add', val: FormData) {
+    const show = function (
+      newType: ActionType = 'add',
+      val: MenuFormData = defaultFormData
+    ) {
       type.value = newType;
 
       val.parentId = val?.parentId === 0 ? undefined : val?.parentId;
@@ -341,6 +341,8 @@ export default defineComponent({
       getData,
       handleSelectIcon,
       show,
+      instance,
+      commonFormRef,
     };
   },
   mounted() {

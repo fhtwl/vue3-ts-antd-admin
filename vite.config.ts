@@ -57,7 +57,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
       },
       '/resource': {
-        target: 'http://localhost:9000',
+        target: 'https://static.fhtwl.cc',
         ws: false,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/resource/, ''),

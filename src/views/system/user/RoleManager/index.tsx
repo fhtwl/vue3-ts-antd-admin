@@ -1,14 +1,19 @@
-import { defineComponent, getCurrentInstance, reactive } from 'vue';
+import { defineComponent, getCurrentInstance, reactive, ref } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getRoleList, deleteRoleByIds } from '@/api/system/role';
 import { VueComponentNode } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
-import AddRole from './AddRole';
-import MenuPermission from './MenuPermission';
+import AddRole, { RoleFormData } from './AddRole';
+import MenuPermission, { MenuPermissionFormData } from './MenuPermission';
 
 export default defineComponent({
   setup() {
+    const addRoleRef = ref<InstanceType<typeof AddRole>>();
+    const tableLayoutRef = ref<InstanceType<typeof TableLayout>>();
+    const menuPermissionRef = ref<InstanceType<typeof MenuPermission>>();
+    const instance = getCurrentInstance();
+
     const formData = reactive<{ name: string }>({
       name: '',
     });
@@ -43,25 +48,20 @@ export default defineComponent({
     ]);
 
     const handleAddClick = function () {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.addRoleRef as { show: Common.Fun }).show('add', {});
+      console.log(addRoleRef);
+      addRoleRef.value?.show('add');
     };
     const handleEditClick = function (
       _selectKeys: number[],
-      selectNodes: unknown[]
+      selectNodes: RoleFormData[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.addRoleRef as { show: Common.Fun }).show(
-        'edit',
-        selectNodes[0]
-      );
+      addRoleRef.value!.show('edit', selectNodes[0]);
     };
     const handleDeleteClick = function (
       _selectKeys: number[],
       selectNodes: Common.TreeNode[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      proxy!.$confirm({
+      instance?.proxy!.$confirm({
         title: '是否确认删除',
         content: '删除该菜单会删除该菜单的所有子菜单',
         okText: '是',
@@ -82,7 +82,7 @@ export default defineComponent({
           deleteRoleByIds({
             ids: ids.join(','),
           }).then(() => {
-            proxy!.$message.success('删除成功');
+            instance?.proxy!.$message.success('删除成功');
             reSearch();
           });
         },
@@ -90,28 +90,18 @@ export default defineComponent({
     };
     const handleDetailsClick = function (
       _selectKeys: number[],
-      selectNodes: unknown[]
+      selectNodes: RoleFormData[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.addRoleRef as { show: Common.Fun }).show(
-        'query',
-        selectNodes[0]
-      );
+      addRoleRef?.value?.show('query', selectNodes[0]);
     };
     const reSearch = function () {
-      const { proxy } = getCurrentInstance()!;
-      (
-        proxy!.$refs.tableLayoutRef as { resetSearch: Common.Fun }
-      ).resetSearch();
+      tableLayoutRef?.value?.resetSearch();
     };
     const handleEditMenuClick = function (
       _selectKeys: number[],
-      selectNodes: unknown[]
+      selectNodes: MenuPermissionFormData[]
     ) {
-      const { proxy } = getCurrentInstance()!;
-      (proxy!.$refs.menuPermissionRef as { show: Common.Fun }).show(
-        selectNodes[0]
-      );
+      menuPermissionRef?.value?.show(selectNodes[0]);
     };
     const tableHeader = reactive<VueComponentNode[]>([
       <a-button
@@ -166,11 +156,13 @@ export default defineComponent({
       tableHeader,
       reSearch,
       formData,
+      handleAddClick,
+      addRoleRef,
+      instance,
     };
   },
   render() {
     const { tableHeader, formJson, columns, reSearch } = this;
-
     return (
       <div class="container">
         <TableLayout
