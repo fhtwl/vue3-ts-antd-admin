@@ -16,6 +16,7 @@ export interface UserFormData {
   id: number | undefined;
   info: Info;
   parentId: number | undefined;
+  profile: string;
 }
 
 const defaultFormData: UserFormData = {
@@ -31,6 +32,7 @@ const defaultFormData: UserFormData = {
     updatedAt: '',
   },
   email: '',
+  profile: '',
   id: undefined,
   parentId: undefined,
 };
@@ -107,7 +109,6 @@ export default defineComponent({
           ],
           label: '背景图片',
           fieldName: 'avatar',
-          initialValue: '',
           beforeUpload,
           extraConfig: {
             showUploadList: false,
@@ -176,7 +177,6 @@ export default defineComponent({
       val: UserFormData = defaultFormData
     ) {
       type.value = newType;
-
       val.parentId = val?.parentId === 0 ? undefined : val?.parentId;
       switch (newType) {
         case 'add': {
@@ -185,15 +185,13 @@ export default defineComponent({
           };
           break;
         }
-        case 'edit': {
-          formData.value = {
-            ...val,
-          };
-          break;
-        }
+        case 'edit':
         case 'query': {
           formData.value = {
-            ...val,
+            ...formData.value,
+            avatar: val.info.avatar,
+            userName: val.info.nickName,
+            profile: val.info.profile,
           };
           break;
         }
