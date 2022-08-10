@@ -1,5 +1,4 @@
 import { PaginationResponse } from '@/components/TableLayout';
-import { UserRes } from '@/typings/api/system/user';
 import http from '@/utils/http';
 
 const User = `/system/user`;
@@ -11,9 +10,9 @@ const api = {
   editPassword: `${User}/editPassword`,
   getUserInfo: `${User}/query`,
   getUserMenu: `${User}/getUserMenu`,
-  editUserById: `${User}/editUserById`,
+  editUserById: `${User}/edit`,
   deleteUserByIds: `${User}/deleteUserByIds`,
-  addUser: `${User}/addUser`,
+  addUser: `${User}/add`,
 };
 
 export function getUserList(
@@ -36,21 +35,12 @@ export function editUserInfo(parameter: System.UserInfo) {
  * @param {*} params
  * @returns
  */
-export function editUserById(params: {
-  userName: string;
-  avatar: string;
-  password: string;
-  roleIds: string;
-  nickName: string;
-  email: string;
-  id: number;
-}) {
+export function editUserById(params: UserReq.EditUserByIdReq) {
   return http.post(api.editUserById, params);
 }
 
 /**
  * 发送邮件获取验证码
- * @param {*} params
  * @returns
  */
 export function email() {

@@ -3,19 +3,10 @@ import TableLayout from '@/components/TableLayout';
 import { getUserList, deleteUserByIds } from '@/api/system/user';
 
 import AddUser from './AddUser';
-import { Fun } from '@fhtwl-admin/common';
 import { VueComponentNode } from '@/components/TableLayout/Tool';
 import ViewerImg from '@/components/ViewerImg';
 import { CommonFormItem } from '@/components/CommonForm';
 import { UserFormData } from './AddUser/index';
-export interface Info {
-  nickName: string;
-  avatar: string;
-  roleName: string;
-  updatedAt: string;
-  profile: string;
-}
-
 export default defineComponent({
   setup() {
     const instance = getCurrentInstance();
@@ -44,7 +35,7 @@ export default defineComponent({
         dataIndex: 'nickName',
         width: 80,
         customRender: ({ record }) => {
-          return (record.info as Info).nickName as string;
+          return (record.info as System.UserInfo).nickName as string;
         },
       },
       {
@@ -52,7 +43,9 @@ export default defineComponent({
         dataIndex: 'avatar',
         width: 80,
         customRender: ({ record }) => {
-          return <ViewerImg images={[(record.info as Info).avatar]} />;
+          return (
+            <ViewerImg images={[(record.info as System.UserInfo).avatar]} />
+          );
         },
       },
       {

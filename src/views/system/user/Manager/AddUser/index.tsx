@@ -4,18 +4,16 @@ import { addUser, editUserById } from '@/api/system/user';
 import CommonForm, { CommonFormItem } from '@/components/CommonForm';
 import { uploadImgWrap } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
-import { Info } from '..';
 import './index.less';
 
 export interface UserFormData {
   userName: string;
   password: string;
   avatar: string;
-  roleIds: string[];
+  roleIds: number[] | string;
   email: string;
   id: number | undefined;
-  info: Info;
-  parentId: number | undefined;
+  info: System.UserInfo;
   profile: string;
 }
 
@@ -27,14 +25,11 @@ const defaultFormData: UserFormData = {
   info: {
     nickName: '',
     avatar: '',
-    roleName: '',
     profile: '',
-    updatedAt: '',
   },
   email: '',
   profile: '',
   id: undefined,
-  parentId: undefined,
 };
 
 export type ActionType = 'edit' | 'add' | 'query';
@@ -70,12 +65,12 @@ export default defineComponent({
     };
     const formJson = computed<CommonFormItem[]>(function (): CommonFormItem[] {
       const disabled = type.value === 'query';
-
+      console.log(formData);
       const list: CommonFormItem[] = [
         {
           type: 'input',
           label: '用户名',
-          fieldName: 'userName',
+          fieldName: ['info', 'nickName'],
           extraConfig: {
             className: 'row',
             disabled,
@@ -103,12 +98,23 @@ export default defineComponent({
           dataType: Number,
         },
         {
+          type: 'input',
+          label: '邮箱',
+          fieldName: 'email',
+          extraConfig: {
+            className: 'row',
+            disabled,
+          },
+          rules: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
+          dataType: String,
+        },
+        {
           type: 'upload',
           rules: [
             { required: true, message: '用户头像不能为空', trigger: 'blur' },
           ],
           label: '背景图片',
-          fieldName: 'avatar',
+          fieldName: ['info', 'avatar'],
           beforeUpload,
           extraConfig: {
             showUploadList: false,
@@ -119,7 +125,7 @@ export default defineComponent({
         {
           type: 'input',
           label: '简介',
-          fieldName: 'profile',
+          fieldName: ['info', 'profile'],
           extraConfig: {
             className: 'row',
             disabled,
@@ -136,6 +142,7 @@ export default defineComponent({
         ...defaultFormData,
       };
       emit('update');
+      commonFormRef?.value?.formRef?.clearValidate();
     };
     const handleOk = function () {
       if (type.value === 'query') {
@@ -148,7 +155,7 @@ export default defineComponent({
       };
 
       commonFormRef?.value?.formRef?.validate().then(() => {
-        const roleIds = formData.value.roleIds.join(',');
+        const roleIds = (formData.value.roleIds as number[]).join(',');
         if (type.value === 'add') {
           addUser({
             ...formData.value,
@@ -177,7 +184,6 @@ export default defineComponent({
       val: UserFormData = defaultFormData
     ) {
       type.value = newType;
-      val.parentId = val?.parentId === 0 ? undefined : val?.parentId;
       switch (newType) {
         case 'add': {
           formData.value = {
@@ -189,9 +195,11 @@ export default defineComponent({
         case 'query': {
           formData.value = {
             ...formData.value,
-            avatar: val.info.avatar,
-            userName: val.info.nickName,
-            profile: val.info.profile,
+            email: val.email,
+            info: val.info,
+            roleIds: (val.roleIds as string)
+              .split(',')
+              .map((str) => Number(str)),
           };
           break;
         }

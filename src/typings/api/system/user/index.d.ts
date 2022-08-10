@@ -1,6 +1,3 @@
-import { DefineComponent } from 'vue';
-
-// import System from '@fhtwl-admin/system';
 declare namespace UserRes {
   export interface StoreRole {
     permissions: System.Permission[];
@@ -31,5 +28,15 @@ declare namespace UserRes {
       icon?: string;
     };
     children: GetUserMenu[];
+  }
+}
+
+declare namespace UserReq {
+  export interface EditUserByIdReq {
+    userName: string;
+    roleIds: string;
+    id: number;
+    email: string;
+    info: System.UserInfo;
   }
 }

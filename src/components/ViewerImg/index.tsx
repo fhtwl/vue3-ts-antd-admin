@@ -16,7 +16,6 @@ export default defineComponent({
   setup() {
     const visible = ref<boolean>(false);
     const handleVisibleChange = (vis: boolean) => {
-      console.log(vis);
       visible.value = vis;
     };
     return {
@@ -30,7 +29,6 @@ export default defineComponent({
       visible: this.visible,
       onVisibleChange: handleVisibleChange,
     };
-    console.log(preview);
     if (images.length > 0) {
       return (
         <>

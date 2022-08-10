@@ -106,6 +106,7 @@ export default defineComponent({
         ...defaultFormData,
       };
       emit('update');
+      commonFormRef?.value?.formRef?.clearValidate();
     };
     const handleOk = function () {
       if (type.value === 'query') {
