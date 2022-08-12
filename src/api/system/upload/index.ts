@@ -1,7 +1,7 @@
 import http from '@/utils/http';
 
 const api = {
-  img: 'system/upload/img',
+  img: 'system/common/upload/img',
 };
 
 /**

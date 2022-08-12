@@ -1,5 +1,7 @@
 import { uploadImg } from '@/api/system/upload';
+import { FieldName } from '@/components/CommonForm';
 import { message } from 'ant-design-vue';
+import { getLoading } from '../components/CommonForm/index';
 /**
  * 获取本地图片
  * @param path
@@ -36,16 +38,17 @@ export function foreachTree(
  */
 export function uploadImgWrap(
   file: File,
-  fieldName: string,
+  fieldName: FieldName,
   form: Common.Params
 ): Promise<string> {
   return new Promise((resolve, reject) => {
-    form[fieldName + 'loading'] = true;
+    const loadingFieldName = getLoading(fieldName);
+    form[loadingFieldName] = true;
     const formData = new FormData();
     formData.append('img', file);
     uploadImg(formData)
       .then((data) => {
-        form[fieldName + 'loading'] = false;
+        form[loadingFieldName] = false;
         resolve(data.path);
       })
       .catch((err) => {

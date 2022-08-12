@@ -167,16 +167,6 @@ export default defineComponent({
           />
         </div>
       </a-form-item>
-      <!-- <a-form-item>
-        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]"> 自动登录 </a-checkbox>
-        <router-link
-          :path="{ name: 'recover' }"
-          class="forge-password"
-          style="float: right"
-        >
-          忘记密码
-        </router-link>
-      </a-form-item> -->
 
       <a-form-item style="margin-top: 24px">
         <a-button

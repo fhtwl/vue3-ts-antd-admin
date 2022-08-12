@@ -4,6 +4,7 @@ import GradientColor from '../GradientColor/index.vue';
 import { defineComponent, PropType, ref } from 'vue';
 import { FormInstance } from 'ant-design-vue';
 import { Fun } from '@fhtwl-admin/common';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 
 type handleBeforeUpload = (file: File) => void;
 
@@ -60,7 +61,7 @@ export interface FormRule {
   trigger: string | string[];
 }
 
-type FieldName = string | string[];
+export type FieldName = string | string[];
 
 export interface CommonFormItem {
   type: CommonFormType;
@@ -80,6 +81,12 @@ export interface CommonFormItem {
 export interface FormItemEvent {
   target: { value: Common.OptionValue };
 }
+
+export const getLoading = (fieldName: FieldName) => {
+  return typeof fieldName === 'string'
+    ? `${fieldName}loading`
+    : `${(fieldName as string[]).join('')}loading`;
+};
 
 const formItemLayout = {
   labelCol: {
@@ -345,14 +352,18 @@ export default defineComponent({
                 {vModel === undefined || vModel === null ? (
                   formData[fieldName as string]
                 ) : vModel ? (
-                  <img src={formData[fieldName as string]} alt="avatar" />
+                  <img
+                    src={vModel || formData[fieldName as string]}
+                    alt="avatar"
+                  />
                 ) : (
                   <div>
-                    <a-icon
-                    // type={
-                    //   this.getLoadingValue(fieldName) ? 'loading' : 'plus'
-                    // }
-                    />
+                    {formData[getLoading(fieldName)] === true ? (
+                      <LoadingOutlined />
+                    ) : (
+                      <PlusOutlined />
+                    )}
+
                     <div class="ant-upload-text">上传图片</div>
                   </div>
                 )}

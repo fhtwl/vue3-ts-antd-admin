@@ -58,11 +58,14 @@ export default defineComponent({
     const title = computed(() => actionConfig[type.value]);
 
     const roleOption = ref<System.Role[]>([]);
+    const uploadLoading = ref<boolean>(false);
 
     const beforeUpload = function (file: File) {
-      uploadImgWrap(file, 'avatar', formData.value).then((img) => {
+      uploadLoading.value = true;
+      uploadImgWrap(file, ['info', 'avatar'], formData.value).then((img) => {
         formData.value.info.avatar = img;
         formData.value.avatar = img;
+        uploadLoading.value = false;
       });
       return false;
     };
