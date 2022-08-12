@@ -1,7 +1,10 @@
 import { getRoleMap } from '@/api/system/role';
 import { addUser, editUserById } from '@/api/system/user';
 
-import CommonForm, { CommonFormItem } from '@/components/CommonForm';
+import CommonForm, {
+  AcceptType,
+  CommonFormItem,
+} from '@/components/CommonForm';
 import { uploadImgWrap } from '@/utils/utils';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
 import './index.less';
@@ -63,20 +66,26 @@ export default defineComponent({
       });
       return false;
     };
-    const formJson = computed<CommonFormItem[]>(function (): CommonFormItem[] {
+    const formJson = computed(function () {
       const disabled = type.value === 'query';
-      console.log(formData);
-      const list: CommonFormItem[] = [
+      const base: CommonFormItem[] = [
         {
-          type: 'input',
-          label: '用户名',
+          type: 'custom-form',
+          label: '昵称',
           fieldName: ['info', 'nickName'],
+          rules: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
           extraConfig: {
             className: 'row',
             disabled,
           },
-          rules: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-          dataType: String,
+          render(formData, extraConfig) {
+            return (
+              <a-input
+                {...(extraConfig as Common.Params)}
+                v-model:value={(formData as UserFormData).info.nickName}
+              />
+            );
+          },
         },
         {
           type: 'tree-select',
@@ -95,7 +104,6 @@ export default defineComponent({
             disabled,
           },
           rules: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
-          dataType: Number,
         },
         {
           type: 'input',
@@ -106,8 +114,21 @@ export default defineComponent({
             disabled,
           },
           rules: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
-          dataType: String,
         },
+      ];
+      const password: CommonFormItem[] = [
+        {
+          type: 'password',
+          label: '密码',
+          fieldName: 'password',
+          extraConfig: {
+            className: 'row',
+            disabled,
+          },
+          rules: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+        },
+      ];
+      const list: CommonFormItem[] = [
         {
           type: 'upload',
           rules: [
@@ -115,25 +136,35 @@ export default defineComponent({
           ],
           label: '背景图片',
           fieldName: ['info', 'avatar'],
-          beforeUpload,
+          vModel: formData.value.info.avatar,
+
           extraConfig: {
             showUploadList: false,
+            beforeUpload,
             disabled,
+            acceptType: AcceptType.IMG,
           },
-          dataType: String,
         },
         {
-          type: 'input',
+          type: 'custom-form',
           label: '简介',
           fieldName: ['info', 'profile'],
+          vModel: formData.value.info.profile,
           extraConfig: {
             className: 'row',
             disabled,
           },
-          dataType: String,
+          render(formData, extraConfig) {
+            return (
+              <a-input
+                {...(extraConfig as Common.Params)}
+                v-model:value={(formData as UserFormData).info.profile}
+              />
+            );
+          },
         },
       ];
-      return list;
+      return [...base, ...(type.value === 'add' ? password : []), ...list];
     });
 
     const handleCancel = function () {
@@ -142,7 +173,7 @@ export default defineComponent({
         ...defaultFormData,
       };
       emit('update');
-      commonFormRef?.value?.formRef?.clearValidate();
+      commonFormRef?.value?.formRef?.resetFields();
     };
     const handleOk = function () {
       if (type.value === 'query') {

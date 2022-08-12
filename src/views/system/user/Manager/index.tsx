@@ -59,6 +59,9 @@ export default defineComponent({
         width: 80,
       },
     ]);
+    const handleAddClick = function () {
+      addUserRef.value?.show('add');
+    };
     const handleEditClick = function (
       _selectKey: number[],
       selectNodes: UserFormData[]
@@ -106,14 +109,15 @@ export default defineComponent({
     };
     const tableHeader = reactive<VueComponentNode[]>([
       <a-button
-        key="approve-delete"
-        onClick={handleDeleteClick}
-        action="delete"
-        v-action="system:user:delete"
+        key="approve-add"
+        onClick={handleAddClick}
+        action="add"
+        v-action="system:user:add"
       >
-        <c-icon type="delete" />
-        删除
+        <c-icon type="add" />
+        新增
       </a-button>,
+
       <a-button
         key="approve-move"
         onClick={handleEditClick}
@@ -122,6 +126,15 @@ export default defineComponent({
       >
         <c-icon type="move" />
         编辑
+      </a-button>,
+      <a-button
+        key="approve-delete"
+        onClick={handleDeleteClick}
+        action="delete"
+        v-action="system:user:delete"
+      >
+        <c-icon type="delete" />
+        删除
       </a-button>,
       <a-button
         key="approve-details"

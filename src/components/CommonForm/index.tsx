@@ -4,9 +4,34 @@ import GradientColor from '../GradientColor/index.vue';
 import { defineComponent, PropType, ref } from 'vue';
 import { FormInstance } from 'ant-design-vue';
 import { Fun } from '@fhtwl-admin/common';
-import { deepCopy } from '@/utils/utils';
 
 type handleBeforeUpload = (file: File) => void;
+
+export enum AcceptType {
+  ALL = 0,
+  IMG,
+  DOC,
+  EXCEL,
+}
+
+const fileAccept = {
+  [AcceptType.ALL]: '*',
+  [AcceptType.IMG]:
+    '.png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.gif,.GIF,.webp.WEBP,.svg,.SVG,.bmp,.BMP',
+  [AcceptType.DOC]: '.doc,.DOC,.docx,.DOCX',
+  [AcceptType.EXCEL]: '.csv,.CSV,.xlsx,.XLSX',
+};
+function getAccept(acceptType: AcceptType | AcceptType[]): string {
+  if (typeof acceptType === 'string') {
+    return fileAccept[acceptType];
+  } else {
+    let accept = '';
+    (acceptType as AcceptType[]).forEach((type: AcceptType) => {
+      accept = accept + fileAccept[type];
+    });
+    return accept;
+  }
+}
 
 export type CommonFormType =
   | 'input'
@@ -26,6 +51,7 @@ export type CommonFormType =
   | 'upload'
   | 'textarea'
   | 'radio-group'
+  | 'custom-form'
   | 'gradient-color';
 
 export interface FormRule {
@@ -43,14 +69,12 @@ export interface CommonFormItem {
   rules?: FormRule[];
   options?: Common.Option[];
   extraConfig?: Common.Params;
-  onClick?: Fun<unknown, void>;
-  beforeUpload?: handleBeforeUpload;
   notRender?: boolean;
   placeholder?: string;
-  onChange?: Fun<unknown, void>;
   render?: Fun<unknown, JSX.Element | string>;
   dataType?: Fun<unknown, void>;
   initialValue?: string;
+  vModel?: string | number | boolean | unknown[];
 }
 
 export interface FormItemEvent {
@@ -72,7 +96,9 @@ export default defineComponent({
   name: 'CommonForm',
   props: {
     formJson: {
-      type: Array as PropType<CommonFormItem[]>,
+      type: Array as PropType<
+        CommonFormItem[] | Fun<unknown, CommonFormItem[]>
+      >,
       default: () => [],
     },
     onChange: {
@@ -94,6 +120,7 @@ export default defineComponent({
   },
   setup() {
     const formRef = ref<FormInstance>();
+
     return {
       formRef,
     };
@@ -106,34 +133,6 @@ export default defineComponent({
   },
 
   methods: {
-    getValue(fieldName: FieldName) {
-      const { formData } = this;
-      if (typeof fieldName === 'string') {
-        return formData[fieldName];
-      } else {
-        let value = deepCopy(formData);
-        fieldName.forEach((str) => {
-          value = deepCopy(value[str]);
-        });
-        return value;
-      }
-    },
-    getLoadingValue(fieldName: FieldName) {
-      const { formData } = this;
-      if (typeof fieldName === 'string') {
-        return formData[fieldName + 'loading'];
-      } else {
-        let value = deepCopy(formData);
-        fieldName.forEach((str, index) => {
-          if (index === fieldName.length - 1) {
-            value = deepCopy(value[str + 'loading']);
-          } else {
-            value = deepCopy(value[str]);
-          }
-        });
-        return value;
-      }
-    },
     // 每种类型的表单item
     renderFormItem(item: CommonFormItem) {
       const { colon, formData } = this;
@@ -143,9 +142,8 @@ export default defineComponent({
         fieldName = '',
         rules,
         options = [],
+        vModel,
         extraConfig = {},
-        onClick = () => {},
-        // beforeUpload = () => {},
       } = item;
       console.log(extraConfig);
       let { placeholder } = item;
@@ -160,26 +158,30 @@ export default defineComponent({
         name: fieldName,
         colon,
         label,
-        key: `form-item-${fieldName}`,
+        key: `form-item-${
+          fieldName instanceof Array ? fieldName.join('-') : fieldName
+        }`,
         rules,
         class: extraConfig.className,
       };
-      console.log(formItemAttr);
-      const value = this.getValue(fieldName);
-
       switch (type) {
         // 自定义内容，当现有组件不满足需求时，可在外层组件中自定义表单项（或分组小标题等其他内容），写在配置项的content里即可
         case 'custom':
           return item.render && item.render!(formData);
         // 普通文本
+        case 'custom-form':
+          return (
+            <a-form-item {...formItemAttr}>
+              {item.render && item.render!(formData, extraConfig)}
+            </a-form-item>
+          );
+
         case 'input':
           return (
             <a-form-item {...formItemAttr}>
               <a-input
-                autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
@@ -189,23 +191,28 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-input-number
-                autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
-
+        case 'password':
+          return (
+            <a-form-item {...formItemAttr}>
+              <a-input-password
+                {...extraConfig}
+                v-model:value={formData[fieldName as string]}
+              />
+            </a-form-item>
+          );
         // 下拉选择框，extraConfig中配置{mode: 'tags'}可进行多选
         case 'select':
           return (
             <a-form-item {...formItemAttr}>
               {
                 <a-select
-                  autoComplete="off"
                   {...extraConfig}
-                  v-model:value={value}
+                  v-model:value={formData[fieldName as string]}
                 >
                   {options.map((item2) => (
                     <a-select-option key={item2.value}>
@@ -221,9 +228,8 @@ export default defineComponent({
             <a-form-item {...formItemAttr}>
               {
                 <a-select
-                  v-model={value}
                   {...extraConfig}
-                  v-model:value={value}
+                  v-model:value={formData[fieldName as string]}
                 >
                   {options.map((item2, index2) => (
                     <a-select-opt-group key={index2} label={item2.label}>
@@ -245,20 +251,32 @@ export default defineComponent({
         case 'tree-select':
           return (
             <a-form-item {...formItemAttr}>
-              {<a-tree-select v-model:value={value} {...extraConfig} />}
+              {
+                <a-tree-select
+                  v-model:value={formData[fieldName as string]}
+                  {...extraConfig}
+                />
+              }
             </a-form-item>
           );
         case 'multiple-field-select':
           return (
             <a-form-item {...formItemAttr}>
-              <MultipleFieldSelect v-model:value={value} {...extraConfig} />
+              <MultipleFieldSelect
+                v-model:value={formData[fieldName as string]}
+                {...extraConfig}
+              />
             </a-form-item>
           );
         // 颜色选择器
         case 'color':
           return (
             <a-form-item {...formItemAttr}>
-              <a-input type="color" {...extraConfig} v-model:value={value} />
+              <a-input
+                type="color"
+                {...extraConfig}
+                v-model:value={formData[fieldName as string]}
+              />
             </a-form-item>
           );
         // 日期选择器
@@ -268,7 +286,7 @@ export default defineComponent({
               <a-date-picker
                 autoComplete="off"
                 {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
@@ -280,7 +298,7 @@ export default defineComponent({
                 autoComplete="off"
                 placeholder={placeholder || [`开始时间`, '结束时间']}
                 {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
@@ -292,46 +310,48 @@ export default defineComponent({
                 un-checked-children="关"
                 autoComplete="off"
                 {...extraConfig}
-                v-model:checked={value}
+                value:checked={formData[fieldName as string]}
               />
             </a-form-item>
           );
         case 'slider':
           return (
             <a-form-item {...formItemAttr}>
-              <a-slider {...extraConfig} v-model:value={value} />
+              <a-slider
+                {...extraConfig}
+                v-model:value={formData[fieldName as string]}
+              />
             </a-form-item>
           );
         case 'button':
           return (
             <a-form-item {...formItemAttr} label="">
-              <a-button
-                autoComplete="off"
-                {...extraConfig}
-                onClick={() => onClick(item)}
-              >
+              <a-button autoComplete="off" {...extraConfig}>
                 {label}
               </a-button>
             </a-form-item>
           );
         case 'upload':
+          // extraConfig.accept = fileAccept[extraConfig?.acceptType];
+          if (extraConfig?.cceptType) {
+            extraConfig.accept = getAccept(
+              extraConfig.acceptType as AcceptType | AcceptType[]
+            );
+          }
+
           return (
             <a-form-item {...formItemAttr}>
-              <a-upload
-                list-type="picture-card"
-                name="file"
-                {...extraConfig}
-                // beforeUpload={beforeUpload}
-                // showUploadList={extraConfig.showUploadList}
-              >
-                {value ? (
-                  <img src={value as string} alt="avatar" />
+              <a-upload list-type="picture-card" name="file" {...extraConfig}>
+                {vModel === undefined || vModel === null ? (
+                  formData[fieldName as string]
+                ) : vModel ? (
+                  <img src={formData[fieldName as string]} alt="avatar" />
                 ) : (
                   <div>
                     <a-icon
-                      type={
-                        this.getLoadingValue(fieldName) ? 'loading' : 'plus'
-                      }
+                    // type={
+                    //   this.getLoadingValue(fieldName) ? 'loading' : 'plus'
+                    // }
                     />
                     <div class="ant-upload-text">上传图片</div>
                   </div>
@@ -346,7 +366,7 @@ export default defineComponent({
                 autoComplete="off"
                 placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
@@ -356,7 +376,7 @@ export default defineComponent({
               <a-radio-group
                 options={options}
                 {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
@@ -365,7 +385,7 @@ export default defineComponent({
             <a-form-item {...formItemAttr}>
               <GradientColor
                 // {...extraConfig}
-                v-model:value={value}
+                v-model:value={formData[fieldName as string]}
               />
             </a-form-item>
           );
@@ -378,6 +398,7 @@ export default defineComponent({
   render() {
     const { formJson = [], formData, layout } = this;
     console.log(formData);
+    const json = formJson instanceof Array ? formJson : formJson(formData);
     return (
       <a-form
         {...{ props: { model: formData } }}
@@ -388,7 +409,7 @@ export default defineComponent({
         layout={layout}
         class="common-form-container"
       >
-        {formJson.map((item) =>
+        {json.map((item) =>
           item.notRender ? null : this.renderFormItem(item)
         )}
       </a-form>
