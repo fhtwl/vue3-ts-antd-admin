@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { ACCESS_TOKEN } from './const';
 import { login, logout } from '@/api/system/auth';
 import { getUserInfo } from '@/api/system/user';
-import { UserRes } from '@/typings/api/system/user';
 import { Permission } from '@fhtwl-admin/system';
 
 interface UserInfo {

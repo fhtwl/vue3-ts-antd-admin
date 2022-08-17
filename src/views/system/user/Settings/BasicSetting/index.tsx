@@ -6,7 +6,7 @@ import {
   ref,
 } from 'vue';
 import { useStore } from '@/store/system/user';
-import { editUserInfo } from '@/api/system/user';
+import { editInfo } from '@/api/system/user';
 import { CloudUploadOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import './index.less';
 
@@ -34,6 +34,16 @@ export default defineComponent({
     };
     const handleUpload = function () {
       modalRef?.value?.edit();
+    };
+    const handleSave = function () {
+      commonFormRef.value?.formRef?.validate().then(() => {
+        saveLoading.value = true;
+        editInfo(info).then(() => {
+          instance?.proxy?.$message.success('更新成功');
+          saveLoading.value = false;
+          userStore.getInfo();
+        });
+      });
     };
     const formJson = computed(function () {
       const list: CommonFormItem[] = [
@@ -67,19 +77,27 @@ export default defineComponent({
             autoSize: { minRows: 4 },
           },
         },
+        {
+          type: 'custom',
+          render() {
+            return (
+              <div class="row">
+                <a-button
+                  v-action="system:user:editInfo"
+                  loading={saveLoading.value}
+                  onClick={handleSave}
+                  type="primary"
+                >
+                  更新基本信息
+                </a-button>
+              </div>
+            );
+          },
+        },
       ];
 
       return [...list];
     });
-    const handleSave = function () {
-      commonFormRef.value?.formRef?.validate().then(() => {
-        saveLoading.value = true;
-        editUserInfo(info).then(() => {
-          instance?.proxy?.$message.success('更新成功');
-          saveLoading.value = false;
-        });
-      });
-    };
 
     return {
       instance,
@@ -89,6 +107,7 @@ export default defineComponent({
       saveLoading,
       setAvatar,
       handleSave,
+      commonFormRef,
     };
   },
   render() {

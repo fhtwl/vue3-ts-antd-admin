@@ -5,7 +5,7 @@ const User = `/system/user`;
 
 const api = {
   getUserList: `${User}/list`,
-  editUserInfo: `${User}/editUserInfo`,
+  editInfo: `${User}/editInfo`,
   email: `${User}/editPassword/email`,
   editPassword: `${User}/editPassword`,
   getUserInfo: `${User}/query`,
@@ -26,8 +26,8 @@ export function getUserList(
  * @param {*} parameter
  * @returns
  */
-export function editUserInfo(parameter: System.UserInfo) {
-  return http.post(api.editUserInfo, parameter);
+export function editInfo(parameter: System.UserInfo) {
+  return http.post(api.editInfo, parameter);
 }
 
 /**
