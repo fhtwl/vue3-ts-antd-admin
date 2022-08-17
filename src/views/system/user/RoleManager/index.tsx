@@ -146,7 +146,7 @@ export default defineComponent({
         action="query"
         v-action="system:role:editPermission"
       >
-        <c-icon type="details" />
+        <c-icon type="setting" />
         权限设置
       </a-button>,
     ] as unknown as VueComponentNode[]);
@@ -159,6 +159,7 @@ export default defineComponent({
       handleAddClick,
       addRoleRef,
       instance,
+      menuPermissionRef,
     };
   },
   render() {
