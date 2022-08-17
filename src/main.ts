@@ -8,6 +8,7 @@ import router from '@/router';
 import { createPinia } from 'pinia';
 import axios from '@/utils/http';
 import CIcon from '@/components/CIcon/index.vue';
+
 import './permission';
 import initCore from './core';
 // devtools.enabled = true;

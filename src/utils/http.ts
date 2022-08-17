@@ -58,7 +58,7 @@ const errorHandler = (error: AxiosError) => {
 };
 // 响应拦截
 axios.interceptors.response.use((response) => {
-  if (response.data.errorCode !== 10000) {
+  if (response.data?.errorCode !== 10000) {
     notification.error({
       message: '请求失败',
       description: response.data.msg,

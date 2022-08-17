@@ -76,6 +76,7 @@ export interface CommonFormItem {
   dataType?: Fun<unknown, void>;
   initialValue?: string;
   vModel?: string | number | boolean | unknown[];
+  className?: string;
 }
 
 export interface FormItemEvent {
@@ -151,6 +152,7 @@ export default defineComponent({
         options = [],
         vModel,
         extraConfig = {},
+        className = '',
       } = item;
       console.log(extraConfig);
       let { placeholder } = item;
@@ -169,7 +171,7 @@ export default defineComponent({
           fieldName instanceof Array ? fieldName.join('-') : fieldName
         }`,
         rules,
-        class: extraConfig.className,
+        class: className,
       };
       switch (type) {
         // 自定义内容，当现有组件不满足需求时，可在外层组件中自定义表单项（或分组小标题等其他内容），写在配置项的content里即可
@@ -374,8 +376,6 @@ export default defineComponent({
           return (
             <a-form-item {...formItemAttr}>
               <a-textarea
-                autoComplete="off"
-                placeholder={placeholder || `请输入${label}`}
                 {...extraConfig}
                 v-model:value={formData[fieldName as string]}
               />

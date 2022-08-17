@@ -49,8 +49,8 @@ export default defineComponent({
           type: 'input',
           label: '角色名称',
           fieldName: 'name',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
@@ -60,8 +60,8 @@ export default defineComponent({
           type: 'tree-select',
           label: '上级角色',
           fieldName: 'parentId',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             treeData: roleOptions,
             replaceFields: {
               children: 'children',
@@ -77,8 +77,8 @@ export default defineComponent({
           type: 'number',
           label: '角色排序',
           fieldName: 'serialNum',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [
@@ -90,8 +90,8 @@ export default defineComponent({
           type: 'textarea',
           label: '角色备注',
           fieldName: 'describe',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           dataType: String,

@@ -3402,6 +3402,11 @@ vue-copy-to-clipboard@^1.0.3:
   dependencies:
     copy-to-clipboard "^3.3.1"
 
+vue-cropper@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vue-cropper/-/vue-cropper-1.0.5.tgz#eddc55a2165d721fa795c14d5d38117315904650"
+  integrity sha512-D4XXdqWmMWRLOIV9LIh7/mkH6OBOMQDFbRjwntkxmAtxOtwpC9U5ZZ6lSXw5F5cbd4g8znDjk6MuCwIL+fZSrA==
+
 vue-demi@*:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.1.tgz#7604904c88be338418a10abbc94d5b8caa14cb8c"

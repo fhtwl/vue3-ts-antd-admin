@@ -17,6 +17,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
+    "vue-cropper": "^1.0.5",
     "vue-router": "^4.0.15"
   },
   "devDependencies": {

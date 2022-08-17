@@ -20,6 +20,9 @@ import {
   Radio,
   Checkbox,
   Image,
+  Card,
+  Row,
+  Col,
 } from 'ant-design-vue';
 
 import { App } from 'vue';
@@ -45,6 +48,9 @@ const components = [
   Radio,
   Checkbox,
   Image,
+  Card,
+  Row,
+  Col,
 ];
 
 export default function setupAtnd(app: App<Element>) {

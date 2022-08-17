@@ -81,8 +81,8 @@ export default defineComponent({
           type: 'input',
           label: '名称',
           fieldName: 'name',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
@@ -93,7 +93,8 @@ export default defineComponent({
           type: 'radio-group',
           label: '菜单类型',
           fieldName: 'type',
-          extraConfig: { className: 'row', disabled },
+          className: 'row',
+          extraConfig: { disabled },
           options: [
             {
               label: '目录',
@@ -110,8 +111,8 @@ export default defineComponent({
           type: 'tree-select',
           label: '上级菜单',
           fieldName: 'parentId',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             treeData: filterMenuOption,
             replaceFields: {
               children: 'children',
@@ -129,8 +130,8 @@ export default defineComponent({
           type: 'number',
           label: '菜单排序',
           fieldName: 'serialNum',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [
@@ -144,7 +145,8 @@ export default defineComponent({
           type: 'input',
           label: '菜单地址',
           fieldName: 'path',
-          extraConfig: { className: 'row', disabled },
+          className: 'row',
+          extraConfig: { disabled },
           dataType: String,
         },
       ];
@@ -181,8 +183,8 @@ export default defineComponent({
           type: 'input',
           label: '权限标识',
           fieldName: 'permission',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           dataType: String,
@@ -193,8 +195,8 @@ export default defineComponent({
           type: 'input',
           label: '渲染组件',
           fieldName: 'component',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [
@@ -208,8 +210,8 @@ export default defineComponent({
           type: 'radio-group',
           label: '是否显示',
           fieldName: 'show',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           options: [

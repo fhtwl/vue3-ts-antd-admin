@@ -78,9 +78,9 @@ export default defineComponent({
           fieldName: ['info', 'nickName'],
           rules: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
           extraConfig: {
-            className: 'row',
             disabled,
           },
+          className: 'row',
           render(formData, extraConfig) {
             return (
               <a-input
@@ -94,9 +94,9 @@ export default defineComponent({
           type: 'tree-select',
           label: '角色',
           fieldName: 'roleIds',
+          className: 'row',
           extraConfig: {
-            className: 'row',
-            treeData: roleOption,
+            treeData: roleOption.value,
             multiple: true,
             replaceFields: {
               children: 'children',
@@ -112,8 +112,8 @@ export default defineComponent({
           type: 'input',
           label: '邮箱',
           fieldName: 'email',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
@@ -124,8 +124,8 @@ export default defineComponent({
           type: 'password',
           label: '密码',
           fieldName: 'password',
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           rules: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
@@ -153,8 +153,8 @@ export default defineComponent({
           label: '简介',
           fieldName: ['info', 'profile'],
           vModel: formData.value.info.profile,
+          className: 'row',
           extraConfig: {
-            className: 'row',
             disabled,
           },
           render(formData, extraConfig) {

@@ -67,7 +67,7 @@ export default defineComponent({
     },
     renderMenuItem(node: Common.Router) {
       return (
-        <a-menu-item title="112" key={node.name}>
+        <a-menu-item title={node.meta.title} key={node.name}>
           {this.renderLinkTitle(node)}
         </a-menu-item>
       );
