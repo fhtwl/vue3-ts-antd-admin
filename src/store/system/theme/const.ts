@@ -17,6 +17,7 @@ export const CONTENT_WIDTH_TYPE = {
   Fixed: 'Fixed',
 };
 
+export type NavThemeType = 'DARK' | 'LIGHT';
 export const NAV_THEME = {
   LIGHT: 'light',
   DARK: 'dark',
