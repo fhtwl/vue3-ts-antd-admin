@@ -11,6 +11,8 @@ import {
   TOGGLE_NAV_THEME,
   TOGGLE_CONTENT_WIDTH,
   TOGGLE_COLOR,
+  NAV_THEME,
+  NavTheme,
 } from '@/store/system/theme/const';
 // import { baseMixin } from '@/store/app-mixin';
 import { useStore } from '@/store/system/theme';
@@ -99,6 +101,8 @@ export default defineComponent({
       themeStore[TOGGLE_MULTI_TAB](checked);
     };
 
+    const dark = ref<NavTheme>(NAV_THEME.DARK);
+
     return {
       settings,
       visible,
@@ -121,6 +125,7 @@ export default defineComponent({
       fixedSidebar,
       colorWeak,
       hideSetting,
+      dark,
     };
   },
   data() {
@@ -149,14 +154,14 @@ export default defineComponent({
               <template #title> 暗色菜单风格 </template>
               <div
                 class="setting-drawer-index-item"
-                @click="handleMenuTheme('dark')"
+                @click="handleMenuTheme(dark)"
               >
                 <img
                   src="https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg"
-                  alt="dark"
+                  :alt="dark"
                 />
                 <div
-                  v-if="navTheme === 'dark'"
+                  v-if="navTheme === dark"
                   class="setting-drawer-index-selectIcon"
                 >
                   <check-outlined />
@@ -175,7 +180,7 @@ export default defineComponent({
                   alt="light"
                 />
                 <div
-                  v-if="navTheme !== 'dark'"
+                  v-if="navTheme !== dark"
                   class="setting-drawer-index-selectIcon"
                 >
                   <check-outlined />

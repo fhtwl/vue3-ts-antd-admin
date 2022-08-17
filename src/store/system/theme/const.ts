@@ -18,7 +18,11 @@ export const CONTENT_WIDTH_TYPE = {
 };
 
 export type NavThemeType = 'DARK' | 'LIGHT';
-export const NAV_THEME = {
+export type NavTheme = 'dark' | 'light';
+type NavThemeObj = {
+  [propsName in NavThemeType]: NavTheme;
+};
+export const NAV_THEME: NavThemeObj = {
   LIGHT: 'light',
   DARK: 'dark',
 };
