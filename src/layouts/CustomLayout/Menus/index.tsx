@@ -26,7 +26,7 @@ export default defineComponent({
 
   setup() {
     const themeStore = useStore();
-    const theme = computed(() => themeStore.theme);
+    const theme = computed(() => themeStore.navTheme);
     return {
       theme,
     };

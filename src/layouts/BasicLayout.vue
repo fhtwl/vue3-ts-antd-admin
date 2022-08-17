@@ -19,7 +19,7 @@ import { getAssrtsImages } from '@/utils/utils';
 type SettingType =
   | 'layout'
   | 'contentWidth'
-  | 'theme'
+  | 'navTheme'
   | 'primaryColor'
   | 'fixedHeader'
   | 'fixedSidebar'
@@ -56,8 +56,8 @@ export default defineComponent({
 
     const settings = computed(() => {
       const {
-        theme,
-        color,
+        navTheme,
+        primaryColor,
         fixedHeader,
         fixedSidebar,
         layout,
@@ -72,9 +72,9 @@ export default defineComponent({
         contentWidth:
           layout === 'sidemenu' ? CONTENT_WIDTH_TYPE.Fluid : contentWidth,
         // 主题 'dark' | 'light'
-        theme,
+        navTheme,
         // 主色调
-        primaryColor: color,
+        primaryColor,
         fixedHeader,
         fixedSidebar,
         colorWeak,
@@ -98,7 +98,7 @@ export default defineComponent({
             settingValue.contentWidth = CONTENT_WIDTH_TYPE.Fixed;
           }
           break;
-        case 'theme': // 主题风格
+        case 'navTheme': // 主题风格
           themeStore[TOGGLE_NAV_THEME](value as string);
           break;
         case 'primaryColor': // 主题色
@@ -177,7 +177,7 @@ export default defineComponent({
     <template #rightContentRender>
       <right-content
         :top-menu="settings.layout === 'topmenu'"
-        :theme="settings.theme"
+        :theme="settings.navTheme"
       />
     </template>
     <template #footerRender>

@@ -67,7 +67,7 @@ export default defineComponent({
       themeStore[TOGGLE_HIDE_SETTING](checked);
     };
 
-    const primaryColor = computed(() => settings.value.color);
+    const primaryColor = computed(() => settings.value.primaryColor);
 
     const handleColorChange = function (color: string) {
       if (primaryColor.value !== color) {
@@ -83,13 +83,13 @@ export default defineComponent({
     const colorWeak = computed(() => settings.value.colorWeak);
 
     onMounted(() => {
-      updateTheme(settings.value.color);
+      updateTheme(settings.value.primaryColor);
       if (colorWeak.value !== config.colorWeak) {
         updateColorWeak(colorWeak.value);
       }
     });
 
-    const navTheme = computed(() => settings.value.theme);
+    const navTheme = computed(() => settings.value.navTheme);
     const fixedHeader = computed(() => settings.value.fixedHeader);
     const fixedSidebar = computed(() => settings.value.fixedSidebar);
 

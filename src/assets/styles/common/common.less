@@ -87,3 +87,22 @@ ol {
 a {
   color: @primary-color;
 }
+
+// 滚动条样式
+body {
+  overflow: overlay; /*滚动条会覆盖在页面之上*/
+}
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 8px;
+}
+::-webkit-scrollbar {
+  padding: 0 2px;
+}
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  background-clip: content-box;
+}

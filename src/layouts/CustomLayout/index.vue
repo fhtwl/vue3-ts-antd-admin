@@ -57,7 +57,7 @@ export default defineComponent({
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
-      :theme="settings.theme"
+      :theme="settings.navTheme"
       width="256"
       class="layout-sider"
     >
@@ -66,7 +66,7 @@ export default defineComponent({
     </a-layout-sider>
     <a-layout>
       <a-layout-header
-        :class="`layout-header ${settings.theme} ${
+        :class="`layout-header ${settings.navTheme} ${
           settings.fixedHeader ? 'fixed' : ''
         }`"
       >

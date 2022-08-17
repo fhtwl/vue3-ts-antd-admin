@@ -63,7 +63,7 @@ export interface FormRule {
 
 export type FieldName = string | string[];
 
-export interface CommonFormItem {
+export interface CommonFormItem extends Common.Params {
   type: CommonFormType;
   label?: string;
   fieldName?: FieldName;

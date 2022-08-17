@@ -29,14 +29,14 @@ const {
 
 export const useStore = defineStore('theme', {
   state: () => ({
-    theme: navTheme,
+    navTheme,
     sideCollapsed: false,
     layout,
     contentWidth,
     fixedHeader,
     fixedSidebar,
     autoHideHeader,
-    color: primaryColor,
+    primaryColor,
     colorWeak,
     multiTab, // 多页签模式
     hideSetting, // 隐藏设置
@@ -66,14 +66,14 @@ export const useStore = defineStore('theme', {
      * @param theme
      */
     [TOGGLE_NAV_THEME]: function (theme: string) {
-      this.theme = theme;
+      this.navTheme = theme;
     },
     /**
      * 主题色
      * @param color
      */
     [TOGGLE_COLOR]: function (color: string) {
-      this.color = color;
+      this.primaryColor = color;
     },
     /**
      * 色弱模式

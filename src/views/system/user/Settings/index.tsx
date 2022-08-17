@@ -1,5 +1,6 @@
 import { defineComponent, ref, reactive, getCurrentInstance } from 'vue';
 import BasicSetting from './BasicSetting';
+import Custom from './Custom';
 import './index.less';
 
 type MenuType = 'basic' | 'security' | 'custom';
@@ -74,8 +75,7 @@ export default defineComponent({
                 </span>
               </div>
               {selectedKeys.includes('basic') ? <BasicSetting /> : ''}
-
-              {/* <Custom v-else-if="selectedKeys.includes('custom')" /> */}
+              {selectedKeys.includes('custom') ? <Custom /> : ''}
               {/* <Security v-else-if="selectedKeys.includes('security')" /> */}
             </div>
           </div>
