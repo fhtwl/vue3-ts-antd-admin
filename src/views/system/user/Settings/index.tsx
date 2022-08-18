@@ -2,6 +2,7 @@ import { defineComponent, ref, reactive, getCurrentInstance } from 'vue';
 import BasicSetting from './BasicSetting';
 import Custom from './Custom';
 import './index.less';
+import Security from './Security';
 
 type MenuType = 'basic' | 'security' | 'custom';
 type MenuTab = {
@@ -76,7 +77,7 @@ export default defineComponent({
               </div>
               {selectedKeys.includes('basic') ? <BasicSetting /> : ''}
               {selectedKeys.includes('custom') ? <Custom /> : ''}
-              {/* <Security v-else-if="selectedKeys.includes('security')" /> */}
+              {selectedKeys.includes('security') ? <Security /> : ''}
             </div>
           </div>
         </a-card>
