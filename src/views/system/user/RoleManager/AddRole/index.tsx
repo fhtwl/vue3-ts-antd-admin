@@ -63,7 +63,7 @@ export default defineComponent({
           className: 'row',
           extraConfig: {
             treeData: roleOptions,
-            replaceFields: {
+            fieldNames: {
               children: 'children',
               label: 'name',
               key: 'id',

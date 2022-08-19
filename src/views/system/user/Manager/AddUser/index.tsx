@@ -98,7 +98,7 @@ export default defineComponent({
           extraConfig: {
             treeData: roleOption.value,
             multiple: true,
-            replaceFields: {
+            fieldNames: {
               children: 'children',
               label: 'name',
               key: 'id',

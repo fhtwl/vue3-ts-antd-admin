@@ -114,7 +114,7 @@ export default defineComponent({
           className: 'row',
           extraConfig: {
             treeData: filterMenuOption,
-            replaceFields: {
+            fieldNames: {
               children: 'children',
               title: 'name',
               key: 'id',

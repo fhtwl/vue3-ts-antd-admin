@@ -39,6 +39,14 @@ export default defineComponent({
         },
       },
       {
+        title: '用户名',
+        dataIndex: 'userName',
+        width: 80,
+        customRender: ({ record }) => {
+          return record.userName as string;
+        },
+      },
+      {
         title: '头像',
         dataIndex: 'avatar',
         width: 80,
@@ -50,8 +58,11 @@ export default defineComponent({
       },
       {
         title: '角色',
-        dataIndex: 'roleName',
+        dataIndex: 'roleIds',
         width: 80,
+        customRender: ({ record }) => {
+          return record.roleIds as string;
+        },
       },
       {
         title: '更新时间',
