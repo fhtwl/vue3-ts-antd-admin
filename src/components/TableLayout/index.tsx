@@ -104,15 +104,16 @@ export default defineComponent({
             label: '查询',
             extraConfig: {
               type: 'primary',
+              onClick: handleSearch,
             },
-            onClick: handleSearch,
           },
           {
             fieldName: '重置',
             type: 'button',
             label: '重置',
-            extraConfig: {},
-            onClick: handleReset,
+            extraConfig: {
+              onClick: handleReset,
+            },
           },
         ];
       }
