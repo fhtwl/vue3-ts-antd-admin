@@ -2,6 +2,7 @@ import { ref, defineComponent, computed, PropType } from 'vue';
 import CommonForm, { CommonFormItem } from '../CommonForm/index';
 import './index.less';
 import Tool, { VueComponentNode } from './Tool';
+import { ToolButton } from './Tool/index';
 
 // 分页接口返回值
 export interface PaginationResponse<T> {
@@ -17,11 +18,15 @@ export type TableSearchFun = (
 export default defineComponent({
   components: {},
   props: {
+    tableHeader: {
+      type: Array as PropType<VueComponentNode[]>,
+      default: () => [],
+    },
     /**
      * 表格头部按钮组
      */
-    tableHeader: {
-      type: Array as PropType<VueComponentNode[]>,
+    buttons: {
+      type: Array,
       default: () => [],
     },
     /**
@@ -152,7 +157,7 @@ export default defineComponent({
   },
   render() {
     const {
-      tableHeader,
+      buttons,
       formData,
       getFormJson,
       loading,
@@ -180,7 +185,7 @@ export default defineComponent({
         {formBottom()}
         <div class="table-layout-table">
           <Tool
-            list={tableHeader}
+            buttons={buttons}
             selectedRowKeys={selectedRowKeys}
             tableData={tableData}
             rowKey={rowKey}

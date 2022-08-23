@@ -72,7 +72,7 @@ export interface CommonFormItem extends Common.Params {
   extraConfig?: Common.Params;
   notRender?: boolean;
   placeholder?: string;
-  render?: Fun<unknown, JSX.Element | string>;
+  render?: Fun<unknown, Common.RenderElement>;
   dataType?: Fun<unknown, void>;
   initialValue?: string;
   vModel?: string | number | boolean | unknown[];

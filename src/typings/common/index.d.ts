@@ -1,7 +1,6 @@
 import { MessageApi } from 'ant-design-vue/lib/message';
 import { ModalFunc } from 'ant-design-vue/lib/modal/Modal';
 import { DefineComponent } from 'vue';
-import { VueComponentNode } from '../../components/TableLayout/Tool/index';
 declare global {
   module System {}
   module Common {
@@ -35,13 +34,7 @@ declare global {
 
     export type Fun<T = unknown, Ret = void> = (...args: T[]) => Ret;
 
-    export type RenderElement =
-      | string
-      | Element
-      | Element[]
-      | VueComponentNode
-      | VueComponentNode[]
-      | JSX.Element;
+    export type RenderElement = string | Element | Element[] | JSX.Element;
 
     /**
      * 表格Columns

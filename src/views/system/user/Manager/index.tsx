@@ -3,10 +3,10 @@ import TableLayout from '@/components/TableLayout';
 import { getUserList, deleteUserByIds } from '@/api/system/user';
 
 import AddUser from './AddUser';
-import { VueComponentNode } from '@/components/TableLayout/Tool';
 import ViewerImg from '@/components/ViewerImg';
 import { CommonFormItem } from '@/components/CommonForm';
 import { UserFormData } from './AddUser/index';
+import { ToolButton } from '../../../../components/TableLayout/Tool/index';
 export default defineComponent({
   setup() {
     const instance = getCurrentInstance();
@@ -79,8 +79,8 @@ export default defineComponent({
       addUserRef?.value?.show('edit', selectNodes[0]);
     };
     const handleDeleteClick = function (
-      _selectKey: unknown,
-      selectNodes: Common.TreeNode[]
+      _selectKey: number[],
+      selectNodes: UserFormData[]
     ) {
       instance?.proxy!.$confirm({
         title: '是否确认删除',
@@ -98,7 +98,7 @@ export default defineComponent({
               }
             });
           };
-          each(selectNodes);
+          each(selectNodes as unknown as Common.TreeNode[]);
           deleteUserByIds({
             ids: ids.join(','),
           }).then(() => {
@@ -117,45 +117,79 @@ export default defineComponent({
     const reSearch = function () {
       tableLayoutRef?.value?.resetSearch();
     };
-    const tableHeader = reactive<VueComponentNode[]>([
-      <a-button
-        key="approve-add"
-        onClick={handleAddClick}
-        action="add"
-        v-action="system:user:add"
-      >
-        <c-icon type="add" />
-        新增
-      </a-button>,
+    const buttons = reactive<ToolButton<number, UserFormData>[]>([
+      {
+        key: 'approve-add',
+        onClick: handleAddClick,
+        action: 'add',
+        vAction: 'system:user:add',
+        icon: 'add',
+        text: '新增',
+      },
+      {
+        key: 'approve-edit',
+        onClick: handleEditClick,
+        action: 'edit',
+        vAction: 'system:user:edit',
+        icon: 'edit',
+        text: '编辑',
+      },
+      {
+        key: 'approve-delete',
+        onClick: handleDeleteClick,
+        action: 'delete',
+        vAction: 'system:user:delete',
+        icon: 'delete',
+        text: '删除',
+      },
+      {
+        key: 'approve-query',
+        onClick: handleDetailsClick,
+        action: 'query',
+        vAction: 'system:user:query',
+        icon: 'details',
+        text: '详情',
+      },
+    ]);
+    // const buttons = reactive<ToolButton[]>([
+    //   <a-button
+    //     key="approve-add"
+    //     onClick={handleAddClick}
+    //     action="add"
+    //     v-action="system:user:add"
+    //   >
+    //     <c-icon type="add" />
+    //     新增
+    //   </a-button>,
 
-      <a-button
-        key="approve-move"
-        onClick={handleEditClick}
-        action="edit"
-        v-action="system:user:edit"
-      >
-        <c-icon type="move" />
-        编辑
-      </a-button>,
-      <a-button
-        key="approve-delete"
-        onClick={handleDeleteClick}
-        action="delete"
-        v-action="system:user:delete"
-      >
-        <c-icon type="delete" />
-        删除
-      </a-button>,
-      <a-button
-        key="approve-details"
-        onClick={handleDetailsClick}
-        action="query"
-        v-action="system:user:query"
-      >
-        <c-icon type="details" />
-        预览
-      </a-button>,
-    ] as unknown as VueComponentNode[]);
+    //   <a-button
+    //     key="approve-move"
+    //     onClick={handleEditClick}
+    //     action="edit"
+    //     v-action="system:user:edit"
+    //   >
+    //     <c-icon type="move" />
+    //     编辑
+    //   </a-button>,
+    //   <a-button
+    //     key="approve-delete"
+    //     onClick={handleDeleteClick}
+    //     action="delete"
+    //     v-action="system:user:delete"
+    //   >
+    //     <c-icon type="delete" />
+    //     删除
+    //   </a-button>,
+    //   <a-button
+    //     key="approve-details"
+    //     onClick={handleDetailsClick}
+    //     action="query"
+    //     v-action="system:user:query"
+    //   >
+    //     <c-icon type="details" />
+    //     预览
+    //   </a-button>,
+    // ] as unknown as VueComponentNode[]);
     return {
       instance,
       addUserRef,
@@ -163,19 +197,19 @@ export default defineComponent({
       formData,
       formJson,
       columns,
-      tableHeader,
+      buttons,
       reSearch,
     };
   },
 
   render() {
-    const { tableHeader, formJson, columns, reSearch } = this;
+    const { buttons, formJson, columns, reSearch } = this;
 
     return (
       <div class="container">
         <TableLayout
           ref="tableLayoutRef"
-          tableHeader={tableHeader}
+          buttons={buttons}
           formJson={formJson}
           columns={columns}
           search={getUserList}
