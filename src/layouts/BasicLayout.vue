@@ -14,7 +14,7 @@ import {
   TOGGLE_HIDE_SETTING,
 } from '@/store/system/theme/const';
 import { computed, defineComponent, markRaw, shallowRef } from 'vue';
-import { getAssrtsImages } from '@/utils/utils';
+import LOGO from '@/assets/logo.svg?inline';
 
 type SettingType =
   | 'layout'
@@ -52,7 +52,7 @@ export default defineComponent({
       const routes = mainMenu.value.find((item) => item.path === '/');
       return (routes && routes.children) || [];
     });
-    const logoSvgImg = getAssrtsImages('/logo.svg?inline');
+    const logoSvgImg = LOGO;
 
     const settings = computed(() => {
       const {

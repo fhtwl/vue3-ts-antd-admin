@@ -21,7 +21,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Fhtwl Low Code',
+  title: 'vue3-ts-antd-admin',
   pwa: false,
   iconfontUrl: '',
   production:

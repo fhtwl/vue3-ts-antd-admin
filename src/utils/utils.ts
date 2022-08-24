@@ -2,14 +2,6 @@ import { uploadImg } from '@/api/system/upload';
 import { FieldName } from '@/components/CommonForm';
 import { message } from 'ant-design-vue';
 import { getLoading } from '../components/CommonForm/index';
-/**
- * 获取本地图片
- * @param path
- * @returns
- */
-export function getAssrtsImages(path: string): string {
-  return new URL(`/src/assets${path}`, import.meta.url).href;
-}
 
 type ForeachTreeCallBack = (node: Common.TreeNode) => void;
 /**
