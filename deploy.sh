@@ -4,11 +4,9 @@
 echo "执行命令: 拉取远程代码"
 git pull origin master
 
-su root
-
 # 更新依赖
 echo "更新依赖"
-npm i
+yarn
 
 # 编译为静态文件
 echo "编译为静态文件"
