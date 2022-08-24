@@ -9,7 +9,7 @@ export default defineComponent({
             Blog
           </a>
 
-          <a href="https://github.com/fhtwl/low-code-admin" target="_blank">
+          <a href="https://github.com/fhtwl/vue3-ts-antd-admin" target="_blank">
             GitHub
           </a>
 

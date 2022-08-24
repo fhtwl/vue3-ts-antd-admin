@@ -81,26 +81,3 @@ export function deepCopy<T>(target: T): T {
 
   return target;
 }
-
-// // 判断是否为数组
-// const isArr = (origin: unknown): boolean => {
-//   const str = '[object Array]';
-//   return Object.prototype.toString.call(origin) == str ? true : false;
-// };
-
-// export function deepCopy<T>(origin: T, target?: Record<string, unknown> | T): T {
-//   const tar = target || {};
-
-//   for (const key in origin) {
-//     if (Object.prototype.hasOwnProperty.call(origin, key)) {
-//       if (typeof origin[key] === 'object' && origin[key] !== null) {
-//         tar[key] = isArr(origin[key]) ? [] : {};
-//         deepCopy(origin[key], tar[key]);
-//       } else {
-//         tar[key] = origin[key];
-//       }
-//     }
-//   }
-
-//   return tar as T;
-// }
