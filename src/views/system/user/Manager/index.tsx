@@ -151,45 +151,6 @@ export default defineComponent({
         text: '详情',
       },
     ]);
-    // const buttons = reactive<ToolButton[]>([
-    //   <a-button
-    //     key="approve-add"
-    //     onClick={handleAddClick}
-    //     action="add"
-    //     v-action="system:user:add"
-    //   >
-    //     <c-icon type="add" />
-    //     新增
-    //   </a-button>,
-
-    //   <a-button
-    //     key="approve-move"
-    //     onClick={handleEditClick}
-    //     action="edit"
-    //     v-action="system:user:edit"
-    //   >
-    //     <c-icon type="move" />
-    //     编辑
-    //   </a-button>,
-    //   <a-button
-    //     key="approve-delete"
-    //     onClick={handleDeleteClick}
-    //     action="delete"
-    //     v-action="system:user:delete"
-    //   >
-    //     <c-icon type="delete" />
-    //     删除
-    //   </a-button>,
-    //   <a-button
-    //     key="approve-details"
-    //     onClick={handleDetailsClick}
-    //     action="query"
-    //     v-action="system:user:query"
-    //   >
-    //     <c-icon type="details" />
-    //     预览
-    //   </a-button>,
-    // ] as unknown as VueComponentNode[]);
     return {
       instance,
       addUserRef,

@@ -1,8 +1,7 @@
 import { ref, defineComponent, computed, PropType } from 'vue';
 import CommonForm, { CommonFormItem } from '../CommonForm/index';
 import './index.less';
-import Tool, { VueComponentNode } from './Tool';
-import { ToolButton } from './Tool/index';
+import Tool from './Tool';
 
 // 分页接口返回值
 export interface PaginationResponse<T> {
@@ -18,10 +17,6 @@ export type TableSearchFun = (
 export default defineComponent({
   components: {},
   props: {
-    tableHeader: {
-      type: Array as PropType<VueComponentNode[]>,
-      default: () => [],
-    },
     /**
      * 表格头部按钮组
      */

@@ -3,7 +3,7 @@ import TableLayout from '@/components/TableLayout';
 import { getMenuList, deleteMenuByIds } from '@/api/system/menu';
 import './index.less';
 import AddMenu, { MenuFormData } from './AddMenu';
-import { VueComponentNode } from '@/components/TableLayout/Tool';
+import { ToolButton } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
 export default defineComponent({
@@ -61,14 +61,14 @@ export default defineComponent({
       addMenuRef.value?.show('add');
     };
     const handleEditClick = function (
-      _selectKey: number[],
+      _selectKeys: number[],
       selectNodes: MenuFormData[]
     ) {
       addMenuRef.value?.show('edit', selectNodes[0]);
     };
     const handleDeleteClick = function (
-      _selectKey: unknown,
-      selectNodes: Common.TreeNode[]
+      _selectKeys: number[],
+      selectNodes: MenuFormData[]
     ) {
       instance?.proxy!.$confirm({
         title: '是否确认删除',
@@ -87,7 +87,7 @@ export default defineComponent({
               }
             });
           };
-          each(selectNodes);
+          each(selectNodes as unknown as Common.TreeNode[]);
           deleteMenuByIds({
             ids: ids.join(','),
           }).then(() => {
@@ -106,50 +106,46 @@ export default defineComponent({
     const reSearch = function () {
       tableLayoutRef.value?.resetSearch();
     };
-    const tableHeader = reactive<VueComponentNode[]>([
-      <a-button
-        key="approve-add"
-        onClick={handleAddClick}
-        action="add"
-        v-action="system:menu:add"
-      >
-        <c-icon type="add" />
-        新增
-      </a-button>,
-      <a-button
-        key="approve-delete"
-        onClick={handleDeleteClick}
-        action="delete"
-        v-action="system:menu:delete"
-      >
-        <c-icon type="delete" />
-        删除
-      </a-button>,
-      <a-button
-        key="approve-edit"
-        onClick={handleEditClick}
-        action="edit"
-        v-action="system:menu:edit"
-      >
-        <c-icon type="move" />
-        编辑
-      </a-button>,
-      <a-button
-        key="approve-query"
-        onClick={handleDetailsClick}
-        action="query"
-        v-action="system:menu:query"
-      >
-        <c-icon type="details" />
-        预览
-      </a-button>,
-    ] as unknown as VueComponentNode[]);
+    const buttons = reactive<ToolButton<number, MenuFormData>[]>([
+      {
+        key: 'approve-add',
+        onClick: handleAddClick,
+        action: 'add',
+        vAction: 'system:menu:add',
+        icon: 'add',
+        text: '新增',
+      },
+      {
+        key: 'approve-edit',
+        onClick: handleEditClick,
+        action: 'edit',
+        vAction: 'system:menu:edit',
+        icon: 'edit',
+        text: '编辑',
+      },
+      {
+        key: 'approve-delete',
+        onClick: handleDeleteClick,
+        action: 'delete',
+        vAction: 'system:menu:delete',
+        icon: 'delete',
+        text: '删除',
+      },
+      {
+        key: 'approve-query',
+        onClick: handleDetailsClick,
+        action: 'query',
+        vAction: 'system:menu:query',
+        icon: 'details',
+        text: '详情',
+      },
+    ]);
     return {
       parentId,
       formData,
       formJson,
       columns,
-      tableHeader,
+      buttons,
       reSearch,
       addMenuRef,
       tableLayoutRef,
@@ -157,13 +153,13 @@ export default defineComponent({
   },
 
   render() {
-    const { tableHeader, formJson, columns, reSearch } = this;
+    const { buttons, formJson, columns, reSearch } = this;
 
     return (
       <div class="container">
         <TableLayout
           ref="tableLayoutRef"
-          tableHeader={tableHeader as unknown as VueComponentNode[]}
+          buttons={buttons}
           formJson={formJson}
           columns={columns}
           search={getMenuList}

@@ -1,7 +1,7 @@
 import { defineComponent, getCurrentInstance, reactive, ref } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getRoleList, deleteRoleByIds } from '@/api/system/role';
-import { VueComponentNode } from '@/components/TableLayout/Tool';
+import { ToolButton, VueComponentNode } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
 import AddRole, { RoleFormData } from './AddRole';
@@ -59,7 +59,7 @@ export default defineComponent({
     };
     const handleDeleteClick = function (
       _selectKeys: number[],
-      selectNodes: Common.TreeNode[]
+      selectNodes: RoleFormData[]
     ) {
       instance?.proxy!.$confirm({
         title: '是否确认删除',
@@ -78,7 +78,7 @@ export default defineComponent({
               }
             });
           };
-          each(selectNodes);
+          each(selectNodes as unknown as Common.TreeNode[]);
           deleteRoleByIds({
             ids: ids.join(','),
           }).then(() => {
@@ -99,61 +99,59 @@ export default defineComponent({
     };
     const handleEditMenuClick = function (
       _selectKeys: number[],
-      selectNodes: MenuPermissionFormData[]
+      selectNodes: RoleFormData[]
     ) {
-      menuPermissionRef?.value?.show(selectNodes[0]);
+      menuPermissionRef?.value?.show(
+        selectNodes[0] as unknown as MenuPermissionFormData
+      );
     };
-    const tableHeader = reactive<VueComponentNode[]>([
-      <a-button
-        key="approve-add"
-        onClick={handleAddClick}
-        action="add"
-        v-action="system:role:add"
-      >
-        <c-icon type="add" />
-        新增
-      </a-button>,
-      <a-button
-        key="approve-delete"
-        onClick={handleDeleteClick}
-        action="delete"
-        v-action="system:role:delete"
-      >
-        <c-icon type="delete" />
-        删除
-      </a-button>,
-      <a-button
-        key="approve-edit"
-        onClick={handleEditClick}
-        action="edit"
-        v-action="system:role:edit"
-      >
-        <c-icon type="move" />
-        编辑
-      </a-button>,
-      <a-button
-        key="approve-query"
-        onClick={handleDetailsClick}
-        action="query"
-        v-action="system:role:query"
-      >
-        <c-icon type="details" />
-        预览
-      </a-button>,
-      <a-button
-        key="approve-permission"
-        onClick={handleEditMenuClick}
-        action="query"
-        v-action="system:role:editPermission"
-      >
-        <c-icon type="setting" />
-        权限设置
-      </a-button>,
-    ] as unknown as VueComponentNode[]);
+    const buttons = reactive<ToolButton<number, RoleFormData>[]>([
+      {
+        key: 'approve-add',
+        onClick: handleAddClick,
+        action: 'add',
+        vAction: 'system:role:add',
+        icon: 'add',
+        text: '新增',
+      },
+      {
+        key: 'approve-edit',
+        onClick: handleEditClick,
+        action: 'edit',
+        vAction: 'system:role:edit',
+        icon: 'edit',
+        text: '编辑',
+      },
+      {
+        key: 'approve-delete',
+        onClick: handleDeleteClick,
+        action: 'delete',
+        vAction: 'system:role:delete',
+        icon: 'delete',
+        text: '删除',
+      },
+      {
+        key: 'approve-query',
+        onClick: handleDetailsClick,
+        action: 'query',
+        vAction: 'system:role:query',
+        icon: 'details',
+        text: '详情',
+      },
+      {
+        key: 'approve-permission',
+        onClick: handleEditMenuClick,
+        action: 'query',
+        vAction: 'system:role:editPermission',
+        icon: 'setting',
+        text: '权限设置',
+      },
+    ]);
+
     return {
       formJson,
       columns,
-      tableHeader,
+      buttons,
       reSearch,
       formData,
       handleAddClick,
@@ -163,12 +161,12 @@ export default defineComponent({
     };
   },
   render() {
-    const { tableHeader, formJson, columns, reSearch } = this;
+    const { buttons, formJson, columns, reSearch } = this;
     return (
       <div class="container">
         <TableLayout
           ref="tableLayoutRef"
-          tableHeader={tableHeader as unknown as VueComponentNode[]}
+          buttons={buttons}
           formJson={formJson}
           columns={columns}
           search={getRoleList}
