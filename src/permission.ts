@@ -4,11 +4,9 @@ import router from './router';
 import { useStore } from './store/system/user';
 import { defineRouterStore } from '@/store/system/async-router';
 import NProgress from 'nprogress'; // progress bar
-// import '@/components/NProgress/nprogress.less'; // progress bar custom style
+import '@/components/NProgress/nprogress.less'; // progress bar custom style
 import { notification } from 'ant-design-vue';
 import { RouteRecordRaw } from 'vue-router';
-// import { ACCESS_TOKEN } from './store/system/user/const';
-// const ACCESS_TOKEN = 'authorization';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 

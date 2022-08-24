@@ -32,10 +32,10 @@ export default defineComponent({
     function setLoading(bool: boolean) {
       loading.value = bool;
     }
-
-    const code = ref(`/api/system/common/code?v=${Math.random()}`);
+    const getCode = () => `/api/system/common/code?v=${Math.random()}`;
+    const code = ref(getCode());
     function handleUpdateCode() {
-      code.value = `/api/system/common/code?v=${Math.random()}`;
+      code.value = getCode();
     }
     return {
       isLoginError,
@@ -69,6 +69,7 @@ export default defineComponent({
       return userStore.name;
     },
   },
+  mounted() {},
   methods: {
     handleSubmit() {
       const { formRef } = this;
