@@ -48,7 +48,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../dist',
+    outDir: './dist',
   },
   server: {
     port: 8001,

@@ -1,15 +1,21 @@
 #sh ./deploy.sh 
 
 # 拉取最新代码
-echo "执行命令：git pull origin master"
+echo "执行命令: 拉取远程代码"
 git pull origin master
 
 su root
 
 # 更新依赖
-echo "sudo npm i"
+echo "更新依赖"
 npm i
 
 # 编译为静态文件
-echo "npm run build"
+echo "编译为静态文件"
 npm run build
+
+# 将编译代码移动到网站目录
+echo '将编译代码移动到网站目录'
+cp -r ./dist/* ../dist/
+
+echo 'success'
