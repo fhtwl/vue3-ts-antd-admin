@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { generatorDynamicRouter } from '@/router/modules/generator-routers';
-import { UserRes } from '@/typings/api/system/user';
 
 export const defineRouterStore = defineStore('async-router', {
   state: () => ({

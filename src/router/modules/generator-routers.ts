@@ -2,7 +2,6 @@
 import { getUserMenu } from '@/api/system/user';
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, RouteView } from '@/layouts';
-import { UserRes } from '@/typings/api/system/user';
 import { markRaw } from 'vue';
 
 // 前端路由表
@@ -131,7 +130,9 @@ export const generator = (
         // target,
         permission: item.permission,
         type: item.type,
-        actions: (item.children || []).filter((action) => action.type === 3),
+        actions: (item.children || []).filter(
+          (action: UserRes.GetUserMenu) => action.type === 3
+        ),
       },
       /**
        * 是否设置了隐藏菜单
