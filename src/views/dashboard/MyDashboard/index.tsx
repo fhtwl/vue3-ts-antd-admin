@@ -12,7 +12,7 @@ export default defineComponent({
   render() {
     return (
       <div>
-        {this.count} <a-button onClick={this.setCount}>change</a-button>
+        {this.count} <a-button onClick={this.setCount}>add</a-button>
       </div>
     );
   },

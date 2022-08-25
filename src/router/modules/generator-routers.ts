@@ -16,13 +16,6 @@ const constantRouterComponents: {
 
   // 你需要动态引入的页面组件
   MyDashboard: () => import('@/views/dashboard/MyDashboard'),
-  DataSource: () => import('@/views/dashboard/DataSource'),
-  EditDashboard: () => import('@/views/dashboard/EditDashboard'),
-  DashboardPreview: () => import('@/views/dashboard/DashboardPreview'),
-  VisualizationComponent: () =>
-    import('@/views/dashboard/VisualizationComponent'),
-  EditVisualizationComponent: () =>
-    import('@/views/dashboard/EditVisualizationComponent'),
 
   // user
   UserCenter: () => import('@/views/system/user/Center/index.vue'),
@@ -81,7 +74,7 @@ export function generatorDynamicRouter(): Promise<Common.Router[]> {
         console.log('generatorDynamicRouter response:', result);
         const menuNav = [];
         const childrenNav: UserRes.GetUserMenu[] = [];
-        //      后端数据, 根级树数组,  根级 PID
+        // 后端数据, 根级树数组,  根级 PID
         listToTree(result as unknown as Common.List, childrenNav, 0);
         rootRouter.children = childrenNav;
         menuNav.push(rootRouter);

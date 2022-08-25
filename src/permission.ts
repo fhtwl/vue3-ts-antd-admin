@@ -1,4 +1,6 @@
 import router from './router';
+// // import store from './store';
+// // import storage from 'store';
 import { useStore } from './store/system/user';
 import { defineRouterStore } from '@/store/system/async-router';
 import NProgress from 'nprogress'; // progress bar
@@ -21,22 +23,27 @@ router.beforeEach((to, from, next) => {
       next({ path: defaultRoutePath });
       NProgress.done();
     } else {
+      // check login user.roles is null
       if (!userStore.role) {
+        // request login userInfo
+        // user.s;
         userStore
           .getInfo()
           .then((res) => {
             const roles = res && res.role;
             // generate dynamic router
             const routerStore = defineRouterStore();
-            routerStore.generateRoutes(roles).then(() => {
+            routerStore.generateRoutes().then(() => {
               routerStore.addRouters.forEach((r) =>
                 router.addRoute(r as unknown as RouteRecordRaw)
               );
               // 请求带有 redirect 重定向时，登录自动重定向到该地址
               const redirect = decodeURIComponent(
+                // from?.query?.redirect || to.path
                 (from.query?.redirect as string | undefined) || to.path
               );
               if (to.path === redirect) {
+                // set the replace: true so the navigation will not leave a history record
                 next({ ...to, replace: true });
               } else {
                 // 跳转到目的路由

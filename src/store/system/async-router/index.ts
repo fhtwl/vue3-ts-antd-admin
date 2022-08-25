@@ -6,9 +6,8 @@ export const defineRouterStore = defineStore('async-router', {
     addRouters: [] as Common.Router[],
   }),
   actions: {
-    generateRoutes(role: UserRes.StoreRole) {
+    generateRoutes() {
       return new Promise((resolve) => {
-        console.log(role);
         generatorDynamicRouter().then((routers) => {
           this.addRouters = routers;
           resolve(undefined);

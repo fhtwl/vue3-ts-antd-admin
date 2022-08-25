@@ -30,10 +30,10 @@ export default defineComponent({
     // 弹窗显示
     const visible = ref(false);
     const formData = ref<MenuPermissionFormData>(defaultFormData);
-
+    const instance = getCurrentInstance()!;
     const checkedKeys = ref<number[]>([]);
-    const handleCheck = function (keys: number[]) {
-      checkedKeys.value = keys;
+    const handleCheck = function ({ checked }: { checked: number[] }) {
+      checkedKeys.value = checked;
     };
 
     const treeData = ref<System.Menu[]>([]);
@@ -51,8 +51,7 @@ export default defineComponent({
         ids,
         roleId: formData.value.id,
       }).then(() => {
-        const { proxy } = getCurrentInstance()!;
-        proxy!.$message.success('修改成功');
+        instance.proxy!.$message.success('修改成功');
         handleCancel();
       });
     };
@@ -74,6 +73,7 @@ export default defineComponent({
       treeData,
       show,
       handleCheck,
+      instance,
     };
   },
   mounted() {
