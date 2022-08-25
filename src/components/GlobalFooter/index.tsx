@@ -5,7 +5,10 @@ export default defineComponent({
     return (
       <div class="global-footer">
         <div class="links">
-          <a href="https://fhtwl.gitee.io/" target="_blank">
+          <a
+            href="https://juejin.cn/column/7131913396370276382"
+            target="_blank"
+          >
             Blog
           </a>
 

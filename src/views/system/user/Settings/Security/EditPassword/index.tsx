@@ -27,19 +27,26 @@ export default defineComponent({
     const confirmLoading = ref<boolean>(false);
     const emailTime = ref<number>(0);
     const emailCodeLoading = ref<boolean>(false);
+    const callback = () => {
+      emailCodeLoading.value = false;
+      emailTime.value = 60;
+      const emailTimer = setInterval(() => {
+        emailTime.value--;
+        if (emailTime.value === 0) {
+          clearInterval(emailTimer);
+        }
+      }, 1000);
+    };
     const handleEmailCode = function () {
       emailCodeLoading.value = true;
-      email().then(() => {
-        emailCodeLoading.value = false;
-        instance?.proxy?.$message.success('验证码邮件发送成功');
-        emailTime.value = 60;
-        const emailTimer = setInterval(() => {
-          emailTime.value--;
-          if (emailTime.value === 0) {
-            clearInterval(emailTimer);
-          }
-        }, 1000);
-      });
+      email()
+        .then(() => {
+          callback();
+          instance?.proxy?.$message.success('验证码邮件发送成功');
+        })
+        .catch(() => {
+          callback();
+        });
     };
 
     const code = ref<string>(getCode());
