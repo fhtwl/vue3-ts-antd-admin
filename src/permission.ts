@@ -29,8 +29,7 @@ router.beforeEach((to, from, next) => {
         // user.s;
         userStore
           .getInfo()
-          .then((res) => {
-            const roles = res && res.role;
+          .then(() => {
             // generate dynamic router
             const routerStore = defineRouterStore();
             routerStore.generateRoutes().then(() => {

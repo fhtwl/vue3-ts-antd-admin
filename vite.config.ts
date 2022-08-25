@@ -4,6 +4,7 @@ import path from 'path';
 import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import vueJsx from '@vitejs/plugin-vue-jsx';
+import viteCompression from 'vite-plugin-compression';
 
 function resolve(url: string): string {
   return path.resolve(__dirname, url);
@@ -25,6 +26,7 @@ export default defineConfig({
         }),
       ],
     }),
+    viteCompression(),
   ],
   resolve: {
     alias: {

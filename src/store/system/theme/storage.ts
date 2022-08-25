@@ -1,4 +1,4 @@
-import { getItem, setItem } from '@/utils/Storage';
+import { getItem, setItem } from '@/utils/storage';
 import { SystemTheme } from './index';
 import { THEME_STOREAGE_KEY } from './const';
 
