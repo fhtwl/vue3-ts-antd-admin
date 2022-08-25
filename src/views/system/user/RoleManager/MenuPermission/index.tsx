@@ -61,7 +61,9 @@ export default defineComponent({
         ...formData.value,
         ...val,
       };
-      checkedKeys.value = val.menuIds.split(',').map((str) => Number(str));
+      checkedKeys.value = (val.menuIds || '')
+        .split(',')
+        .map((str) => Number(str));
       visible.value = true;
     };
 

@@ -21,7 +21,7 @@ export default defineComponent({
     const formJson = reactive<CommonFormItem[]>([
       {
         type: 'input',
-        label: '名称',
+        label: '用户名',
         fieldName: 'name',
         extraConfig: {
           // className: "row",

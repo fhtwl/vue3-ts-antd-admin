@@ -1,7 +1,7 @@
 import { defineComponent, getCurrentInstance, reactive, ref } from 'vue';
 import TableLayout from '@/components/TableLayout';
 import { getRoleList, deleteRoleByIds } from '@/api/system/role';
-import { ToolButton, VueComponentNode } from '@/components/TableLayout/Tool';
+import { ToolButton } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
 import AddRole, { RoleFormData } from './AddRole';
@@ -158,6 +158,7 @@ export default defineComponent({
       addRoleRef,
       instance,
       menuPermissionRef,
+      tableLayoutRef,
     };
   },
   render() {

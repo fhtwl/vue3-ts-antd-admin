@@ -16,7 +16,6 @@ import { Action } from '@fhtwl-admin/system';
  */
 const directive = {
   mounted: (el: HTMLElement, binding: DirectiveBinding<string>) => {
-    // el: T, binding: DirectiveBinding<V>, vnode: VNode<any, T>
     const actionName = binding.arg || binding.value;
     const vm = binding.instance;
     const node = vm!.$route;
@@ -24,7 +23,6 @@ const directive = {
     const routerStore = defineRouterStore();
     userStore.role!.permissionList;
     // // 由于在切换用户后，vnode的$route没有正常更新, 所以要去store里去最新的数据
-    // console.log(store.state.permission.routers)
     const each = (tree: Common.Router[]) => {
       for (let i = 0; i < tree.length; i++) {
         const treeNode = tree[i];
@@ -39,7 +37,6 @@ const directive = {
     };
     each(routerStore.addRouters);
     const actions: Action[] = node.meta.actions as Action[];
-    // console.log(el, binding, vnode, this)
     if (
       !actions.find((action) => action.permission === actionName) &&
       actionName !== '*:*:*'
