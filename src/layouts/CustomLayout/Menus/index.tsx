@@ -27,8 +27,10 @@ export default defineComponent({
   setup() {
     const themeStore = useStore();
     const theme = computed(() => themeStore.navTheme);
+    const layout = computed(() => themeStore.layout);
     return {
       theme,
+      layout,
     };
   },
   data() {
@@ -89,7 +91,7 @@ export default defineComponent({
       theme,
       menus,
       renderSubMenuItem,
-      // settings,
+      layout,
       selectedKeys,
       defaultOpenKeys,
     } = this;
@@ -101,12 +103,11 @@ export default defineComponent({
       children.length && (
         <a-menu
           class="custom-menus"
-          mode="inline"
+          mode={layout === 'sidemenu' ? 'inline' : 'horizontal'}
           theme={theme}
           openKeys={defaultOpenKeys}
           selectedKeys={selectedKeys}
         >
-          {/* mode={settings.layout === 'sidemenu' ? 'inline' : 'horizontal'} */}
           {children.map((item) => renderSubMenuItem(item))}
         </a-menu>
       )

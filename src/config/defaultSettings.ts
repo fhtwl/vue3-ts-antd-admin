@@ -6,7 +6,6 @@
  * layout - 整体布局方式 ['sidemenu', 'topmenu'] 两种布局
  * fixedHeader - 固定 Header : boolean
  * fixSiderbar - 固定左侧菜单栏 ： boolean
- * contentWidth - 内容区布局： 流式 |  固定
  *
  */
 
@@ -14,20 +13,11 @@ export default {
   navTheme: 'dark', // theme for nav menu
   primaryColor: '#18a058', // '#F5222D', // primary color of ant design
   layout: 'sidemenu', // nav menu position: `sidemenu` or `topmenu`
-  contentWidth: 'Fluid', // layout of content: `Fluid` or `Fixed`, only works when layout is topmenu
-  fixedHeader: false, // sticky header
-  fixedSidebar: false, // sticky siderbar
   colorWeak: false,
-  menu: {
-    locale: true,
-  },
   title: 'vue3-ts-antd-admin',
   pwa: false,
   iconfontUrl: '',
-  production:
-    process.env.NODE_ENV === 'production' &&
-    process.env.VUE_APP_PREVIEW !== 'true',
+  production: process.env.NODE_ENV === 'production',
   multiTab: true,
   hideSetting: false,
-  autoHideHeader: false,
 };

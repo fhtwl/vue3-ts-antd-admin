@@ -14,12 +14,10 @@ import {
   NAV_THEME,
   NavTheme,
 } from '@/store/system/theme/const';
-// import { baseMixin } from '@/store/app-mixin';
 import { useStore } from '@/store/system/theme';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
   emits: ['change'],
-  // mixins: [baseMixin],
   setup() {
     const themeStore = useStore();
 
@@ -49,20 +47,6 @@ export default defineComponent({
 
     const handleLayoutChange = function (mode: string) {
       themeStore[TOGGLE_LAYOUT](mode);
-      // 因为顶部菜单不能固定左侧菜单栏，所以强制关闭
-      handleFixedSidebar(false);
-    };
-
-    const handleFixedSidebar = function (isFixed: boolean) {
-      if (layout.value === 'topmenu') {
-        themeStore[TOGGLE_FIXED_SIDEBAR](false);
-        return;
-      }
-      themeStore[TOGGLE_FIXED_SIDEBAR](isFixed);
-    };
-
-    const handleFixedHeaderChange = function (isFixed: boolean) {
-      themeStore[TOGGLE_FIXED_HEADER](isFixed);
     };
 
     const handleHideSettingChange = function (checked: boolean) {
@@ -78,10 +62,6 @@ export default defineComponent({
       }
     };
 
-    const handleContentWidthChange = function (type: string) {
-      themeStore[TOGGLE_CONTENT_WIDTH](type);
-    };
-
     const colorWeak = computed(() => settings.value.colorWeak);
 
     onMounted(() => {
@@ -92,8 +72,6 @@ export default defineComponent({
     });
 
     const navTheme = computed(() => settings.value.navTheme);
-    const fixedHeader = computed(() => settings.value.fixedHeader);
-    const fixedSidebar = computed(() => settings.value.fixedSidebar);
 
     const hideSetting = computed(() => settings.value.hideSetting);
 
@@ -114,15 +92,10 @@ export default defineComponent({
       handleMenuTheme,
       layout,
       handleLayoutChange,
-      handleFixedSidebar,
-      handleFixedHeaderChange,
       handleHideSettingChange,
       handleColorChange,
-      handleContentWidthChange,
       navTheme,
       primaryColor,
-      fixedHeader,
-      fixedSidebar,
       colorWeak,
       hideSetting,
       dark,
@@ -251,62 +224,6 @@ export default defineComponent({
                 </div>
               </div>
             </a-tooltip>
-          </div>
-          <div :style="{ marginTop: '24px' }">
-            <a-list :split="false">
-              <!-- <a-list-item>
-                <a-tooltip slot="actions">
-                  <template slot="title">
-                    该设定仅 [顶部栏导航] 时有效
-                  </template>
-                  <a-select size="small" style="width: 80px;" :defaultValue="contentWidth" @change="handleContentWidthChange">
-                    <a-select-option value="Fixed">固定</a-select-option>
-                    <a-select-option value="Fluid" v-if="layout !== 'sidemenu'">流式</a-select-option>
-                  </a-select>
-                </a-tooltip>
-                <a-list-item-meta>
-                  <div slot="title">内容区域宽度</div>
-                </a-list-item-meta>
-              </a-list-item> -->
-              <a-list-item>
-                <template #actions>
-                  <a-switch
-                    size="small"
-                    :checked="fixedHeader"
-                    @change="handleFixedHeaderChange"
-                  />
-                </template>
-
-                <a-list-item-meta>
-                  <template #title>
-                    <div>固定 Header</div>
-                  </template>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <template #actions>
-                  <a-switch
-                    size="small"
-                    :disabled="layout === 'topmenu'"
-                    :checked="fixedSidebar"
-                    @change="handleFixedSidebar"
-                  />
-                </template>
-
-                <a-list-item-meta>
-                  <template #title
-                    ><div
-                      :style="{
-                        textDecoration:
-                          layout === 'topmenu' ? 'line-through' : 'unset',
-                      }"
-                    >
-                      固定侧边菜单
-                    </div></template
-                  >
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
           </div>
         </div>
         <a-divider />

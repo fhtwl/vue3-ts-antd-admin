@@ -26,3 +26,5 @@ export const NAV_THEME: NavThemeObj = {
   LIGHT: 'light',
   DARK: 'dark',
 };
+
+export const THEME_STOREAGE_KEY = 'admin_theme';

@@ -8,21 +8,19 @@ import { defineRouterStore } from '@/store/system/async-router';
 import { useStore } from '@/store/system/theme';
 import MultiTab from '@/components/MultiTab';
 import {
-  CONTENT_WIDTH_TYPE,
   TOGGLE_NAV_THEME,
   TOGGLE_COLOR,
   TOGGLE_HIDE_SETTING,
+  TOGGLE_LAYOUT,
 } from '@/store/system/theme/const';
 import { computed, defineComponent, markRaw, shallowRef } from 'vue';
 import LOGO from '@/assets/logo.svg?inline';
+import { updateSystemThemeData } from '@/store/system/theme/storage';
 
 type SettingType =
   | 'layout'
-  | 'contentWidth'
   | 'navTheme'
   | 'primaryColor'
-  | 'fixedHeader'
-  | 'fixedSidebar'
   | 'colorWeak'
   | 'multiTab'
   | 'defaultSelectKey'
@@ -55,28 +53,15 @@ export default defineComponent({
     const logoSvgImg = LOGO;
 
     const settings = computed(() => {
-      const {
-        navTheme,
-        primaryColor,
-        fixedHeader,
-        fixedSidebar,
-        layout,
-        colorWeak,
-        multiTab,
-        contentWidth,
-      } = themeStore;
+      const { navTheme, primaryColor, layout, colorWeak, multiTab } =
+        themeStore;
       return {
         // 布局类型
         layout, // 'sidemenu', 'topmenu'
-        // CONTENT_WIDTH_TYPE
-        contentWidth:
-          layout === 'sidemenu' ? CONTENT_WIDTH_TYPE.Fluid : contentWidth,
         // 主题 'dark' | 'light'
         navTheme,
         // 主色调
         primaryColor,
-        fixedHeader,
-        fixedSidebar,
         colorWeak,
         multiTab,
         defaultSelectKey: undefined,
@@ -87,24 +72,15 @@ export default defineComponent({
       console.log(type, value);
       const settingValue = settings.value;
       switch (type) {
-        case 'contentWidth':
-          settingValue[type] = value as string;
-          break;
         case 'layout':
-          if (value === 'sidemenu') {
-            settingValue.contentWidth = CONTENT_WIDTH_TYPE.Fluid;
-          } else {
-            settingValue.fixedSidebar = false;
-            settingValue.contentWidth = CONTENT_WIDTH_TYPE.Fixed;
-          }
+          themeStore[TOGGLE_LAYOUT](value as string);
           break;
         case 'navTheme': // 主题风格
           themeStore[TOGGLE_NAV_THEME](value as string);
           break;
         case 'primaryColor': // 主题色
           themeStore[TOGGLE_COLOR](value as string);
-          // updateTheme(value)
-          // this.$store.dispatch('ToggleColor', value)
+
           break;
         case 'hideSetting': // 是否隐藏设置
           themeStore[TOGGLE_HIDE_SETTING](value as boolean);
@@ -112,6 +88,7 @@ export default defineComponent({
         default:
           settingValue[type] = value as never;
       }
+      updateSystemThemeData(settingValue);
     };
 
     const shallowNum = shallowRef({
