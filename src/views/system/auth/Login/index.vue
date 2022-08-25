@@ -4,6 +4,8 @@ import { defineComponent, reactive, ref } from 'vue';
 import { useStore } from '@/store/system/user';
 import md5 from 'md5';
 import './index.less';
+import demo from './demo';
+
 const userStore = useStore();
 
 interface FormState {
@@ -69,7 +71,9 @@ export default defineComponent({
       return userStore.name;
     },
   },
-  mounted() {},
+  mounted() {
+    this.$notification.success(demo());
+  },
   methods: {
     handleSubmit() {
       const { formRef } = this;
@@ -143,7 +147,7 @@ export default defineComponent({
         <a-input-password
           v-model:value="form.password"
           size="large"
-          placeholder="密码: user"
+          placeholder="密码"
         >
           <template #prefix>
             <lock-outlined class="icon" />
