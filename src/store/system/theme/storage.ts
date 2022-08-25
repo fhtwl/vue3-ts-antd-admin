@@ -1,4 +1,5 @@
 import { getItem, setItem } from '@/utils/Storage';
+import { SystemTheme } from './index';
 import { THEME_STOREAGE_KEY } from './const';
 
 /**
@@ -13,6 +14,6 @@ export function updateSystemThemeData(data: Common.Params) {
  * 获取系统主题相关配置
  * @returns
  */
-export function getSystemThemeData() {
-  return getItem(THEME_STOREAGE_KEY);
+export function getSystemThemeData(): SystemTheme {
+  return getItem(THEME_STOREAGE_KEY) as unknown as SystemTheme;
 }

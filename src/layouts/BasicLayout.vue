@@ -7,15 +7,9 @@ import CustomLayout from './CustomLayout/index.vue';
 import { defineRouterStore } from '@/store/system/async-router';
 import { useStore } from '@/store/system/theme';
 import MultiTab from '@/components/MultiTab';
-import {
-  TOGGLE_NAV_THEME,
-  TOGGLE_COLOR,
-  TOGGLE_HIDE_SETTING,
-  TOGGLE_LAYOUT,
-} from '@/store/system/theme/const';
+
 import { computed, defineComponent, markRaw, shallowRef } from 'vue';
 import LOGO from '@/assets/logo.svg?inline';
-import { updateSystemThemeData } from '@/store/system/theme/storage';
 
 type SettingType =
   | 'layout'
@@ -68,29 +62,6 @@ export default defineComponent({
       };
     });
 
-    const handleSettingChange = function ({ type, value }: SetSetting) {
-      console.log(type, value);
-      const settingValue = settings.value;
-      switch (type) {
-        case 'layout':
-          themeStore[TOGGLE_LAYOUT](value as string);
-          break;
-        case 'navTheme': // 主题风格
-          themeStore[TOGGLE_NAV_THEME](value as string);
-          break;
-        case 'primaryColor': // 主题色
-          themeStore[TOGGLE_COLOR](value as string);
-
-          break;
-        case 'hideSetting': // 是否隐藏设置
-          themeStore[TOGGLE_HIDE_SETTING](value as boolean);
-          break;
-        default:
-          settingValue[type] = value as never;
-      }
-      updateSystemThemeData(settingValue);
-    };
-
     const shallowNum = shallowRef({
       key: 999,
       collapsed: false,
@@ -111,7 +82,6 @@ export default defineComponent({
       mainMenu,
       menus,
       settings,
-      handleSettingChange,
       handleCollapse,
       shallowNum,
       reload,

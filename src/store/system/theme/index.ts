@@ -10,9 +10,18 @@ import {
   TOGGLE_WEAK,
 } from './const';
 import defaultSettings from '@/config/defaultSettings';
+import { getSystemThemeData, updateSystemThemeData } from './storage';
+export interface SystemTheme {
+  navTheme: string;
+  multiTab: boolean;
+  layout: string;
+  hideSetting: boolean;
+  colorWeak: boolean;
+  primaryColor: string;
+}
 
 const { navTheme, multiTab, layout, hideSetting, colorWeak, primaryColor } =
-  defaultSettings;
+  getSystemThemeData() || defaultSettings;
 
 export const useStore = defineStore('theme', {
   state: () => ({
@@ -42,6 +51,7 @@ export const useStore = defineStore('theme', {
      */
     [SIDEBAR_TYPE]: function (bool: boolean) {
       this.sideCollapsed = bool;
+      save(this);
     },
     /**
      * 主题风格
@@ -49,6 +59,7 @@ export const useStore = defineStore('theme', {
      */
     [TOGGLE_NAV_THEME]: function (theme: string) {
       this.navTheme = theme;
+      save(this);
     },
     /**
      * 主题色
@@ -56,6 +67,7 @@ export const useStore = defineStore('theme', {
      */
     [TOGGLE_COLOR]: function (color: string) {
       this.primaryColor = color;
+      save(this);
     },
     /**
      * 色弱模式
@@ -63,6 +75,7 @@ export const useStore = defineStore('theme', {
      */
     [TOGGLE_WEAK]: function (bool: boolean) {
       this.colorWeak = bool;
+      save(this);
     },
     /**
      * 开启页签模式
@@ -70,6 +83,7 @@ export const useStore = defineStore('theme', {
      */
     [TOGGLE_MULTI_TAB]: function (bool: boolean) {
       this.multiTab = bool;
+      save(this);
     },
 
     /**
@@ -78,6 +92,7 @@ export const useStore = defineStore('theme', {
      */
     [TOGGLE_LAYOUT]: function (mode: string) {
       this.layout = mode;
+      save(this);
     },
 
     /**
@@ -86,6 +101,20 @@ export const useStore = defineStore('theme', {
      */
     [TOGGLE_HIDE_SETTING]: function (bool: boolean) {
       this.hideSetting = bool;
+      save(this);
     },
   },
 });
+
+function save(data: SystemTheme) {
+  const { navTheme, multiTab, layout, hideSetting, colorWeak, primaryColor } =
+    data;
+  updateSystemThemeData({
+    navTheme,
+    multiTab,
+    layout,
+    hideSetting,
+    colorWeak,
+    primaryColor,
+  });
+}
