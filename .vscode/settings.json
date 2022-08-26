@@ -4,8 +4,28 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
+  "editor.tabSize": 2,
+  // 粘贴时格式化代码
+  "editor.formatOnPaste": false,
+
   "vetur.format.enable": true,
   "vetur.validation.script": false,
   "vetur.validation.style": false,
-  "vetur.validation.template": false
+  "vetur.validation.template": false,
+
+  "eslint.alwaysShowStatus": true,
+  "eslint.options": {
+    "extensions": [".js", ".vue"]
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "vue",
+    "tsx"
+  ],
+  "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass"]
 }
