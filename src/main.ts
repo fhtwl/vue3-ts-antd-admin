@@ -13,7 +13,9 @@ const app = createApp(App);
 app.use(router);
 app.component('CIcon', CIcon);
 app.use(createPinia());
+
 setupAtnd(app);
 initCore(app);
+
 app.config.globalProperties.$axios = axios;
 app.mount('#app');
