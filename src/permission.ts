@@ -1,6 +1,4 @@
 import router from './router';
-// // import store from './store';
-// // import storage from 'store';
 import { useStore } from './store/system/user';
 import { defineRouterStore } from '@/store/system/async-router';
 import NProgress from 'nprogress'; // progress bar
@@ -25,8 +23,6 @@ router.beforeEach((to, from, next) => {
     } else {
       // check login user.roles is null
       if (!userStore.role) {
-        // request login userInfo
-        // user.s;
         userStore
           .getInfo()
           .then(() => {
