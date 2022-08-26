@@ -65,11 +65,6 @@ declare global {
       size: number;
     }
   }
-
-  module LowCode {
-    // export interface ComponentField extends Common.Option {
-    // }
-  }
 }
 
 declare module '@vue/runtime-core' {

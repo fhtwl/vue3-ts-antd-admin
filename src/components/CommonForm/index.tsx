@@ -6,8 +6,6 @@ import { FormInstance } from 'ant-design-vue';
 import { Fun } from '@fhtwl-admin/common';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 
-type handleBeforeUpload = (file: File) => void;
-
 export enum AcceptType {
   ALL = 0,
   IMG,

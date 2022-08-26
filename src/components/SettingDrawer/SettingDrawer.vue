@@ -3,13 +3,10 @@ import config from '@/config/defaultSettings';
 import { updateTheme, updateColorWeak, colorList } from './settingConfig';
 import {
   TOGGLE_MULTI_TAB,
-  TOGGLE_FIXED_HEADER,
   TOGGLE_LAYOUT,
   TOGGLE_HIDE_SETTING,
-  TOGGLE_FIXED_SIDEBAR,
   TOGGLE_WEAK,
   TOGGLE_NAV_THEME,
-  TOGGLE_CONTENT_WIDTH,
   TOGGLE_COLOR,
   NAV_THEME,
   NavTheme,
