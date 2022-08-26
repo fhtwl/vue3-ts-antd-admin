@@ -5,6 +5,9 @@ import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import viteCompression from 'vite-plugin-compression';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import { version } from './package.json';
+import config from './src/config/defaultSettings';
 
 function resolve(url: string): string {
   return path.resolve(__dirname, url);
@@ -27,6 +30,15 @@ export default defineConfig({
       ],
     }),
     viteCompression(),
+    createHtmlPlugin({
+      inject: {
+        data: {
+          title: config.title,
+          description: config.description,
+          version,
+        },
+      },
+    }),
   ],
   resolve: {
     alias: {

@@ -5,9 +5,10 @@
 <script lang="ts">
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 import { defineComponent } from 'vue';
+import config from '@/config/defaultSettings';
 
 const MyIcon = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3233276_vdxns10ldqf.js', // 在 iconfont.cn 上生成
+  scriptUrl: config.iconfontUrl, // 在 iconfont.cn 上生成
 });
 
 export default defineComponent({
