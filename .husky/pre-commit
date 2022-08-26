@@ -1,4 +1,4 @@
 #!/bin/sh#!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx --no-install lint-staged
+npx --no-install lint-staged # 使用执行 lint-statged 插件 使用本地资源 不下载

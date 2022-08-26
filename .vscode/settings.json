@@ -5,7 +5,6 @@
     "source.fixAll": true
   },
   "editor.tabSize": 2,
-  // 粘贴时格式化代码
   "editor.formatOnPaste": false,
 
   "vetur.format.enable": true,
@@ -27,5 +26,6 @@
     "vue",
     "tsx"
   ],
+
   "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass"]
 }
