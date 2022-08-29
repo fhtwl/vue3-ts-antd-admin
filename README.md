@@ -8,19 +8,19 @@
 
 ### 前端
 
-**vue3**: 核心框架
-**pinia**: 状态管理
-**less**: css 预编译器
-**ant design**: 组件库
-**ts/tsx**: 开发和模板语言
-**vite2**: 前端构建工具
+**vue3**: 核心框架 <br/>
+**pinia**: 状态管理 <br/>
+**less**: css 预编译器 <br/>
+**ant design**: 组件库 <br/>
+**ts/tsx**: 开发和模板语言 <br/>
+**vite2**: 前端构建工具 <br/>
 
 ### 服务端
 
-**koa2**: 核心框架
-**mysql**: 数据库
-**redis**: 缓存
-**ts**:开发语言
+**koa2**: 核心框架 <br/>
+**mysql**: 数据库 <br/>
+**redis**: 缓存 <br/>
+**ts**:开发语言 <br/>
 
 本文主要介绍前端部分的设计和开发, 服务端的开发在我的掘金专栏 <a href="https://juejin.cn/column/7100898007582769160"  >超细致 nodejs + koa2 + ts + mysql + redis 后端框架搭建</a>里有详细介绍, 感兴趣的可以看看
 
@@ -66,35 +66,35 @@
 
 # 四、目录结构
 
-├── .husky husky # 脚本
-├── .vscode vscode # 配置
-├── public
-│ └── favicon.ico # 网站图标
-├── src
-│ ├── api # Api ajax 等
-│ ├── assets # 本地静态资源
-│ ├── config # 项目全局设置
-│ ├── components # 通用组件
-│ ├── core # 自定义指令等
-│ ├── lib # 依赖包引入
-│ ├── router # Vue-Router
-│ ├── store # Pinia
-│ ├── typings # .d.ts 描述文件
-│ ├── utils # 工具库
-│ ├── views # 业务页面入口和常用模板
-│ └── App.vue # Vue 模板入口
-│ └── env.d.ts # 环境变量定义文件
-│ └── main.ts # Vue 入口 ts
-│ └── permission.ts # 路由守卫(路由权限控制)
-└── .env # 环境变量
-└── .env.development # 开发环境变量
-└── .env.production # 生产环境变量
-└── .eslintrc.json # eslint 配置
-└── .prettierrc.json # prettier 配置
-└── deploy.sh # 部署脚本
-└── index.html # Vue 入口模板
-└── README.md
-└── package.json
-└── tsconfig.json
-└── tsconfig.node.json
-└── vite.config.ts
+├── .husky husky # 脚本 <br/>
+├── .vscode vscode # 配置 <br/>
+├── public <br/>
+│ └── favicon.ico # 网站图标 <br/>
+├── src <br/>
+│ ├── api # Api ajax 等 <br/>
+│ ├── assets # 本地静态资源 <br/>
+│ ├── config # 项目全局设置 <br/>
+│ ├── components # 通用组件 <br/>
+│ ├── core # 自定义指令等 <br/>
+│ ├── lib # 依赖包引入 <br/>
+│ ├── router # Vue-Router <br/>
+│ ├── store # Pinia <br/>
+│ ├── typings # .d.ts 描述文件 <br/>
+│ ├── utils # 工具库 <br/>
+│ ├── views # 业务页面入口和常用模板 <br/>
+│ └── App.vue # Vue 模板入口 <br/>
+│ └── env.d.ts # 环境变量定义文件 <br/>
+│ └── main.ts # Vue 入口 ts <br/>
+│ └── permission.ts # 路由守卫(路由权限控制) <br/>
+└── .env # 环境变量 <br/>
+└── .env.development # 开发环境变量 <br/>
+└── .env.production # 生产环境变量 <br/>
+└── .eslintrc.json # eslint 配置 <br/>
+└── .prettierrc.json # prettier 配置 <br/>
+└── deploy.sh # 部署脚本 <br/>
+└── index.html # Vue 入口模板 <br/>
+└── README.md <br/>
+└── package.json <br/>
+└── tsconfig.json <br/>
+└── tsconfig.node.json <br/>
+└── vite.config.ts <br/>
