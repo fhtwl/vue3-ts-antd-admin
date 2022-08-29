@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-antd-admin",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "vite --mode development",
     "build": "vue-tsc --noEmit && vite build --mode production",
