@@ -1,10 +1,9 @@
 import router from './router';
 import { useStore } from './store/system/user';
-import { defineRouterStore } from '@/store/system/async-router';
 import NProgress from 'nprogress'; // progress bar
 import '@/components/NProgress/nprogress.less'; // progress bar custom style
 import { notification } from 'ant-design-vue';
-import { RouteRecordRaw } from 'vue-router';
+import { resetMenuRouter, updateMenuRouter } from './utils/router';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
@@ -13,32 +12,31 @@ export const loginRoutePath = '/auth/login';
 const defaultRoutePath = '/dashboard/my-dashboard';
 
 router.beforeEach((to, from, next) => {
-  NProgress.start(); // start progress bar
-  /* has token */
+  NProgress.start();
   const userStore = useStore();
+  // 如果已经登录
   if (userStore.token) {
+    // 而跳转路径是登录页面
     if (to.path === loginRoutePath) {
+      // 则直接跳转到默认页
       next({ path: defaultRoutePath });
       NProgress.done();
     } else {
-      // check login user.roles is null
+      // 如果没有角色信息
       if (!userStore.role) {
+        // 重新获取
         userStore
           .getInfo()
           .then(() => {
-            // generate dynamic router
-            const routerStore = defineRouterStore();
-            routerStore.generateRoutes().then(() => {
-              routerStore.addRouters.forEach((r) =>
-                router.addRoute(r as unknown as RouteRecordRaw)
-              );
+            // 重置之前的动态路由
+            resetMenuRouter();
+            // 更新动态路由
+            updateMenuRouter().then(() => {
               // 请求带有 redirect 重定向时，登录自动重定向到该地址
               const redirect = decodeURIComponent(
-                // from?.query?.redirect || to.path
                 (from.query?.redirect as string | undefined) || to.path
               );
               if (to.path === redirect) {
-                // set the replace: true so the navigation will not leave a history record
                 next({ ...to, replace: true });
               } else {
                 // 跳转到目的路由
@@ -66,11 +64,11 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       next({ path: loginRoutePath, query: { redirect: to.fullPath } });
-      NProgress.done(); // if current page is login will not trigger afterEach hook, so manually handle it
+      NProgress.done();
     }
   }
 });
 
 router.afterEach(() => {
-  NProgress.done(); // finish progress bar
+  NProgress.done();
 });

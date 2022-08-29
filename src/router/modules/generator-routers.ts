@@ -1,8 +1,8 @@
-// eslint-disable-next-line
 import { getUserMenu } from '@/api/system/user';
-// eslint-disable-next-line
 import { BasicLayout, BlankLayout, RouteView } from '@/layouts';
 import { markRaw } from 'vue';
+
+export const ROOT_NAME = -1;
 
 // 前端路由表
 const constantRouterComponents: {
@@ -59,7 +59,7 @@ const rootRouter: UserRes.GetUserMenu = {
   children: [],
   serialNum: 0,
   parentId: -11,
-  id: -1,
+  id: ROOT_NAME,
   hideChildrenInMenu: false,
 };
 
@@ -92,10 +92,9 @@ export function generatorDynamicRouter(): Promise<Common.Router[]> {
 
 /**
  * 格式化树形结构数据 生成 vue-router 层级路由表
- *
  * @param routerMap
  * @param parent
- * @returns {*}
+ * @returns
  */
 export const generator = (
   routerMap: UserRes.GetUserMenu[],
@@ -108,7 +107,7 @@ export const generator = (
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/my-dashboard
       path: item.path || `${(parent && parent.path) || ''}/${item.key}`,
       // 路由名称，建议唯一
-      name: item.id || item.key || '',
+      name: item.id.toString(),
       // 该路由对应页面的 组件 :方案1
       // component: constantRouterComponents[item.component || item.key],
       // 该路由对应页面的 组件 :方案2 (动态加载)
@@ -127,13 +126,9 @@ export const generator = (
           (action: UserRes.GetUserMenu) => action.type === 3
         ),
       },
-      /**
-       * 是否设置了隐藏菜单
-       */
+      // 是否设置了隐藏菜单
       hidden: show === false,
-      /**
-       * 是否设置了隐藏子菜单
-       */
+      // 是否设置了隐藏子菜单
       hideChildrenInMenu: !!hideChildren,
       children: [],
       redirect: '',
@@ -152,11 +147,6 @@ export const generator = (
     return currentRouter;
   });
 };
-
-// interface TreeItem {
-//   id: number;
-//   [propsName: string]: unknown;
-// }
 
 /**
  * 数组转树形结构
@@ -182,10 +172,6 @@ function listToTree(
       };
       // 迭代 list， 找到当前菜单相符合的所有子菜单
       listToTree(list, child.children, item.id!);
-      // 删掉不存在 children 值的属性
-      // if (child.children.length <= 0) {
-      //   delete child.children;
-      // }
       // 加入到树中
       tree.push(child);
     }

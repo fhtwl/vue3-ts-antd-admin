@@ -4,10 +4,9 @@
 
 import UserLayout from '@/layouts/UserLayout.vue';
 
-export const asyncRouterMap = [];
 /**
+ *
  * 基础路由
- * @type { *[] }
  */
 export const constantRouterMap = [
   {
@@ -40,6 +39,4 @@ export const constantRouterMap = [
   },
 ];
 
-const Common = [...constantRouterMap];
-
-export default Common;
+export default [...constantRouterMap];
