@@ -17,7 +17,8 @@ declare namespace UserRes {
     key: number | string;
     name: string;
     path: string;
-    component: string;
+    component?: string;
+    componentPath?: string;
     redirect: string;
     meta: {
       title: string;

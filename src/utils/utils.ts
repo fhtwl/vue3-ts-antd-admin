@@ -3,17 +3,22 @@ import { FieldName } from '@/components/CommonForm';
 import { message } from 'ant-design-vue';
 import { getLoading } from '../components/CommonForm/index';
 
-type ForeachTreeCallBack = (node: Common.TreeNode) => void;
+type ForeachTreeCallBack<T> = (node: T) => void;
+
+interface TreeItem<T> {
+  children: TreeItem<T>[];
+  [propsName: string]: unknown;
+}
 /**
  * 循环遍历树的每一个元素
  * @param tree
  * @param callBack
  */
-export function foreachTree(
-  tree: Common.TreeNode[],
-  callBack: ForeachTreeCallBack = () => {}
+export function foreachTree<T>(
+  tree: TreeItem<T>[],
+  callBack: ForeachTreeCallBack<TreeItem<T>> = (arg: TreeItem<T>) => arg
 ) {
-  tree.forEach((element) => {
+  tree.forEach((element: TreeItem<T>) => {
     callBack(element);
     if (element.children) {
       foreachTree(element.children, callBack);

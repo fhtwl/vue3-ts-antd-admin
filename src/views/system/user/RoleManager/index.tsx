@@ -8,6 +8,8 @@ import AddRole, { RoleFormData } from './AddRole';
 import MenuPermission, { MenuPermissionFormData } from './MenuPermission';
 
 export default defineComponent({
+  isPage: true,
+  name: 'RoleManager',
   setup() {
     const addRoleRef = ref<InstanceType<typeof AddRole>>();
     const tableLayoutRef = ref<InstanceType<typeof TableLayout>>();

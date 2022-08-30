@@ -1,44 +1,3 @@
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { useStore } from '@/store/system/user';
-
-export default defineComponent({
-  setup() {
-    const store = useStore();
-    return {
-      nickname: computed(() => store.info?.nickName),
-      userInfo: computed(() => store.info),
-      avatar: computed(() => store.info?.avatar),
-      role: computed(() => store.role),
-    };
-  },
-});
-</script>
-
-<template>
-  <div class="page-header-index-wide page-header-wrapper-grid-content-main">
-    <a-row :gutter="24">
-      <a-col :md="24" :lg="7">
-        <a-card :bordered="false">
-          <div class="account-center-avatarHolder">
-            <div class="avatar">
-              <img :src="avatar" />
-            </div>
-            <div class="username">{{ nickname }}</div>
-            <div class="bio">{{ userInfo?.profile }}</div>
-          </div>
-          <div class="account-center-detail">
-            <p><i class="title"></i>{{ role?.roleName }}</p>
-          </div>
-          <a-divider />
-        </a-card>
-      </a-col>
-      <a-col :md="24" :lg="17"> </a-col>
-    </a-row>
-  </div>
-</template>
-
-<style lang="less" scoped>
 .page-header-wrapper-grid-content-main {
   width: 100%;
   height: 100%;
@@ -137,4 +96,3 @@ export default defineComponent({
     margin-bottom: 12px;
   }
 }
-</style>

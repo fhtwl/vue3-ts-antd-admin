@@ -17,8 +17,21 @@ export function resetMenuRouter() {
 export async function updateMenuRouter() {
   const routerStore = defineRouterStore();
   await routerStore.generateRoutes().then(() => {
-    routerStore.addRouters.forEach((r) =>
-      router.addRoute(r as unknown as RouteRecordRaw)
-    );
+    // foreachTree(routerStore.addRouters, (r) => {
+    //   console.log(r);
+    //   if (r.component) {
+    //     router.addRoute({
+    //       ...r,
+    //     } as unknown as RouteRecordRaw);
+    //   }
+    // });
+
+    routerStore.addRouters.forEach((r) => {
+      console.log(r);
+      router.addRoute({
+        ...r,
+      } as unknown as RouteRecordRaw);
+    });
+    console.log(router.getRoutes());
   });
 }
