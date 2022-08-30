@@ -7,6 +7,8 @@ import { ToolButton } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
 export default defineComponent({
+  isPage: true,
+  name: 'MenuManager',
   setup() {
     const parentId = ref<number>(0);
 

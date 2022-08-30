@@ -8,6 +8,8 @@ import { CommonFormItem } from '@/components/CommonForm';
 import { UserFormData } from './AddUser/index';
 import { ToolButton } from '../../../../components/TableLayout/Tool/index';
 export default defineComponent({
+  isPage: true,
+  name: 'UserManager',
   setup() {
     const instance = getCurrentInstance();
     const addUserRef = ref<InstanceType<typeof AddUser>>();

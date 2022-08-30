@@ -105,3 +105,7 @@
 └── tsconfig.node.json
 └── vite.config.ts
 ```
+
+# 五、已知 bug
+
+- <a href="https://github.com/vuejs/core/issues/6222">issues</a>: 热更新报错 TypeError: parentComponent.ctx.deactivate is not a function

@@ -4,6 +4,8 @@ import { markRaw } from 'vue';
 
 export const ROOT_NAME = -1;
 
+const modules = getModules();
+
 // 前端路由表
 const constantRouterComponents: {
   [propsName: string]: unknown;
@@ -13,17 +15,21 @@ const constantRouterComponents: {
   BlankLayout: markRaw(BlankLayout),
   RouteView: markRaw(RouteView),
   404: () => import('@/views/system/exception/404/index.vue'),
-
-  // 你需要动态引入的页面组件
-  MyDashboard: () => import('@/views/dashboard/MyDashboard'),
-
-  // user
-  UserCenter: () => import('@/views/system/user/Center/index.vue'),
-  UserSettings: () => import('@/views/system/user/Settings'),
-  UserManager: () => import('@/views/system/user/Manager'),
-  RoleManager: () => import('@/views/system/user/RoleManager'),
-  MenuManager: () => import('@/views/system/user/MenuManager'),
 };
+
+function loadAllPage() {
+  for (const path in modules) {
+    modules[path]().then((mod) => {
+      const file = mod.default;
+      console.log(file.name);
+      if (file.isPage) {
+        constantRouterComponents[`${file.name}`] = markRaw(file);
+      }
+    });
+  }
+}
+// 获取所有的页面并放入路由表中
+loadAllPage();
 
 // 前端未找到页面路由（固定不用改）
 const notFoundRouter = {
@@ -101,18 +107,17 @@ export const generator = (
   parent?: Common.Router
 ) => {
   return routerMap.map((item) => {
-    const { title, show, hideChildren, hiddenHeaderContent, icon } =
-      item.meta || {};
+    const { component, meta } = item;
+    const { title, show, hideChildren, hiddenHeaderContent, icon } = meta || {};
     const currentRouter: Common.Router = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/my-dashboard
       path: item.path || `${(parent && parent.path) || ''}/${item.key}`,
       // 路由名称，建议唯一
       name: item.id.toString(),
-      // 该路由对应页面的 组件 :方案1
-      // component: constantRouterComponents[item.component || item.key],
-      // 该路由对应页面的 组件 :方案2 (动态加载)
-      component: (constantRouterComponents[item.component || item.key] ||
-        (() => import(`@/views/${item.component}`))) as Common.VueComponent,
+      // 该路由对应页面的组件
+      component: constantRouterComponents[
+        component!
+      ] as unknown as Common.VueComponent,
 
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {
@@ -176,4 +181,13 @@ function listToTree(
       tree.push(child);
     }
   });
+}
+
+/**
+ * 加载views目录下的所有组件
+ * @returns
+ */
+function getModules() {
+  const components = import.meta.glob('../../views/**/*.tsx');
+  return components;
 }
