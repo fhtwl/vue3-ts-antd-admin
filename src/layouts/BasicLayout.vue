@@ -4,7 +4,7 @@ import RightContent from '@/components/GlobalHeader/RightContent.vue';
 import GlobalFooter from '@/components/GlobalFooter';
 import SettingDrawer from '@/components/SettingDrawer/SettingDrawer.vue';
 import CustomLayout from './CustomLayout/index.vue';
-import { defineRouterStore } from '@/store/system/async-router';
+import { defineRouterStore } from '@/store/system/asyncRouter';
 import { useStore } from '@/store/system/theme';
 import MultiTab from '@/components/MultiTab';
 
@@ -71,9 +71,6 @@ export default defineComponent({
       shallowNum.value.collapsed = bool;
     };
 
-    // watch(shallowNum, ({ collapsed }) => {
-    //   themeStore[SIDEBAR_TYPE](collapsed);
-    // });
     const reload = function () {
       shallowNum.value.key = Math.random();
     };

@@ -1,5 +1,6 @@
 import { getUserMenu } from '@/api/system/user';
 import { BasicLayout, BlankLayout, RouteView } from '@/layouts';
+import { listToTree } from '@/utils/utils';
 import { markRaw } from 'vue';
 
 export const ROOT_NAME = -1;
@@ -7,12 +8,14 @@ export const ROOT_NAME = -1;
 const modules = getModules();
 
 // 前端路由表
-const constantRouterComponents: {
-  [propsName: string]: unknown;
-} = {
+const constantRouterComponents: Common.Params = {
   // 基础页面 layout 必须引入
+
+  // 二级路由包裹组件
   BasicLayout: markRaw(BasicLayout),
+  // 空白布局
   BlankLayout: markRaw(BlankLayout),
+  // 一级路由
   RouteView: markRaw(RouteView),
   404: () => import('@/views/system/exception/404/index.vue'),
 };
@@ -22,8 +25,9 @@ function loadAllPage() {
     modules[path]().then((mod) => {
       const file = mod.default;
       console.log(file.name);
+      file.displayName = file.name;
       if (file.isPage) {
-        constantRouterComponents[`${file.name}`] = markRaw(file);
+        constantRouterComponents[`${file.name}`] = () => Promise.resolve(file);
       }
     });
   }
@@ -39,6 +43,7 @@ const notFoundRouter = {
   serialNum: 0,
   parentId: 0,
   name: '404',
+  id: '404',
   component: undefined,
   meta: {
     title: '404',
@@ -55,7 +60,7 @@ const notFoundRouter = {
 // 根级菜单
 const rootRouter: UserRes.GetUserMenu = {
   key: '',
-  name: 'index',
+  name: 'dynamicRouter',
   path: '',
   component: 'BasicLayout',
   redirect: '/dashboard',
@@ -77,17 +82,14 @@ export function generatorDynamicRouter(): Promise<Common.Router[]> {
   return new Promise((resolve, reject) => {
     getUserMenu()
       .then((result) => {
-        console.log('generatorDynamicRouter response:', result);
         const menuNav = [];
         const childrenNav: UserRes.GetUserMenu[] = [];
         // 后端数据, 根级树数组,  根级 PID
         listToTree(result as unknown as Common.List, childrenNav, 0);
         rootRouter.children = childrenNav;
         menuNav.push(rootRouter);
-        console.log('menuNav', menuNav);
         const routers = generator(menuNav);
         routers.push(notFoundRouter);
-        console.log('routers', routers);
         resolve(routers);
       })
       .catch((err) => {
@@ -107,11 +109,11 @@ export const generator = (
   parent?: Common.Router
 ) => {
   return routerMap.map((item) => {
-    const { component, meta } = item;
-    const { title, show, hideChildren, hiddenHeaderContent, icon } = meta || {};
+    const { component, meta, key, permission, type } = item;
+    const { title, show, hideChildren, hiddenHeaderContent, icon } = meta;
     const currentRouter: Common.Router = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/my-dashboard
-      path: item.path || `${(parent && parent.path) || ''}/${item.key}`,
+      path: item.path || `${parent?.path || ''}/${key}`,
       // 路由名称，建议唯一
       name: item.id.toString(),
       // 该路由对应页面的组件
@@ -121,12 +123,11 @@ export const generator = (
 
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {
-        title: title,
-        icon: icon || undefined,
-        hiddenHeaderContent: hiddenHeaderContent,
-        // target,
-        permission: item.permission,
-        type: item.type,
+        title,
+        icon,
+        hiddenHeaderContent,
+        permission,
+        type,
         actions: (item.children || []).filter(
           (action: UserRes.GetUserMenu) => action.type === 3
         ),
@@ -146,42 +147,11 @@ export const generator = (
     item.redirect && (currentRouter.redirect = item.redirect);
     // 是否有子菜单，并递归处理
     if (item.children && item.children.length > 0) {
-      // Recursion
       currentRouter.children = generator(item.children, currentRouter);
     }
     return currentRouter;
   });
 };
-
-/**
- * 数组转树形结构
- * @param list 源数组
- * @param tree 树
- * @param parentId 父ID
- */
-function listToTree(
-  list: Common.List,
-  tree: Common.TreeNode[],
-  parentId: number
-) {
-  list.forEach((item) => {
-    // 判断是否为父级菜单
-    if (item.parentId === parentId) {
-      const child = {
-        ...item,
-        id: item.id!,
-        key: item.id || item.name,
-        children: [],
-        serialNum: item.serialNum as number,
-        parentId: item.parentId,
-      };
-      // 迭代 list， 找到当前菜单相符合的所有子菜单
-      listToTree(list, child.children, item.id!);
-      // 加入到树中
-      tree.push(child);
-    }
-  });
-}
 
 /**
  * 加载views目录下的所有组件

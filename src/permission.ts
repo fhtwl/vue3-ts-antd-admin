@@ -1,13 +1,13 @@
 import router from './router';
 import { useStore } from './store/system/user';
-import NProgress from 'nprogress'; // progress bar
-import '@/components/NProgress/nprogress.less'; // progress bar custom style
+import NProgress from 'nprogress';
+import '@/components/NProgress/nprogress.less';
 import { notification } from 'ant-design-vue';
 import { resetMenuRouter, updateMenuRouter } from './utils/router';
 
-NProgress.configure({ showSpinner: false }); // NProgress Configuration
+NProgress.configure({ showSpinner: false });
 
-const allowList = ['login', 'register', 'registerResult']; // no redirect allowList
+const allowList = ['login', 'register', 'registerResult'];
 export const loginRoutePath = '/auth/login';
 const defaultRoutePath = '/dashboard/my-dashboard';
 

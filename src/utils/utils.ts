@@ -78,3 +78,33 @@ export function deepCopy<T>(target: T): T {
 
   return target;
 }
+
+/**
+ * 数组转树形结构
+ * @param list 源数组
+ * @param tree 树
+ * @param parentId 父ID
+ */
+export function listToTree(
+  list: Common.List,
+  tree: Common.TreeNode[],
+  parentId: number
+) {
+  list.forEach((item) => {
+    // 判断是否为父级菜单
+    if (item.parentId === parentId) {
+      const child = {
+        ...item,
+        id: item.id!,
+        key: item.id || item.name,
+        children: [],
+        serialNum: item.serialNum as number,
+        parentId: item.parentId,
+      };
+      // 迭代 list， 找到当前菜单相符合的所有子菜单
+      listToTree(list, child.children, item.id!);
+      // 加入到树中
+      tree.push(child);
+    }
+  });
+}

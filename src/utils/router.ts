@@ -1,6 +1,6 @@
 import router from '@/router';
-import { ROOT_NAME } from '@/router/modules/generator-routers';
-import { defineRouterStore } from '@/store/system/async-router';
+import { ROOT_NAME } from '@/router/modules/generatorRouters';
+import { defineRouterStore } from '@/store/system/asyncRouter';
 import { RouteRecordRaw } from 'vue-router';
 
 export function resetMenuRouter() {
@@ -17,21 +17,10 @@ export function resetMenuRouter() {
 export async function updateMenuRouter() {
   const routerStore = defineRouterStore();
   await routerStore.generateRoutes().then(() => {
-    // foreachTree(routerStore.addRouters, (r) => {
-    //   console.log(r);
-    //   if (r.component) {
-    //     router.addRoute({
-    //       ...r,
-    //     } as unknown as RouteRecordRaw);
-    //   }
-    // });
-
     routerStore.addRouters.forEach((r) => {
-      console.log(r);
       router.addRoute({
         ...r,
       } as unknown as RouteRecordRaw);
     });
-    console.log(router.getRoutes());
   });
 }

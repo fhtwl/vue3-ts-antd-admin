@@ -1,6 +1,6 @@
 import { DirectiveBinding } from 'vue';
 import { useStore } from '@/store/system/user';
-import { defineRouterStore } from '@/store/system/async-router';
+import { defineRouterStore } from '@/store/system/asyncRouter';
 import { Action } from '@fhtwl-admin/system';
 /**
  * Action 权限指令
