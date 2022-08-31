@@ -18,11 +18,9 @@ export async function updateMenuRouter() {
   const routerStore = defineRouterStore();
   await routerStore.generateRoutes().then(() => {
     routerStore.addRouters.forEach((r) => {
-      console.log(r);
       router.addRoute({
         ...r,
       } as unknown as RouteRecordRaw);
     });
-    console.log(router.getRoutes());
   });
 }
