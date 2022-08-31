@@ -8,7 +8,7 @@ import { defineRouterStore } from '@/store/system/asyncRouter';
 import { useStore } from '@/store/system/theme';
 import MultiTab from '@/components/MultiTab';
 
-import { computed, defineComponent, markRaw, shallowRef } from 'vue';
+import { computed, defineComponent, markRaw, ref } from 'vue';
 import LOGO from '@/assets/logo.svg?inline';
 
 type SettingType =
@@ -61,18 +61,15 @@ export default defineComponent({
         defaultSelectKey: undefined,
       };
     });
-
-    const shallowNum = shallowRef({
-      key: 999,
-      collapsed: false,
-    });
+    const routerKey = ref<number>(999);
+    const collapsed = ref<boolean>(false);
 
     const handleCollapse = function (bool: boolean) {
-      shallowNum.value.collapsed = bool;
+      collapsed.value = bool;
     };
 
     const reload = function () {
-      shallowNum.value.key = Math.random();
+      routerKey.value = Math.random();
     };
 
     return {
@@ -80,7 +77,8 @@ export default defineComponent({
       menus,
       settings,
       handleCollapse,
-      shallowNum,
+      routerKey,
+      collapsed,
       reload,
       logoSvgImg,
     };
@@ -96,7 +94,7 @@ export default defineComponent({
 <template>
   <CustomLayout
     :menus="menus"
-    :default-collapsed="shallowNum.collapsed"
+    :default-collapsed="collapsed"
     :handle-collapse="handleCollapse"
     :settings="settings"
   >
@@ -109,9 +107,12 @@ export default defineComponent({
 
     <template #headerContentRender>
       <div class="basic-head">
-        <!-- <a-tooltip title="刷新页面">
-           <reload-outlined style="font-size: 18px;cursor: pointer;" @click="reload"  />
-        </a-tooltip> -->
+        <a-tooltip title="刷新页面">
+          <reload-outlined
+            style="font-size: 18px; cursor: pointer"
+            @click="reload"
+          />
+        </a-tooltip>
         <div class="multi-tab-container">
           <multi-tab v-if="settings.multiTab" />
         </div>
@@ -127,7 +128,7 @@ export default defineComponent({
     <template #footerRender>
       <global-footer />
     </template>
-    <router-view :key="shallowNum.key" />
+    <router-view :key="routerKey" />
   </CustomLayout>
 </template>
 
