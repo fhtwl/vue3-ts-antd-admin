@@ -7,12 +7,14 @@ export const ROOT_NAME = -1;
 const modules = getModules();
 
 // 前端路由表
-const constantRouterComponents: {
-  [propsName: string]: unknown;
-} = {
+const constantRouterComponents: Common.Params = {
   // 基础页面 layout 必须引入
+
+  // 二级路由包裹组件
   BasicLayout: markRaw(BasicLayout),
+  // 空白布局
   BlankLayout: markRaw(BlankLayout),
+  // 一级路由
   RouteView: markRaw(RouteView),
   404: () => import('@/views/system/exception/404/index.vue'),
 };
@@ -39,6 +41,7 @@ const notFoundRouter = {
   serialNum: 0,
   parentId: 0,
   name: '404',
+  id: '404',
   component: undefined,
   meta: {
     title: '404',
