@@ -73,6 +73,18 @@ export default defineComponent({
       const disabled = type.value === 'query';
       const base: CommonFormItem[] = [
         {
+          type: 'input',
+          label: '用户名',
+          fieldName: 'userName',
+          className: 'row',
+          extraConfig: {
+            disabled,
+          },
+          rules: [
+            { required: true, message: '用户名不能为空', trigger: 'blur' },
+          ],
+        },
+        {
           type: 'custom-form',
           label: '昵称',
           fieldName: ['info', 'nickName'],
@@ -137,7 +149,7 @@ export default defineComponent({
           rules: [
             { required: true, message: '用户头像不能为空', trigger: 'blur' },
           ],
-          label: '背景图片',
+          label: '用户头像',
           fieldName: ['info', 'avatar'],
           vModel: formData.value.info.avatar,
 
@@ -229,6 +241,8 @@ export default defineComponent({
         case 'query': {
           formData.value = {
             ...formData.value,
+            id: val.id,
+            userName: val.userName,
             email: val.email,
             info: val.info,
             roleIds: (val.roleIds as string)
