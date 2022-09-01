@@ -184,11 +184,11 @@ export default defineComponent({
         </a-button>
       </a-form-item>
 
-      <div class="user-login-other">
+      <!-- <div class="user-login-other">
         <router-link class="register" :to="{ name: 'register' }">
           注册
         </router-link>
-      </div>
+      </div> -->
     </a-form>
   </div>
 </template>
