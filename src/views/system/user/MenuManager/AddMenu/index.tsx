@@ -56,7 +56,7 @@ export default defineComponent({
       foreachTree(menuOption.value, (node) => {
         node.disabled = formData.value.id === node.id;
       });
-      let filterMenuOption;
+      let filterMenuOption: System.Menu[] = [];
       switch (formData.value.type) {
         case 1:
           filterMenuOption = [];
@@ -65,13 +65,13 @@ export default defineComponent({
           foreachTree(menuOption.value, (node) => {
             node.disabled = node.type !== 1;
           });
-          filterMenuOption = menuOption;
+          filterMenuOption = menuOption.value;
           break;
         case 3:
           foreachTree(menuOption.value, (node) => {
             node.disabled = node.type !== 2;
           });
-          filterMenuOption = menuOption;
+          filterMenuOption = menuOption.value;
           break;
       }
       const disabled = type.value === 'query';
@@ -116,7 +116,7 @@ export default defineComponent({
             treeData: filterMenuOption,
             fieldNames: {
               children: 'children',
-              title: 'name',
+              label: 'name',
               key: 'id',
               value: 'id',
             },

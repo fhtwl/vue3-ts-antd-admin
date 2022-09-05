@@ -1,6 +1,12 @@
 <script lang="ts">
 import { FormInstance } from 'ant-design-vue';
-import { defineComponent, reactive, ref } from 'vue';
+import {
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  reactive,
+  ref,
+} from 'vue';
 import { useStore } from '@/store/system/user';
 import md5 from 'md5';
 import './index.less';
@@ -18,6 +24,7 @@ export default defineComponent({
   name: 'Login',
   components: {},
   setup() {
+    const instance = getCurrentInstance();
     const form = reactive<FormState>({
       userName: '',
       password: '',
@@ -39,6 +46,53 @@ export default defineComponent({
     function handleUpdateCode() {
       code.value = getCode();
     }
+
+    const rules = ref({
+      userName: [
+        { required: true, message: '请输入用户名！', trigger: 'blur' },
+      ],
+      password: [{ required: true, message: '请输入密码！', trigger: 'blur' }],
+      code: [{ required: true, message: '请输入验证码！', trigger: 'blur' }],
+    });
+
+    onMounted(() => {
+      instance?.proxy?.$notification.success(demo());
+    });
+
+    const handleSubmit = function () {
+      setLoading(true);
+
+      const validateFieldsKey = ['userName', 'password', 'code'];
+      formRef.value
+        ?.validateFields(validateFieldsKey)
+        .then((values) => {
+          const loginParams = { ...values };
+          loginParams.password = md5(values.password);
+          userStore
+            .login(loginParams as FormState)
+            .then(() => loginSuccess())
+            .catch((res) => requestFailed(res))
+            .finally(() => {
+              setLoading(false);
+            });
+        })
+        .catch(() => {
+          setTimeout(() => {
+            setLoading(false);
+          }, 600);
+        });
+    };
+
+    const loginSuccess = function () {
+      instance?.proxy?.$router.push({ path: '/' });
+      setLoginError(false);
+    };
+    const requestFailed = function (res: unknown) {
+      console.log('requestFailed', res);
+      setLoginError(true);
+      handleUpdateCode();
+    };
+
     return {
       isLoginError,
       setLoginError,
@@ -48,67 +102,11 @@ export default defineComponent({
       setLoading,
       code,
       handleUpdateCode,
+      rules,
+      handleSubmit,
+      loginSuccess,
+      requestFailed,
     };
-  },
-  data() {
-    return {
-      rules: {
-        userName: [
-          { required: true, message: '请输入用户名！', trigger: 'blur' },
-        ],
-        password: [
-          { required: true, message: '请输入密码！', trigger: 'blur' },
-        ],
-        code: [{ required: true, message: '请输入验证码！', trigger: 'blur' }],
-      },
-    };
-  },
-  computed: {
-    nameLength() {
-      return userStore.nameLength;
-    },
-    name() {
-      return userStore.name;
-    },
-  },
-  mounted() {
-    this.$notification.success(demo());
-  },
-  methods: {
-    handleSubmit() {
-      const { formRef } = this;
-      this.setLoading(true);
-
-      const validateFieldsKey = ['userName', 'password', 'code'];
-      formRef
-        ?.validateFields(validateFieldsKey)
-        .then((values) => {
-          const loginParams = { ...values };
-          loginParams.password = md5(values.password);
-          userStore
-            .login(loginParams as FormState)
-            .then(() => this.loginSuccess())
-            .catch((res) => this.requestFailed(res))
-            .finally(() => {
-              this.setLoading(false);
-            });
-        })
-        .catch(() => {
-          setTimeout(() => {
-            this.setLoading(false);
-          }, 600);
-        });
-    },
-
-    loginSuccess() {
-      this.$router.push({ path: '/' });
-      this.setLoginError(false);
-    },
-    requestFailed(res: unknown) {
-      console.log('requestFailed', res);
-      this.setLoginError(true);
-      this.handleUpdateCode();
-    },
   },
 });
 </script>
@@ -186,11 +184,11 @@ export default defineComponent({
         </a-button>
       </a-form-item>
 
-      <div class="user-login-other">
+      <!-- <div class="user-login-other">
         <router-link class="register" :to="{ name: 'register' }">
           注册
         </router-link>
-      </div>
+      </div> -->
     </a-form>
   </div>
 </template>
