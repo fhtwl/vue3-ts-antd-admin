@@ -106,7 +106,6 @@ export default defineComponent({
           dataType: Number,
         },
       ];
-      console.log(filterMenuOption);
       const parent: CommonFormItem[] = [
         {
           type: 'tree-select',

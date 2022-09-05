@@ -1,14 +1,14 @@
-<script lang="ts">
 import defaultSettings from '@/config/defaultSettings';
 import RightContent from '@/components/GlobalHeader/RightContent.vue';
 import GlobalFooter from '@/components/GlobalFooter';
 import SettingDrawer from '@/components/SettingDrawer/SettingDrawer.vue';
-import CustomLayout from './CustomLayout/index.vue';
+import CustomLayout from './CustomLayout';
 import { defineRouterStore } from '@/store/system/asyncRouter';
-import { useStore } from '@/store/system/theme';
+import { SystemTheme, useStore } from '@/store/system/theme';
 import MultiTab from '@/components/MultiTab';
+import './index.less';
 
-import { computed, defineComponent, markRaw, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, markRaw, ref } from 'vue';
 import LOGO from '@/assets/logo.svg?inline';
 
 type SettingType =
@@ -17,7 +17,6 @@ type SettingType =
   | 'primaryColor'
   | 'colorWeak'
   | 'multiTab'
-  | 'defaultSelectKey'
   | 'hideSetting';
 
 export interface SetSetting {
@@ -45,10 +44,15 @@ export default defineComponent({
       return (routes && routes.children) || [];
     });
     const logoSvgImg = LOGO;
-
-    const settings = computed(() => {
-      const { navTheme, primaryColor, layout, colorWeak, multiTab } =
-        themeStore;
+    const settings: ComputedRef<SystemTheme> = computed(() => {
+      const {
+        navTheme,
+        primaryColor,
+        layout,
+        colorWeak,
+        multiTab,
+        hideSetting,
+      } = themeStore;
       return {
         // 布局类型
         layout, // 'sidemenu', 'topmenu'
@@ -58,7 +62,7 @@ export default defineComponent({
         primaryColor,
         colorWeak,
         multiTab,
-        defaultSelectKey: undefined,
+        hideSetting,
       };
     });
     const routerKey = ref<number>(999);
@@ -83,55 +87,50 @@ export default defineComponent({
       logoSvgImg,
     };
   },
-  data() {
-    return {
-      title: defaultSettings.title,
+
+  render() {
+    const { menus, collapsed, handleCollapse, settings, reload, routerKey } =
+      this;
+
+    const slots = {
+      menuHeaderRender: () => (
+        <div class="logo">
+          <img src={LOGO} />
+          <h1>{defaultSettings.title}</h1>
+        </div>
+      ),
+      headerContentRender: () => (
+        <div class="basic-head">
+          <a-tooltip title="刷新页面">
+            <reload-outlined
+              style="font-size: 18px; cursor: pointer"
+              onClick={reload}
+            />
+          </a-tooltip>
+          <div class="multi-tab-container">
+            {settings.multiTab && <multi-tab />}
+          </div>
+        </div>
+      ),
+      rightContentRender: () => (
+        <right-content
+          top-menu={settings.layout === 'topmenu'}
+          theme={settings.navTheme}
+        />
+      ),
+      footerRender: () => <global-footer />,
     };
+    return (
+      <CustomLayout
+        menus={menus}
+        default-collapsed={collapsed}
+        handle-collapse={handleCollapse}
+        settings={settings}
+        v-slots={slots}
+      >
+        <setting-drawer settings={settings}></setting-drawer>
+        <router-view key={routerKey} />
+      </CustomLayout>
+    );
   },
 });
-</script>
-
-<template>
-  <CustomLayout
-    :menus="menus"
-    :default-collapsed="collapsed"
-    :handle-collapse="handleCollapse"
-    :settings="settings"
-  >
-    <template #menuHeaderRender>
-      <div class="logo">
-        <img :src="logoSvgImg" />
-        <h1>{{ title }}</h1>
-      </div>
-    </template>
-
-    <template #headerContentRender>
-      <div class="basic-head">
-        <a-tooltip title="刷新页面">
-          <reload-outlined
-            style="font-size: 18px; cursor: pointer"
-            @click="reload"
-          />
-        </a-tooltip>
-        <div class="multi-tab-container">
-          <multi-tab v-if="settings.multiTab" />
-        </div>
-      </div>
-    </template>
-    <setting-drawer :settings="settings"></setting-drawer>
-    <template #rightContentRender>
-      <right-content
-        :top-menu="settings.layout === 'topmenu'"
-        :theme="settings.navTheme"
-      />
-    </template>
-    <template #footerRender>
-      <global-footer />
-    </template>
-    <router-view :key="routerKey" />
-  </CustomLayout>
-</template>
-
-<style lang="less">
-@import './BasicLayout.less';
-</style>

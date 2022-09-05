@@ -1,6 +1,6 @@
 import { computed, defineComponent, KeepAlive, Transition } from 'vue';
 import { useStore } from '@/store/system/theme';
-import './RouteView.less';
+import './index.less';
 export default defineComponent({
   name: 'RouteView',
   components: {

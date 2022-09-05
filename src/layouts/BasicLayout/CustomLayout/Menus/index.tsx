@@ -1,21 +1,15 @@
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import './index.less';
-import { useStore } from '@/store/system/theme';
+import { SystemTheme, useStore } from '@/store/system/theme';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
-import { Menu } from 'ant-design-vue';
 export default defineComponent({
-  components: {
-    'a-menu': Menu,
-    'a-menu-item': Menu.Item,
-    'a-sub-menu': Menu.SubMenu,
-  },
   props: {
     menus: {
-      type: Array,
+      type: Array as PropType<Common.Router[]>,
       default: () => [],
     },
     settings: {
-      type: Object,
+      type: Object as PropType<SystemTheme>,
       default: () => {},
     },
     collapsed: {
