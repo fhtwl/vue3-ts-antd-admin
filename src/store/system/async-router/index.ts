@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { generatorDynamicRouter } from '@/router/modules/generatorRouters';
+import { generatorDynamicRouter } from '@/router/modules/generator-routers';
 
-export const defineRouterStore = defineStore('asyncRouter', {
+export const defineRouterStore = defineStore('async-router', {
   state: () => ({
     addRouters: [] as Common.Router[],
   }),

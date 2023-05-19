@@ -13,6 +13,7 @@ export interface MenuFormData {
   path: string;
   type: System.MenuType;
   id: number | undefined;
+  permission: string;
 }
 
 const defaultFormData: MenuFormData = {
@@ -23,11 +24,12 @@ const defaultFormData: MenuFormData = {
   path: '',
   type: 1,
   id: undefined,
+  permission: '',
 };
 
 export type ActionType = 'edit' | 'add' | 'query';
 
-const actionConfig = {
+const actionConfig: { [propsName: string]: unknown } = {
   edit: '编辑',
   add: '新增',
   query: '详情',
@@ -38,7 +40,7 @@ export default defineComponent({
     CommonForm,
   },
   emits: ['update'],
-  setup(_props: Common.Params, { emit }) {
+  setup(_props: Common.Params, { emit }: { emit: Common.Fun }) {
     const instance = getCurrentInstance();
     const commonFormRef = ref<InstanceType<typeof CommonForm>>();
     // 弹窗显示
@@ -56,7 +58,7 @@ export default defineComponent({
       foreachTree(menuOption.value, (node) => {
         node.disabled = formData.value.id === node.id;
       });
-      let filterMenuOption: System.Menu[] = [];
+      let filterMenuOption;
       switch (formData.value.type) {
         case 1:
           filterMenuOption = [];
@@ -65,13 +67,13 @@ export default defineComponent({
           foreachTree(menuOption.value, (node) => {
             node.disabled = node.type !== 1;
           });
-          filterMenuOption = menuOption.value;
+          filterMenuOption = menuOption;
           break;
         case 3:
           foreachTree(menuOption.value, (node) => {
             node.disabled = node.type !== 2;
           });
-          filterMenuOption = menuOption.value;
+          filterMenuOption = menuOption;
           break;
       }
       const disabled = type.value === 'query';
@@ -106,6 +108,7 @@ export default defineComponent({
           dataType: Number,
         },
       ];
+      console.log('filterMenuOption', filterMenuOption);
       const parent: CommonFormItem[] = [
         {
           type: 'tree-select',
@@ -257,6 +260,7 @@ export default defineComponent({
       formData.value = {
         ...defaultFormData,
       };
+      getData();
       emit('update');
     };
     const handleOk = function () {
@@ -379,17 +383,24 @@ export default defineComponent({
           formData={formData}
           formJson={formJson}
         />
-        <a-modal visible={isIconShow} title="图标" footer={false}>
+        <a-modal
+          onCancel={() => (this.isIconShow = false)}
+          visible={isIconShow}
+          title="图标"
+          footer={false}
+        >
           <div class="icon-container">
-            {menuIconList.map((item) => (
-              <div
-                key={item.type}
-                class="icon"
-                onClick={() => handleSelectIcon(item)}
-              >
-                <c-icon type={item.type} />
-              </div>
-            ))}
+            {menuIconList.map(
+              (item: { type: string | number | symbol | undefined }) => (
+                <div
+                  key={item.type}
+                  class="icon"
+                  onClick={() => handleSelectIcon(item)}
+                >
+                  <c-icon type={item.type} />
+                </div>
+              )
+            )}
           </div>
         </a-modal>
       </a-modal>

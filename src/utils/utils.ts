@@ -3,22 +3,17 @@ import { FieldName } from '@/components/CommonForm';
 import { message } from 'ant-design-vue';
 import { getLoading } from '../components/CommonForm/index';
 
-type ForeachTreeCallBack<T> = (node: T) => void;
-
-interface TreeItem<T> {
-  children: TreeItem<T>[];
-  [propsName: string]: unknown;
-}
+type ForeachTreeCallBack = (node: Common.TreeNode) => void;
 /**
  * 循环遍历树的每一个元素
  * @param tree
  * @param callBack
  */
-export function foreachTree<T>(
-  tree: TreeItem<T>[],
-  callBack: ForeachTreeCallBack<TreeItem<T>> = (arg: TreeItem<T>) => arg
+export function foreachTree(
+  tree: Common.TreeNode[],
+  callBack: ForeachTreeCallBack = () => {}
 ) {
-  tree.forEach((element: TreeItem<T>) => {
+  tree.forEach((element) => {
     callBack(element);
     if (element.children) {
       foreachTree(element.children, callBack);
@@ -80,59 +75,17 @@ export function deepCopy<T>(target: T): T {
 }
 
 /**
- * 数组转树形结构
- * @param list 源数组
- * @param tree 树
- * @param parentId 父ID
+ * 构造随机id
+ * @param length
+ * @returns
  */
-export function listToTree(
-  list: Common.List,
-  tree: Common.TreeNode[],
-  parentId: number
-) {
-  list.forEach((item) => {
-    // 判断是否为父级菜单
-    if (item.parentId === parentId) {
-      const child = {
-        ...item,
-        id: item.id!,
-        key: item.id || item.name,
-        children: [],
-        serialNum: item.serialNum as number,
-        parentId: item.parentId,
-      };
-      // 迭代 list， 找到当前菜单相符合的所有子菜单
-      listToTree(list, child.children, item.id!);
-      // 加入到树中
-      tree.push(child);
-    }
-  });
-}
-
-export function scorePassword(pass: string) {
-  let score = 0;
-  if (!pass) {
-    return score;
+export function generateRandomID(length = 7): string {
+  let id = '';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    id += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-
-  const letters: { [propsName: string]: number } = {};
-  for (let i = 0; i < pass.length; i++) {
-    letters[pass[i]] = (letters[pass[i]] || 0) + 1;
-    score += 5.0 / letters[pass[i]];
-  }
-
-  const variations: { [propsName: string]: boolean } = {
-    digits: /\d/.test(pass),
-    lower: /[a-z]/.test(pass),
-    upper: /[A-Z]/.test(pass),
-    nonWords: /\W/.test(pass),
-  };
-
-  let variationCount = 0;
-  for (const check in variations) {
-    variationCount += variations[check] === true ? 1 : 0;
-  }
-  score += (variationCount - 1) * 10;
-
-  return parseInt(score.toString());
+  return id;
 }

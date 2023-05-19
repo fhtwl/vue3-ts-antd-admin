@@ -1,18 +1,20 @@
-import { defineComponent, getCurrentInstance, reactive, ref } from 'vue';
+import { defineComponent, ref, reactive, getCurrentInstance } from 'vue';
 import TableLayout from '@/components/TableLayout';
-import { getRoleList, deleteRoleByIds } from '@/api/system/role';
-import { ToolButton } from '@/components/TableLayout/Tool';
+import { getUserList, deleteUserByIds } from '@/api/system/user';
+
+import Add from './Add';
+import ViewerImg from '@/components/ViewerImg';
 import { CommonFormItem } from '@/components/CommonForm';
-
-import AddRole, { RoleFormData } from './AddRole';
-import MenuPermission, { MenuPermissionFormData } from './MenuPermission';
-
+import { UserFormData } from './Add/index';
+import { ToolButton } from '@/components/TableLayout/Tool/index';
 export default defineComponent({
+  name: 'Knowledge',
   setup() {
-    const addRoleRef = ref<InstanceType<typeof AddRole>>();
-    const tableLayoutRef = ref<InstanceType<typeof TableLayout>>();
-    const menuPermissionRef = ref<InstanceType<typeof MenuPermission>>();
     const instance = getCurrentInstance();
+    const addRef = ref<InstanceType<typeof Add>>();
+    const tableLayoutRef = ref<InstanceType<typeof TableLayout>>();
+
+    const parentId = ref<number>(0);
 
     const formData = reactive<{ name: string }>({
       name: '',
@@ -20,7 +22,7 @@ export default defineComponent({
     const formJson = reactive<CommonFormItem[]>([
       {
         type: 'input',
-        label: '名称',
+        label: '用户名',
         fieldName: 'name',
         extraConfig: {
           // className: "row",
@@ -28,17 +30,40 @@ export default defineComponent({
         dataType: String,
       },
     ]);
-
     const columns = reactive<Common.TableColumns[]>([
       {
-        title: '名称',
-        dataIndex: 'name',
+        title: '昵称',
+        dataIndex: 'nickName',
+        width: 80,
+        customRender: ({ record }) => {
+          console.log(typeof record.info);
+          return (record.info as System.UserInfo).nickName as string;
+        },
+      },
+      {
+        title: '头像',
+        dataIndex: 'avatar',
+        width: 80,
+        customRender: ({ record }) => {
+          return (
+            <ViewerImg images={[(record.info as System.UserInfo).avatar]} />
+          );
+        },
+      },
+      {
+        title: '用户名',
+        dataIndex: 'userName',
         width: 80,
       },
       {
-        title: '描述',
-        dataIndex: 'describe',
-        width: 120,
+        title: '邮箱',
+        dataIndex: 'email',
+        width: 100,
+      },
+      {
+        title: '角色',
+        dataIndex: 'roleNames',
+        width: 80,
       },
       {
         title: '更新时间',
@@ -46,24 +71,21 @@ export default defineComponent({
         width: 80,
       },
     ]);
-
     const handleAddClick = function () {
-      console.log(addRoleRef);
-      addRoleRef.value?.show('add');
+      addRef.value?.show('add');
     };
     const handleEditClick = function (
-      _selectKeys: number[],
-      selectNodes: RoleFormData[]
+      _selectKey: number[],
+      selectNodes: UserFormData[]
     ) {
-      addRoleRef.value!.show('edit', selectNodes[0]);
+      addRef?.value?.show('edit', selectNodes[0]);
     };
     const handleDeleteClick = function (
-      _selectKeys: number[],
-      selectNodes: RoleFormData[]
+      _selectKey: number[],
+      selectNodes: UserFormData[]
     ) {
       instance?.proxy!.$confirm({
         title: '是否确认删除',
-        content: '删除该菜单会删除该菜单的所有子菜单',
         okText: '是',
         okType: 'danger',
         cancelText: '否',
@@ -79,7 +101,7 @@ export default defineComponent({
             });
           };
           each(selectNodes as unknown as Common.TreeNode[]);
-          deleteRoleByIds({
+          deleteUserByIds({
             ids: ids.join(','),
           }).then(() => {
             instance?.proxy!.$message.success('删除成功');
@@ -89,28 +111,20 @@ export default defineComponent({
       });
     };
     const handleDetailsClick = function (
-      _selectKeys: number[],
-      selectNodes: RoleFormData[]
+      _selectKey: number[],
+      selectNodes: UserFormData[]
     ) {
-      addRoleRef?.value?.show('query', selectNodes[0]);
+      addRef?.value?.show('query', selectNodes[0]);
     };
     const reSearch = function () {
       tableLayoutRef?.value?.resetSearch();
     };
-    const handleEditMenuClick = function (
-      _selectKeys: number[],
-      selectNodes: RoleFormData[]
-    ) {
-      menuPermissionRef?.value?.show(
-        selectNodes[0] as unknown as MenuPermissionFormData
-      );
-    };
-    const buttons = reactive<ToolButton<number, RoleFormData>[]>([
+    const buttons = reactive<ToolButton<number, UserFormData>[]>([
       {
         key: 'approve-add',
         onClick: handleAddClick,
         action: 'add',
-        vAction: 'system:role:add',
+        vAction: 'system:user:add',
         icon: 'add',
         text: '新增',
       },
@@ -118,7 +132,7 @@ export default defineComponent({
         key: 'approve-edit',
         onClick: handleEditClick,
         action: 'edit',
-        vAction: 'system:role:edit',
+        vAction: 'system:user:edit',
         icon: 'edit',
         text: '编辑',
       },
@@ -126,7 +140,7 @@ export default defineComponent({
         key: 'approve-delete',
         onClick: handleDeleteClick,
         action: 'delete',
-        vAction: 'system:role:delete',
+        vAction: 'system:user:delete',
         icon: 'delete',
         text: '删除',
       },
@@ -134,35 +148,26 @@ export default defineComponent({
         key: 'approve-query',
         onClick: handleDetailsClick,
         action: 'query',
-        vAction: 'system:role:query',
+        vAction: 'system:user:query',
         icon: 'details',
         text: '详情',
       },
-      {
-        key: 'approve-permission',
-        onClick: handleEditMenuClick,
-        action: 'query',
-        vAction: 'system:role:editPermission',
-        icon: 'setting',
-        text: '权限设置',
-      },
     ]);
-
     return {
+      instance,
+      addRef,
+      parentId,
+      formData,
       formJson,
       columns,
       buttons,
       reSearch,
-      formData,
-      handleAddClick,
-      addRoleRef,
-      instance,
-      menuPermissionRef,
-      tableLayoutRef,
     };
   },
+
   render() {
     const { buttons, formJson, columns, reSearch } = this;
+
     return (
       <div class="container">
         <TableLayout
@@ -170,10 +175,9 @@ export default defineComponent({
           buttons={buttons}
           formJson={formJson}
           columns={columns}
-          search={getRoleList}
+          search={getUserList}
         ></TableLayout>
-        <AddRole ref="addRoleRef" onUpdate={reSearch} />
-        <MenuPermission ref="menuPermissionRef" onUpdate={reSearch} />
+        <Add ref="addRef" onUpdate={reSearch} />
       </div>
     );
   },

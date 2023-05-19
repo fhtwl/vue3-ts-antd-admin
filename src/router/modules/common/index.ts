@@ -2,11 +2,12 @@
  * @description 公共的一些路由，不属于功能模块的都放这里统一管理
  * @author fhtwl */
 
-import UserLayout from '@/layouts/UserLayout';
+import UserLayout from '@/layouts/UserLayout.vue';
 
+export const asyncRouterMap = [];
 /**
- *
  * 基础路由
+ * @type { *[] }
  */
 export const constantRouterMap = [
   {
@@ -39,4 +40,6 @@ export const constantRouterMap = [
   },
 ];
 
-export default [...constantRouterMap];
+const Common = [...constantRouterMap];
+
+export default Common;

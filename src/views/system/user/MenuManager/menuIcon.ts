@@ -23,4 +23,19 @@ export const menuIconList = [
   {
     type: 'edit',
   },
+  {
+    type: 'user',
+  },
+  {
+    type: 'knowledge-base',
+  },
+  {
+    type: 'chat',
+  },
+  {
+    type: 'role-manager',
+  },
+  {
+    type: 'ai',
+  },
 ];

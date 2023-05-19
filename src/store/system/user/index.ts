@@ -3,7 +3,7 @@ import { ACCESS_TOKEN } from './const';
 import { login, logout } from '@/api/system/auth';
 import { getUserInfo } from '@/api/system/user';
 import { Permission } from '@fhtwl-admin/system';
-import { updateMenuRouter } from '@/utils/router';
+import { defineRouterStore } from '../async-router';
 
 interface UserInfo {
   userName: string;
@@ -32,10 +32,10 @@ export const useStore = defineStore('user', {
             const token = res;
             this.token = token;
             localStorage.setItem(ACCESS_TOKEN, token);
+            updateMenuRouter();
+            this.getInfo();
 
-            Promise.all([updateMenuRouter(), this.getInfo()]).then(() => {
-              resolve(undefined);
-            });
+            resolve(undefined);
           })
           .catch((error: Error) => {
             reject(error);
@@ -91,3 +91,11 @@ export const useStore = defineStore('user', {
     },
   },
 });
+
+/**
+ * 更新系统导航和路由
+ */
+function updateMenuRouter() {
+  const routerStore = defineRouterStore();
+  routerStore.generateRoutes();
+}

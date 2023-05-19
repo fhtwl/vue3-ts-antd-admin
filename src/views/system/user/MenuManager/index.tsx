@@ -7,8 +7,6 @@ import { ToolButton } from '@/components/TableLayout/Tool';
 import { CommonFormItem } from '@/components/CommonForm';
 
 export default defineComponent({
-  isPage: true,
-  name: 'MenuManager',
   setup() {
     const parentId = ref<number>(0);
 
@@ -46,7 +44,7 @@ export default defineComponent({
         title: '是否显示',
         dataIndex: 'show',
         width: 60,
-        customRender: (text) => {
+        customRender: (text: unknown) => {
           return text ? '是' : '否';
         },
       },

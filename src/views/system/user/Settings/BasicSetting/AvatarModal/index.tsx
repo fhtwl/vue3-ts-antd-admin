@@ -50,7 +50,7 @@ export default defineComponent({
     };
 
     const realTime = function (data: Previews) {
-      console.log(data);
+      console.log('previews.value', data);
       previews.value = data;
     };
 
@@ -63,13 +63,19 @@ export default defineComponent({
 
     const handleFinish = function () {
       const formData = new FormData();
-      formData.append('img', imgFile.value as unknown as string);
-      uploadImg(formData).then((response) => {
-        console.log('upload response:', response);
-        instance?.proxy?.$message.success('上传成功');
-        emit('ok', response.path);
-        visible.value = false;
+      cropperRef.value.getCropBlob((data: Blob) => {
+        // const img = window.URL.createObjectURL(data);
+        // this.model = true;
+        // this.modelSrc = img;
+        formData.append('img', data);
+        uploadImg(formData).then((response) => {
+          console.log('upload response:', response);
+          instance?.proxy?.$message.success('上传成功');
+          emit('ok', response.path);
+          visible.value = false;
+        });
       });
+      // formData.append('img', previews.value?.url as unknown as string);
     };
 
     const handleBeforeUpload = function (file: File) {
@@ -80,6 +86,7 @@ export default defineComponent({
       reader.onload = () => {
         options.value.img = reader.result as string;
       };
+      return false;
     };
     return {
       visible,

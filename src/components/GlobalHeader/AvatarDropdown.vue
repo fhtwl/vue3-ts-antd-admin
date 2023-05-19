@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Modal } from 'ant-design-vue';
-import { defineComponent } from 'vue-demi';
+import { defineComponent } from 'vue';
 import { useStore } from '@/store/system/user';
 
 export default defineComponent({

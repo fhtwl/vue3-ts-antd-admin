@@ -1,6 +1,6 @@
 import { SystemTheme } from '@/store/system/theme';
 import { PropType, ref } from 'vue';
-import { defineComponent } from 'vue-demi';
+import { defineComponent } from 'vue';
 import './index.less';
 import Menus from './Menus';
 

@@ -2,7 +2,7 @@
 
 # 拉取最新代码
 echo "执行命令: 拉取远程代码"
-git pull origin r1.0.0
+git pull origin master
 
 # 更新依赖
 echo "更新依赖"

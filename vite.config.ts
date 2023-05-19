@@ -71,31 +71,15 @@ export default defineConfig({
         drop_debugger: true,
       },
     },
-    // 块大小警告大小限制(kb)
-    chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        // 分解大块js,
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return id
-              .toString()
-              .split('node_modules/')[1]
-              .split('/')[0]
-              .toString();
-          }
-        },
-      },
-    },
   },
   server: {
     port: 8001,
     proxy: {
       '/api': {
-        target: 'http://1.116.40.155:9002/',
+        target: 'http://localhost:4200',
         ws: false,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
+        rewrite: (path) => path.replace(/^\/api/, '/api/'),
       },
       '/resource': {
         target: 'https://static.fhtwl.cc',

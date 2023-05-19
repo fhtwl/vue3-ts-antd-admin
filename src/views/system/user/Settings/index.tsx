@@ -10,8 +10,6 @@ type MenuTab = {
   title: string;
 };
 export default defineComponent({
-  isPage: true,
-  name: 'UserSettings',
   setup() {
     const selectedKeys = ref<MenuType[]>(['basic']);
     const menu = reactive<MenuTab[]>([

@@ -1,0 +1,87 @@
+@import 'ant-design-vue/es/style/themes/default.less';
+
+.ant-pro-global-header-index-right {
+  margin-right: 8px;
+
+  &.ant-pro-global-header-index-dark {
+    .ant-pro-global-header-index-action {
+      color: hsla(0, 0%, 100%, 0.85);
+
+      &:hover {
+        background: @primary-color;
+      }
+    }
+  }
+
+  .ant-pro-account-avatar {
+    padding: 10px;
+    .antd-pro-global-header-index-avatar {
+      margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+      margin-right: 8px;
+      color: @primary-color;
+      vertical-align: top;
+      background: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .menu {
+    .anticon {
+      margin-right: 8px;
+    }
+
+    .ant-dropdown-menu-item {
+      min-width: 100px;
+    }
+  }
+}
+
+.basic-head {
+  // width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  .multi-tab-container {
+    width: 100%;
+    position: absolute;
+    top: 65px;
+    left: 0;
+  }
+}
+
+.logo {
+  // display: flex;
+  // align-items: center;
+  height: 100%;
+  // justify-content: center;
+  // flex-wrap: wrap;
+  overflow: hidden;
+  line-height: 64px;
+  text-align: center;
+  svg,
+  img {
+    height: 32px;
+    width: 32px;
+    vertical-align: middle;
+  }
+  h1 {
+    // color: #fff;
+    margin-bottom: 0;
+    height: 100%;
+    font-size: 16px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 12px;
+    font-weight: 500;
+  }
+}
+.ant-layout-sider-dark {
+  h1 {
+    color: #fff;
+  }
+}
+.ant-layout-sider-light {
+  background: #fff;
+  h1 {
+    color: #666;
+  }
+}

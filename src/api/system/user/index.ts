@@ -60,18 +60,9 @@ export function editPassword(params: {
   return http.post(api.editPassword, params);
 }
 
-/**
- * 获取用户信息
- * @returns
- */
 export function getUserInfo(): Promise<UserRes.GetUserInfo> {
   return http.get(api.getUserInfo);
 }
-
-/**
- * 获取动态路由
- * @returns
- */
 export function getUserMenu(): Promise<UserRes.GetUserMenu[]> {
   return http.post(api.getUserMenu);
 }

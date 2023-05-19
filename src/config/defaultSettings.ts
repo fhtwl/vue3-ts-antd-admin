@@ -16,7 +16,9 @@ export default {
   colorWeak: false,
   title: 'vue3-ts-antd-admin',
   description: '基于vue3+ts+vite+pinia的antdv后台管理系统',
-  iconfontUrl: '//at.alicdn.com/t/font_3233276_vdxns10ldqf.js',
+  // iconfontUrl: '//at.alicdn.com/t/c/font_3233276_mbp6v7yqep.js',
+  iconfontUrl: '//at.alicdn.com/t/c/font_3233276_0obvwn2vvi4l.js',
+  // iconfontUrl: '//at.alicdn.com/t/c/font_4074736_wtyrf0vhm6c.js',
   multiTab: true,
   hideSetting: false,
 };

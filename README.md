@@ -1,33 +1,28 @@
+# 基于 vue3 + Typescript + Vite + pinia + Antd 的后台管理系统
+
 # 一、前言
 
-<a href="https://github.com/fhtwl/vue3-ts-antd-admin" >vue3-ts-antd-admin</a>是基于 vue3、ts、tsx、vite 开发的一套中后台管理系统模板, 简洁轻量, 适合中小型中后台项目的开发.
-
-演示地址：<a href ="https://admin.fhtwl.cc/" >传送门</a>
-
-编辑器预览：
-
-![预览.jpg](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8757f92912b7414daf146e1d10992bb2~tplv-k3u1fbpfcp-watermark.image?)
-![1661504529243.jpg](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3e68c0b4a91e48a3a4c66f01b9de61ea~tplv-k3u1fbpfcp-watermark.image?)
+时至今日, vue3 的生态已经趋于成熟, 无论是学习还是工作, 尝试 vue3 都是有必要的, 本项目是对 vue3 开发中后管理系统最佳实践的一次尝试和总结.
 
 # 二、技术栈
 
-- 前端
+### 前端
 
-  **vue3**: 核心框架 <br/>
-  **pinia**: 状态管理 <br/>
-  **less**: css 预编译器 <br/>
-  **ant design**: 组件库 <br/>
-  **ts/tsx**: 开发和模板语言 <br/>
-  **vite2**: 前端构建工具 <br/>
+**vue3**: 核心框架
+**pinia**: 状态管理
+**less**: css 预编译器
+**ant design**: 组件库
+**ts/tsx**: 开发和模板语言
+**vite2**: 前端构建工具
 
-- 服务端
+### 服务端
 
-  **koa2**: 核心框架 <br/>
-  **mysql**: 数据库 <br/>
-  **redis**: 缓存 <br/>
-  **ts**:开发语言 <br/>
+**koa2**: 核心框架
+**mysql**: 数据库
+**redis**: 缓存
+**ts**:开发语言
 
-该工程只包含前端部分, 服务端请访问 <a href="https://github.com/fhtwl/koa-ts-learn" >koa-ts-learn</a>
+本文主要介绍前端部分的设计和开发, 服务端的开发在我的掘金专栏 <a href="https://juejin.cn/column/7100898007582769160"  >超细致 nodejs + koa2 + ts + mysql + redis 后端框架搭建</a>里有详细介绍, 感兴趣的可以看看
 
 # 三、功能
 
@@ -71,7 +66,6 @@
 
 # 四、目录结构
 
-```
 ├── .husky husky # 脚本
 ├── .vscode vscode # 配置
 ├── public
@@ -104,8 +98,3 @@
 └── tsconfig.json
 └── tsconfig.node.json
 └── vite.config.ts
-```
-
-# 五、已知 bug
-
-- <a href="https://github.com/vuejs/core/issues/6222">issues</a>: 热更新报错 TypeError: parentComponent.ctx.deactivate is not a function

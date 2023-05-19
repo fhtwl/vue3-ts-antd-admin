@@ -37,8 +37,6 @@ export default defineComponent({
     const type = ref<ActionType>('add');
     const title = computed(() => actionConfig[type.value]);
 
-    const isIconShow = ref(false);
-
     const roleOptions = ref<System.Role[]>([]);
 
     const formJson = computed<CommonFormItem[]>(function (): CommonFormItem[] {
@@ -174,7 +172,6 @@ export default defineComponent({
       formData,
       type,
       title,
-      isIconShow,
       roleOptions,
       formJson,
       handleOk,
@@ -193,15 +190,7 @@ export default defineComponent({
   },
   methods: {},
   render() {
-    const {
-      title,
-      visible,
-      handleOk,
-      handleCancel,
-      formData,
-      formJson,
-      isIconShow,
-    } = this;
+    const { title, visible, handleOk, handleCancel, formData, formJson } = this;
     return (
       <a-modal
         title={title}
@@ -218,9 +207,6 @@ export default defineComponent({
           formData={formData}
           formJson={formJson}
         />
-        <a-modal visible={isIconShow} title="图标" footer={false}>
-          <div class="icon-container"></div>
-        </a-modal>
       </a-modal>
     );
   },

@@ -1,0 +1,98 @@
+#components-layout-demo-custom-trigger {
+  height: 100%;
+  .layout-content {
+    margin: 60px 16px 24px 16px;
+    padding: 0;
+    // background: #fff;
+    min-height: 280px;
+    // &.fixed-top {
+    //   margin-top: 124px;
+    // }
+    // &.no-multi-tab {
+    //   margin-top: 16px;
+    //   &.fixed-top {
+    //     margin-top: 66px;
+    //   }
+    // }
+  }
+  &.layout-topmenu {
+    .ant-layout-header {
+      padding-left: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      .ant-menu.custom-menus {
+        margin-top: 8px;
+        margin-left: 10px;
+        .ant-menu-submenu,
+        .ant-menu-submenu-title {
+          height: 100%;
+        }
+      }
+      &.fixed {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 20;
+      }
+    }
+    .layout-content {
+      &.fixed-top {
+        margin-top: 124px;
+        &:not(.no-multi-tab) {
+          margin-top: 124px;
+        }
+      }
+      &.no-multi-tab {
+        margin-top: 84px;
+        &:not(.fixed-top) {
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+  &.layout-sidemenu {
+    .layout-content {
+      &.fixed-top {
+        margin-top: 60px;
+      }
+      &.no-multi-tab {
+        margin-top: 22px;
+      }
+    }
+  }
+  .ant-layout-header {
+    position: relative;
+    padding: 0;
+    background: #001529;
+    color: #fff;
+    &.light {
+      background: #fff;
+      color: rgba(0, 0, 0, 0.65);
+    }
+    &.layout-header {
+      display: flex;
+      justify-content: space-between;
+      .left {
+        display: flex;
+        .trigger {
+          width: 64px;
+          height: 100%;
+          font-size: 20px;
+          line-height: 64px;
+          padding: 0 24px;
+          cursor: pointer;
+          transition: color 0.3s;
+          &:hover {
+            color: @primary-color;
+          }
+        }
+      }
+      .right {
+        width: auto;
+      }
+    }
+  }
+
+  .logo {
+    height: 64px;
+  }
+}
