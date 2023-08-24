@@ -66,6 +66,7 @@
 
 # 四、目录结构
 
+```
 ├── .husky husky # 脚本
 ├── .vscode vscode # 配置
 ├── public
@@ -98,3 +99,4 @@
 └── tsconfig.json
 └── tsconfig.node.json
 └── vite.config.ts
+```
