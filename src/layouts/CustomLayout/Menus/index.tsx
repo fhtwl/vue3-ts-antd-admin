@@ -1,7 +1,11 @@
 import { computed, defineComponent } from 'vue';
 import './index.less';
 import { useStore } from '@/store/system/theme';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
+import {
+  RouteLocationMatched,
+  RouteLocationNormalizedLoaded,
+  RouteRecordName,
+} from 'vue-router';
 import { Menu } from 'ant-design-vue';
 export default defineComponent({
   components: {
@@ -34,9 +38,9 @@ export default defineComponent({
     };
   },
   data() {
-    const defaultOpenKeys = this.$route.matched
+    const defaultOpenKeys: RouteRecordName[] = this.$route.matched
       .filter((item) => item.name && item.name !== this.$route.name)
-      .map((item) => item.name);
+      .map((item) => item.name!);
     console.log(defaultOpenKeys);
     return {
       selectedKeys: this.$route.matched
@@ -52,7 +56,7 @@ export default defineComponent({
         .map((item) => item.name);
       this.defaultOpenKeys = newVal.matched
         .filter((item) => item.name && item.name !== newVal.name)
-        .map((item) => item.name);
+        .map((item) => item.name!);
     },
   },
   methods: {
