@@ -2,7 +2,13 @@ import { addMenu, editMenuById, getMenuMap } from '@/api/system/menu';
 import CommonForm, { CommonFormItem } from '@/components/CommonForm';
 import { menuIconList as defaultMenuIconList } from '../menuIcon';
 import { foreachTree } from '@/utils/utils';
-import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  ref,
+} from 'vue';
 import './index.less';
 
 export interface MenuFormData {
@@ -40,7 +46,7 @@ export default defineComponent({
     CommonForm,
   },
   emits: ['update'],
-  setup(_props: Common.Params, { emit }: { emit: Common.Fun }) {
+  setup(_props, { emit }) {
     const instance = getCurrentInstance();
     const commonFormRef = ref<InstanceType<typeof CommonForm>>();
     // 弹窗显示
@@ -301,10 +307,10 @@ export default defineComponent({
       isIconShow.value = false;
     };
 
-    const show = function (
+    const show = (
       newType: ActionType = 'add',
       val: MenuFormData = defaultFormData
-    ) {
+    ) => {
       type.value = newType;
 
       val.parentId = val?.parentId === 0 ? undefined : val?.parentId;
@@ -331,7 +337,9 @@ export default defineComponent({
 
       visible.value = true;
     };
-
+    onMounted(() => {
+      getData();
+    });
     return {
       visible,
       formData,
@@ -351,10 +359,6 @@ export default defineComponent({
       commonFormRef,
     };
   },
-  mounted() {
-    this.getData();
-  },
-  methods: {},
   render() {
     const {
       title,
@@ -390,17 +394,15 @@ export default defineComponent({
           footer={false}
         >
           <div class="icon-container">
-            {menuIconList.map(
-              (item: { type: string | number | symbol | undefined }) => (
-                <div
-                  key={item.type}
-                  class="icon"
-                  onClick={() => handleSelectIcon(item)}
-                >
-                  <c-icon type={item.type} />
-                </div>
-              )
-            )}
+            {menuIconList.map((item: { type: string }) => (
+              <div
+                key={item.type}
+                class="icon"
+                onClick={() => handleSelectIcon(item)}
+              >
+                <c-icon type={item.type} />
+              </div>
+            ))}
           </div>
         </a-modal>
       </a-modal>

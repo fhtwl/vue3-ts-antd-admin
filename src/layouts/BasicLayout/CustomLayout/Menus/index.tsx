@@ -92,7 +92,6 @@ export default defineComponent({
     const children =
       (menus as unknown as Common.Router[]).filter((item) => !item.hidden) ||
       [];
-
     return (
       children.length && (
         <a-menu

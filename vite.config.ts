@@ -76,10 +76,10 @@ export default defineConfig({
     port: 8001,
     proxy: {
       '/api': {
-        target: 'http://localhost:4200',
+        target: 'http://localhost:9002',
         ws: false,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api/'),
+        rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
       },
       '/resource': {
         target: 'https://static.fhtwl.cc',

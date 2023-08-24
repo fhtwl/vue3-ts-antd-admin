@@ -1,6 +1,6 @@
 import UserLayout from './UserLayout.vue';
 import BlankLayout from './BlankLayout.vue';
-import BasicLayout from './BasicLayout.vue';
+import BasicLayout from './BasicLayout/index';
 import RouteView from './RouteView';
 import PageView from './PageView.vue';
 

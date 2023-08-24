@@ -3,7 +3,7 @@ import RightContent from '@/components/GlobalHeader/RightContent.vue';
 import GlobalFooter from '@/components/GlobalFooter';
 import SettingDrawer from '@/components/SettingDrawer/SettingDrawer.vue';
 import CustomLayout from './CustomLayout';
-import { defineRouterStore } from '@/store/system/asyncRouter';
+import { defineRouterStore } from '@/store/system/async-router';
 import { SystemTheme, useStore } from '@/store/system/theme';
 import MultiTab from '@/components/MultiTab';
 import './index.less';
@@ -40,9 +40,13 @@ export default defineComponent({
     // 主路由
     const mainMenu = computed(() => routerStore.addRouters);
     const menus = computed(() => {
-      const routes = mainMenu.value.find((item) => item.path === '/');
+      const routes = mainMenu.value.find(
+        (item: { path: string }) => item.path === '/'
+      );
       return (routes && routes.children) || [];
     });
+
+    console.log('this.addRouters', menus.value);
     const logoSvgImg = LOGO;
     const settings: ComputedRef<SystemTheme> = computed(() => {
       const {
@@ -120,6 +124,7 @@ export default defineComponent({
       ),
       footerRender: () => <global-footer />,
     };
+    console.log('menus render', menus);
     return (
       <CustomLayout
         menus={menus}
