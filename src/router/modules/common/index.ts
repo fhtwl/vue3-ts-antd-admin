@@ -2,7 +2,7 @@
  * @description 公共的一些路由，不属于功能模块的都放这里统一管理
  * @author fhtwl */
 
-import UserLayout from '@/layouts/UserLayout.vue';
+import UserLayout from '@/layouts/UserLayout';
 
 export const asyncRouterMap = [];
 /**
