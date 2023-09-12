@@ -3,6 +3,7 @@ import { getUserMenu } from '@/api/system/user';
 // eslint-disable-next-line
 import { BasicLayout, BlankLayout, RouteView } from '@/layouts';
 import { markRaw } from 'vue';
+export const ROOT_NAME = 'dynamics';
 
 // 前端路由表
 const constantRouterComponents: {
@@ -23,9 +24,6 @@ const constantRouterComponents: {
 
   // 你需要动态引入的页面组件
   MyDashboard: () => import('@/views/dashboard/MyDashboard'),
-
-  Chat: () => import('@/views/knowledgeBase/Chat'),
-  Knowledge: () => import('@/views/knowledgeBase/Knowledge'),
 };
 // 前端未找到页面路由（固定不用改）
 const notFoundRouter = {
@@ -54,7 +52,7 @@ const rootRouter: UserRes.GetUserMenu = {
   name: 'index',
   path: '',
   component: 'BasicLayout',
-  redirect: '/knowledgeBase',
+  redirect: '/system/user/center',
   meta: {
     title: '首页',
   },

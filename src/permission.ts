@@ -10,7 +10,7 @@ NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const allowList = ['login', 'register', 'registerResult']; // no redirect allowList
 export const loginRoutePath = '/auth/login';
-const defaultRoutePath = '/knowledgeBase/chat';
+const defaultRoutePath = '/system/user/center';
 
 router.beforeEach((to, from, next) => {
   NProgress.start(); // start progress bar

@@ -9,7 +9,7 @@ import { loginRoutePath } from '@/permission';
 
 // 设置请求头和请求路径
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_BASE_URL;
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 60000;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.interceptors.request.use(
   (config): AxiosRequestConfig<unknown> => {
@@ -59,11 +59,13 @@ const errorHandler = (error: AxiosError) => {
 // 响应拦截
 axios.interceptors.response.use((response) => {
   if (response.data?.errorCode !== 10000) {
+    console.log(response);
     notification.error({
       message: '请求失败',
       description: response.data.msg,
     });
     // errorHandler(response)
+    // console.log(response);
     return Promise.reject(response);
     // return Promise.reject(response)
   }

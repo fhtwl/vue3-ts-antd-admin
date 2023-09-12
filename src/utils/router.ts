@@ -1,6 +1,6 @@
 import router from '@/router';
-import { ROOT_NAME } from '@/router/modules/generatorRouters';
-import { defineRouterStore } from '@/store/system/asyncRouter';
+import { ROOT_NAME } from '@/router/modules/generator-routers';
+import { defineRouterStore } from '@/store/system/async-router';
 import { RouteRecordRaw } from 'vue-router';
 
 export function resetMenuRouter() {

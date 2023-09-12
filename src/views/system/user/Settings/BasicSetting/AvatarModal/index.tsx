@@ -16,6 +16,14 @@ interface Previews {
   img: Common.Params;
 }
 
+const defaultOptions = {
+  img: '',
+  autoCrop: true,
+  autoCropWidth: 200,
+  autoCropHeight: 200,
+  fixedBox: true,
+};
+
 export default defineComponent({
   emits: ['ok'],
   setup(_props, { emit }) {
@@ -23,14 +31,9 @@ export default defineComponent({
     const visible = ref<boolean>(false);
     const confirmLoading = ref<boolean>(false);
     const fileList = reactive<File[]>([]);
-    const uploading = ref<boolean>(false);
+    const uploadLoading = ref<boolean>(false);
     const options = ref({
-      // img: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      img: '',
-      autoCrop: true,
-      autoCropWidth: 200,
-      autoCropHeight: 200,
-      fixedBox: true,
+      ...defaultOptions,
     });
     const previews = ref<Previews>();
     const imgFile = ref<File>();
@@ -67,12 +70,21 @@ export default defineComponent({
         // const img = window.URL.createObjectURL(data);
         // this.model = true;
         // this.modelSrc = img;
+        if (data.size > 1024 * 1024 * 10) {
+          instance?.proxy?.$message.success('图片不能大于10M');
+          return;
+        }
         formData.append('img', data);
+        uploadLoading.value = true;
         uploadImg(formData).then((response) => {
           console.log('upload response:', response);
+          uploadLoading.value = false;
           instance?.proxy?.$message.success('上传成功');
           emit('ok', response.path);
           visible.value = false;
+          options.value = {
+            ...defaultOptions,
+          };
         });
       });
       // formData.append('img', previews.value?.url as unknown as string);
@@ -92,7 +104,7 @@ export default defineComponent({
       visible,
       confirmLoading,
       fileList,
-      uploading,
+      uploadLoading,
       options,
       previews,
       imgFile,
@@ -111,6 +123,7 @@ export default defineComponent({
     const {
       visible,
       confirmLoading,
+      uploadLoading,
       hanldeCancel,
       previews,
       options,
@@ -154,6 +167,7 @@ export default defineComponent({
           <br />
           <div class="tool">
             <a-upload
+              accept="image/*"
               name="file"
               beforeUpload={handleBeforeUpload}
               showUploadList={false}
@@ -173,7 +187,11 @@ export default defineComponent({
               icon={<RedoOutlined />}
               onClick={handleRotateRightClick}
             />
-            <a-button type="primary" onClick={handleFinish}>
+            <a-button
+              loading={uploadLoading}
+              type="primary"
+              onClick={handleFinish}
+            >
               保存
             </a-button>
           </div>

@@ -156,6 +156,9 @@ export default defineComponent({
           fieldName: 'path',
           className: 'row',
           extraConfig: { disabled },
+          rules: [
+            { required: true, message: '菜单地址不能为空', trigger: 'blur' },
+          ],
           dataType: String,
         },
       ];
