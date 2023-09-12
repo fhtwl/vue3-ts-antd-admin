@@ -1,3 +1,4 @@
+import { MenuType } from '@fhtwl-admin/system';
 import { MessageApi } from 'ant-design-vue/lib/message';
 import { ModalFunc } from 'ant-design-vue/lib/modal/Modal';
 import { NotificationApi } from 'ant-design-vue/lib/notification';

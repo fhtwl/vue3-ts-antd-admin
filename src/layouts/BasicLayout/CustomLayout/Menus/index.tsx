@@ -85,6 +85,7 @@ export default defineComponent({
       theme,
       menus,
       renderSubMenuItem,
+      renderMenuItem,
       layout,
       selectedKeys,
       defaultOpenKeys,
@@ -101,7 +102,11 @@ export default defineComponent({
           openKeys={defaultOpenKeys}
           selectedKeys={selectedKeys}
         >
-          {children.map((item) => renderSubMenuItem(item))}
+          {children.map((item) =>
+            item.meta.type === 1
+              ? renderSubMenuItem(item)
+              : renderMenuItem(item)
+          )}
         </a-menu>
       )
     );

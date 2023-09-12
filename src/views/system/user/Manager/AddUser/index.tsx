@@ -6,8 +6,15 @@ import CommonForm, {
   CommonFormItem,
 } from '@/components/CommonForm';
 import { uploadImgWrap } from '@/utils/utils';
-import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  ref,
+} from 'vue';
 import './index.less';
+import md5 from 'md5';
 
 export interface UserFormData {
   userName: string;
@@ -110,6 +117,18 @@ export default defineComponent({
         },
         {
           type: 'input',
+          label: '用户名',
+          fieldName: 'userName',
+          className: 'row',
+          extraConfig: {
+            disabled,
+          },
+          rules: [
+            { required: true, message: '用户名不能为空', trigger: 'blur' },
+          ],
+        },
+        {
+          type: 'input',
           label: '邮箱',
           fieldName: 'email',
           className: 'row',
@@ -134,13 +153,12 @@ export default defineComponent({
       const list: CommonFormItem[] = [
         {
           type: 'upload',
-          rules: [
-            { required: true, message: '用户头像不能为空', trigger: 'blur' },
-          ],
-          label: '背景图片',
+          // rules: [
+          //   { required: true, message: '用户头像不能为空', trigger: 'blur' },
+          // ],
+          label: '头像',
           fieldName: ['info', 'avatar'],
           vModel: formData.value.info.avatar,
-
           extraConfig: {
             showUploadList: false,
             beforeUpload,
@@ -185,16 +203,19 @@ export default defineComponent({
       }
       const callBack = () => {
         handleCancel();
+        confirmLoading.value = false;
         instance?.proxy?.$message.success(`${title.value}成功`);
       };
 
       commonFormRef?.value?.formRef?.validate().then(() => {
         const roleIds = (formData.value.roleIds as number[]).join(',');
+        confirmLoading.value = true;
         if (type.value === 'add') {
           addUser({
             ...formData.value,
             ...formData.value.info,
             roleIds,
+            password: md5(formData.value.password),
           }).then(callBack);
         } else {
           editUserById({
@@ -229,8 +250,7 @@ export default defineComponent({
         case 'query': {
           formData.value = {
             ...formData.value,
-            email: val.email,
-            info: val.info,
+            ...val,
             roleIds: (val.roleIds as string)
               .split(',')
               .map((str) => Number(str)),
@@ -241,6 +261,12 @@ export default defineComponent({
 
       visible.value = true;
     };
+
+    const confirmLoading = ref(false);
+
+    onMounted(() => {
+      getData();
+    });
 
     return {
       instance,
@@ -255,14 +281,19 @@ export default defineComponent({
       handleCancel,
       getData,
       show,
+      confirmLoading,
     };
   },
-  mounted() {
-    this.getData();
-  },
-  methods: {},
   render() {
-    const { title, visible, handleOk, handleCancel, formData, formJson } = this;
+    const {
+      title,
+      visible,
+      handleOk,
+      handleCancel,
+      formData,
+      formJson,
+      confirmLoading,
+    } = this;
     return (
       <a-modal
         title={title}
@@ -273,6 +304,7 @@ export default defineComponent({
         maskClosable={false}
         onOk={handleOk}
         onCancel={handleCancel}
+        confirmLoading={confirmLoading}
       >
         <CommonForm
           ref="commonFormRef"

@@ -161,6 +161,7 @@ export default defineComponent({
       columns,
       buttons,
       reSearch,
+      tableLayoutRef,
     };
   },
 

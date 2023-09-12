@@ -21,8 +21,9 @@ const fileAccept = {
   [AcceptType.EXCEL]: '.csv,.CSV,.xlsx,.XLSX',
 };
 function getAccept(acceptType: AcceptType | AcceptType[]): string {
-  if (typeof acceptType === 'string') {
-    return fileAccept[acceptType];
+  console.log('acceptType', acceptType);
+  if (['string', 'number'].includes(typeof acceptType)) {
+    return fileAccept[acceptType as AcceptType];
   } else {
     let accept = '';
     (acceptType as AcceptType[]).forEach((type: AcceptType) => {
@@ -340,7 +341,7 @@ export default defineComponent({
           );
         case 'upload':
           // extraConfig.accept = fileAccept[extraConfig?.acceptType];
-          if (extraConfig?.cceptType) {
+          if (extraConfig?.acceptType) {
             extraConfig.accept = getAccept(
               extraConfig.acceptType as AcceptType | AcceptType[]
             );

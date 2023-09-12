@@ -2,6 +2,7 @@ import { addRole, editRoleById, getRoleMap } from '@/api/system/role';
 import CommonForm, { CommonFormItem } from '@/components/CommonForm';
 import { computed, defineComponent, getCurrentInstance, ref } from 'vue';
 import './index.less';
+import { foreachTree } from '@/utils/utils';
 
 export interface RoleFormData extends RoleReq.AddRole {
   id: undefined | number;
@@ -133,7 +134,12 @@ export default defineComponent({
 
     const getData = function () {
       getRoleMap().then((data) => {
-        roleOptions.value = data;
+        foreachTree(data as unknown as Common.TreeNode[], (node) => {
+          if (node.id === formData.value.id) {
+            node.disabled = true;
+          }
+        });
+        roleOptions.value = data as unknown as System.Role[];
       });
     };
 
@@ -141,6 +147,7 @@ export default defineComponent({
       newType: ActionType = 'add',
       val: RoleFormData = { ...defaultFormData }
     ) {
+      getData();
       type.value = newType;
 
       val.parentId = val?.parentId === 0 ? undefined : val?.parentId;
