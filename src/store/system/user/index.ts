@@ -32,9 +32,9 @@ export const useStore = defineStore('user', {
             const token = res;
             this.token = token;
             localStorage.setItem(ACCESS_TOKEN, token);
-            updateMenuRouter();
             this.getInfo();
 
+            updateMenuRouter();
             resolve(undefined);
           })
           .catch((error: Error) => {
