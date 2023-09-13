@@ -4,6 +4,8 @@ import { login, logout } from '@/api/system/auth';
 import { getUserInfo } from '@/api/system/user';
 import { Permission } from '@fhtwl-admin/system';
 import { defineRouterStore } from '../async-router';
+import router from '@/router';
+import { RouteRecordRaw } from 'vue-router';
 
 interface UserInfo {
   userName: string;
@@ -97,5 +99,9 @@ export const useStore = defineStore('user', {
  */
 function updateMenuRouter() {
   const routerStore = defineRouterStore();
-  routerStore.generateRoutes();
+  routerStore.generateRoutes().then(() => {
+    routerStore.addRouters.forEach((r) =>
+      router.addRoute(r as unknown as RouteRecordRaw)
+    );
+  });
 }
