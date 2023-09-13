@@ -47,16 +47,19 @@ export default defineComponent({
     };
     const handleOk = function () {
       const ids = checkedKeys.value.join(',');
+      confirmLoading.value = true;
       editRolePermissionById({
         ids,
         roleId: formData.value.id,
       }).then(() => {
         instance.proxy!.$message.success('修改成功');
+        confirmLoading.value = false;
         handleCancel();
       });
     };
 
     const show = function (val: MenuPermissionFormData) {
+      getMenuMapData();
       formData.value = {
         ...formData.value,
         ...val,
@@ -66,7 +69,12 @@ export default defineComponent({
         .map((str) => Number(str));
       visible.value = true;
     };
-
+    const confirmLoading = ref(false);
+    const getMenuMapData = () => {
+      getMenuMap().then((data) => {
+        treeData.value = [...data];
+      });
+    };
     return {
       visible,
       handleOk,
@@ -76,21 +84,12 @@ export default defineComponent({
       show,
       handleCheck,
       instance,
+      confirmLoading,
     };
   },
-  mounted() {
-    this.getMenuMap();
-  },
 
-  methods: {
-    getMenuMap() {
-      getMenuMap().then((data) => {
-        this.treeData = [...data];
-      });
-    },
-  },
   render() {
-    const { visible, handleOk, handleCancel, treeData } = this;
+    const { visible, handleOk, handleCancel, treeData, confirmLoading } = this;
     // checkedKeys 使用解构不会触发响应式
     return (
       <PermissionModal
@@ -99,6 +98,7 @@ export default defineComponent({
         onOk={handleOk}
         onCancel={handleCancel}
         permission="system:role:editPermission"
+        confirmLoading={confirmLoading}
       >
         <a-tree
           v-model:checkedKeys={this.checkedKeys}
